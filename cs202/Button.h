@@ -4,9 +4,12 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#define beige sf::Color(158, 123, 56)
+#define darkBeige sf::Color(49, 38, 19)
+
 class Button {
 public:
-	Button(std::string btnText, sf::Vector2f buttonSize, int charSize, sf::Color bgColor, sf::Color textColor);
+	Button(std::string btnText, sf::Vector2f buttonSize, int charSize, sf::Color bgColor, sf::Color textColor, sf::Font& font);
 
 	// Pass font by reference:
 	void setFont(const sf::Font& font);

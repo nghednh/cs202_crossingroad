@@ -1,7 +1,7 @@
 
 #include "Button.h"
 
-Button::Button(std::string btnText, sf::Vector2f buttonSize, int charSize, sf::Color bgColor, sf::Color textColor) {
+Button::Button(std::string btnText, sf::Vector2f buttonSize, int charSize, sf::Color bgColor, sf::Color textColor, sf::Font& font) {
     button.setSize(buttonSize);
     button.setFillColor(bgColor);
 
@@ -11,6 +11,7 @@ Button::Button(std::string btnText, sf::Vector2f buttonSize, int charSize, sf::C
     text.setString(btnText);
     text.setCharacterSize(charSize);
     text.setFillColor(textColor);
+    text.setFont(font);
 }
 
 // Pass font by reference:
@@ -89,10 +90,16 @@ void Button::update(sf::RenderWindow& window)
 {
     sf::Color grey(0, 0, 0, 120);
     if (isMouseOver(window)) {
-		button.setOutlineColor(grey);
+		button.setOutlineColor(beige);
+        button.setFillColor(darkBeige);
+        button.setOutlineThickness(4.5);
+        this->setTextColor(sf::Color::White);
 	}
     else {
-		button.setOutlineColor(sf::Color::Transparent);
+		button.setOutlineColor(darkBeige);
+		button.setFillColor(beige);
+		button.setOutlineThickness(4.5);
+		this->setTextColor(sf::Color::Black);
 	}
 }
 
