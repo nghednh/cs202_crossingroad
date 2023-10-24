@@ -2,13 +2,16 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include <string>
+#include "Button.h"
 
 class Game {
 private:
 	enum State {
 		MENU,
 		PLAY,
-		PAUSE
+		PAUSE,
+		TUTORIAL
 	};
 	State state;
 	sf::RenderWindow window;
@@ -19,10 +22,14 @@ private:
 	sf::Sprite backgroundPlay;
 
 	sf::Font font;
+	Button playButton;
+	Button exitButton;
+	Button tutorialButton;
 public:
 	Game();
 	void loadTexture();
 	void run();
+	void handleEvent();
 	void update();
 	void draw();
 };
