@@ -1,15 +1,17 @@
 #include "Game.h"
 
 Game::Game() : window(sf::VideoMode(1600, 900), "Cross The Road", sf::Style::Close),
-playButton("Play", { 230, 90 }, 40, beige, darkBeige, font),
-exitButton("Exit", { 230, 90 }, 40, beige, darkBeige, font),
-tutorialButton("Tutorial", { 230, 90 }, 40, beige, darkBeige, font)
+playButton("  Play  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+exitButton("  Exit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+tutorialButton("Tutorial", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+selectArrow(">        <", {500, 90}, 60, sf::Color::Transparent, darkBeige, font)
 {
 	this->state = MENU;
 	loadTexture();
 	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350);
-	exitButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 500);
-	tutorialButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
+	tutorialButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 500);
+	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
+	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350-20);
 }
 
 void Game::loadTexture()
@@ -55,9 +57,15 @@ void Game::handleEvent()
 void Game::update()
 {
 	if (state == MENU) {
-		playButton.update(window);
-		exitButton.update(window);
-		tutorialButton.update(window);
+		playButton.updateTransparent(window);
+		if (playButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 20);
+		tutorialButton.updateTransparent(window);
+		if (tutorialButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 500 - 20);
+		exitButton.updateTransparent(window);
+		if (exitButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650 - 20);
 	}
 	else if (state == PLAY) {
 	}
@@ -72,6 +80,7 @@ void Game::draw()
 		playButton.drawTo(window);
 		exitButton.drawTo(window);
 		tutorialButton.drawTo(window);
+		selectArrow.drawTo(window);
 	}
 	else if (this->state == PLAY)
 	{

@@ -25,6 +25,7 @@ private:
 	Button playButton;
 	Button exitButton;
 	Button tutorialButton;
+	Button selectArrow;
 public:
 	Game();
 	void loadTexture();

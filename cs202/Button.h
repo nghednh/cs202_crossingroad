@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #define beige sf::Color(158, 123, 56)
-#define darkBeige sf::Color(49, 38, 19)
+#define darkBeige sf::Color(85, 68, 38)
 
 class Button {
 public:
@@ -36,6 +36,8 @@ public:
 	bool isMouseOver(sf::RenderWindow& window);
 
 	void update(sf::RenderWindow& window);
+	void updateTransparent(sf::RenderWindow& window);
+	void updateArrow(sf::RenderWindow& window, Button& other);
 
 	void setString(std::string text);
 

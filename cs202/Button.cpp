@@ -103,6 +103,21 @@ void Button::update(sf::RenderWindow& window)
 	}
 }
 
+void Button::updateTransparent(sf::RenderWindow& window)
+{
+    if (isMouseOver(window)) {
+        this->setTextColor(darkBeige);
+    }
+    else {
+        this->setTextColor(beige);
+    }
+}
+
+void Button::updateArrow(sf::RenderWindow& window, Button& other)
+{
+    this->setPosition(other.button.getPosition());
+}
+
 void Button::setString(std::string text)
 {
     this->text.setString(text);
