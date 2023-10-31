@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
 #include "Button.h"
 
@@ -21,6 +22,12 @@ private:
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
 
+	sf::Sound backgroundMusic;
+	sf::SoundBuffer backgroundBuffer;
+	sf::Sound clickSound;
+	sf::SoundBuffer clickBuffer;
+	sf::Music music;
+
 	sf::Font font;
 	Button playButton;
 	Button exitButton;
@@ -28,6 +35,7 @@ private:
 	Button selectArrow;
 public:
 	Game();
+	void loadSound();
 	void loadTexture();
 	void run();
 	void handleEvent();
