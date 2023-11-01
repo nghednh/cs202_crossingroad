@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <string>
 #include "Button.h"
+#include "Gif.h"
 
 class Game {
 private:
@@ -21,6 +22,9 @@ private:
 	sf::Sprite backgroundMenu;
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
+	sf::Texture _object;
+	sf::Sprite fire;
+	Gif fireGif;
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;

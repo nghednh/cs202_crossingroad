@@ -9,6 +9,7 @@ selectArrow(">        <", {500, 90}, 60, sf::Color::Transparent, darkBeige, font
 	this->state = MENU;
 	loadTexture();
 	loadSound();
+	font.loadFromFile("resource/fibberish.ttf");
 	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350);
 	tutorialButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 500);
 	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
@@ -41,7 +42,9 @@ void Game::loadTexture()
 	backgroundMenu.setTexture(_backgroundMenu);
 	_backgroundPlay.loadFromFile("resource/backgroundPlay.png");
 	backgroundPlay.setTexture(_backgroundPlay);
-	font.loadFromFile("resource/fibberish.ttf");
+	_object.loadFromFile("resource/object.png");
+	fireGif.load(_object, 96, 125, 16, 16, 5);
+	fireGif.setScale(4, 4);
 }
 
 void Game::run()
@@ -63,6 +66,7 @@ void Game::handleEvent()
 			window.close();
 		if (event.type == sf::Event::MouseButtonReleased) {
 			clickSound.play();
+			fireGif.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			if (playButton.isMouseOver(window)) {
 				this->state = PLAY;
 			}
@@ -88,6 +92,7 @@ void Game::update()
 		exitButton.updateTransparent(window);
 		if (exitButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650 - 20);
+		fireGif.update();
 	}
 	else if (state == PLAY) {
 	}
@@ -103,6 +108,7 @@ void Game::draw()
 		exitButton.drawTo(window);
 		tutorialButton.drawTo(window);
 		selectArrow.drawTo(window);
+		fireGif.drawTo(window);
 	}
 	else if (this->state == PLAY)
 	{
