@@ -1,19 +1,21 @@
 #include "Game.h"
 
 Game::Game() : window(sf::VideoMode(1600, 900), "Cross The Road", sf::Style::Close),
-playButton("  Play  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-exitButton("  Exit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-tutorialButton("Tutorial", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+playButton("play", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+tutorialButton(" tutorial ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+creditButton("  credit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+exitButton("   exit   ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 selectArrow(">        <", {500, 90}, 60, sf::Color::Transparent, darkBeige, font)
 {
 	this->state = MENU;
 	loadTexture();
 	loadSound();
 	font.loadFromFile("resource/fibberish.ttf");
-	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350);
-	tutorialButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 500);
+	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350+10);
+	tutorialButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 450);
+	creditButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 550);
 	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
-	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350-20);
+	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350-5);
 }
 
 void Game::loadSound()
@@ -44,7 +46,8 @@ void Game::loadTexture()
 	backgroundPlay.setTexture(_backgroundPlay);
 	_object.loadFromFile("resource/object.png");
 	fireGif.load(_object, 96, 125, 16, 16, 5);
-	fireGif.setScale(4, 4);
+	fireGif.setScale(8, 8);
+	fireGif.setSpeed(0.5);
 }
 
 void Game::run()
@@ -73,6 +76,9 @@ void Game::handleEvent()
 			if (exitButton.isMouseOver(window)) {
 				window.close();
 			}
+			if (creditButton.isMouseOver(window)) {
+				this->state = CREDIT;
+			}
 			if (tutorialButton.isMouseOver(window)) {
 				this->state = TUTORIAL;
 			}
@@ -85,13 +91,16 @@ void Game::update()
 	if (state == MENU) {
 		playButton.updateTransparent(window);
 		if (playButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 20);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350-5);
 		tutorialButton.updateTransparent(window);
 		if (tutorialButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 500 - 20);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 450-5);
+		creditButton.updateTransparent(window);
+		if (creditButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 550-5);
 		exitButton.updateTransparent(window);
 		if (exitButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650 - 20);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650-5);
 		fireGif.update();
 	}
 	else if (state == PLAY) {
@@ -107,6 +116,7 @@ void Game::draw()
 		playButton.drawTo(window);
 		exitButton.drawTo(window);
 		tutorialButton.drawTo(window);
+		creditButton.drawTo(window);
 		selectArrow.drawTo(window);
 		fireGif.drawTo(window);
 	}

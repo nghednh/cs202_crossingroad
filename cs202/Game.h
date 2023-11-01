@@ -13,7 +13,8 @@ private:
 		MENU,
 		PLAY,
 		PAUSE,
-		TUTORIAL
+		TUTORIAL,
+		CREDIT
 	};
 	State state;
 	sf::RenderWindow window;
@@ -23,7 +24,6 @@ private:
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
 	sf::Texture _object;
-	sf::Sprite fire;
 	Gif fireGif;
 
 	sf::Sound backgroundMusic;
@@ -34,8 +34,9 @@ private:
 
 	sf::Font font;
 	Button playButton;
-	Button exitButton;
 	Button tutorialButton;
+	Button creditButton;
+	Button exitButton;
 	Button selectArrow;
 public:
 	Game();
