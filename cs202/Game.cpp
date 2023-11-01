@@ -68,6 +68,7 @@ void Game::handleEvent()
 		if (event.type == sf::Event::Closed)
 			window.close();
 		if (event.type == sf::Event::MouseButtonReleased) {
+			fireGif.update();
 			clickSound.play();
 			fireGif.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			if (playButton.isMouseOver(window)) {
@@ -101,7 +102,8 @@ void Game::update()
 		exitButton.updateTransparent(window);
 		if (exitButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650-5);
-		fireGif.update();
+		if (fireGif.needUpdate())
+			fireGif.update();
 	}
 	else if (state == PLAY) {
 	}
@@ -118,7 +120,8 @@ void Game::draw()
 		tutorialButton.drawTo(window);
 		creditButton.drawTo(window);
 		selectArrow.drawTo(window);
-		fireGif.drawTo(window);
+		if (fireGif.needUpdate())
+			fireGif.drawTo(window);
 	}
 	else if (this->state == PLAY)
 	{

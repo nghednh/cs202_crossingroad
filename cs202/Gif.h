@@ -12,8 +12,9 @@ private:
 	int currentFrame; //which frame is the gif currently on
 	int totalFrame; //how many frames are there in the gif
 	double cycle; //how many seconds will it take for the gif to finish
-	double frameSpeed; //how many seconds will it take for each frame to change
+	double frameTime; //how many seconds will it take for each frame to change
 	sf::Sprite sprite;
+	bool loop;
 public:
 	void load(const sf::Texture& texture, int x, int y, int width, int height, int totalFrame);
 	void update();
@@ -21,4 +22,5 @@ public:
 	void setPosition(int x, int y);
 	void setScale(float x, float y);
 	void setSpeed(double speed);
+	bool needUpdate();
 };

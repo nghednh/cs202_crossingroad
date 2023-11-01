@@ -11,20 +11,26 @@ void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, 
 	this->cycle = 1;
 	this->sprite.setTexture(texture);
 	this->sprite.setTextureRect(sf::IntRect(x, y, width, height));
-	frameSpeed = cycle / totalFrame;
+	frameTime = cycle / totalFrame;
+	loop = false;
 }
 
 void Gif::update()
 {
-	double time = clock.getElapsedTime().asSeconds();
-	if (time > frameSpeed) {
-		this->currentFrame++;
-		clock.restart();
-	}
-	if (this->currentFrame >= this->totalFrame) {
-		this->currentFrame = 0;
-	}
-	this->sprite.setTextureRect(sf::IntRect(this->x + this->currentFrame * this->width, this->y, this->width, this->height));
+	//while (currentFrame < totalFrame) {
+		double time = clock.getElapsedTime().asSeconds();
+		if (time > frameTime) {
+			this->currentFrame++;
+			clock.restart();
+		}
+		if (this->currentFrame >= this->totalFrame) {
+			//if (loop)
+				this->currentFrame = 0;
+			//else
+				//this->currentFrame = this->totalFrame;
+		}
+		this->sprite.setTextureRect(sf::IntRect(this->x + this->currentFrame * this->width, this->y, this->width, this->height));
+	//}
 }
 
 void Gif::drawTo(sf::RenderWindow& window)
@@ -45,4 +51,11 @@ void Gif::setScale(float x, float y)
 void Gif::setSpeed(double speed)
 {
 	this->cycle = speed;
+}
+
+bool Gif::needUpdate()
+{
+	if (this->currentFrame + 1 >= this->totalFrame && loop == false)
+		return false;
+	return true;
 }
