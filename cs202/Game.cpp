@@ -5,7 +5,7 @@ playButton("play", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transpare
 tutorialButton(" tutorial ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 creditButton("  credit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 exitButton("   exit   ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-selectArrow(">        <", {500, 90}, 60, sf::Color::Transparent, darkBeige, font)
+selectArrow(">        <", {500, 90}, 60, sf::Color::Transparent, sf::Color::Transparent, font)
 {
 	this->state = MENU;
 	loadTexture();
@@ -90,18 +90,23 @@ void Game::handleEvent()
 void Game::update()
 {
 	if (state == MENU) {
-		playButton.updateTransparent(window);
+		playButton.updateHalfTransparent(window);
+		tutorialButton.updateHalfTransparent(window);
+		creditButton.updateHalfTransparent(window);
+		exitButton.updateHalfTransparent(window);
+		selectArrow.updateHalfTransparent(window);
 		if (playButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350-5);
-		tutorialButton.updateTransparent(window);
 		if (tutorialButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 450-5);
-		creditButton.updateTransparent(window);
 		if (creditButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 550-5);
-		exitButton.updateTransparent(window);
 		if (exitButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650-5);
+		if (playButton.isMouseOver(window) || tutorialButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
+			selectArrow.setTextColor(darkBeige);
+		else
+			selectArrow.setTextColor(sf::Color::Transparent);
 		if (fireGif.needUpdate())
 			fireGif.update();
 	}

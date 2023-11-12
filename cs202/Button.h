@@ -36,8 +36,7 @@ public:
 	bool isMouseOver(sf::RenderWindow& window);
 
 	void update(sf::RenderWindow& window);
-	void updateTransparent(sf::RenderWindow& window);
-	void updateArrow(sf::RenderWindow& window, Button& other);
+	void updateHalfTransparent(sf::RenderWindow& window);
 
 	void setString(std::string text);
 
