@@ -46,7 +46,7 @@ void Game::loadTexture()
 	backgroundPlay.setTexture(_backgroundPlay);
 	_object.loadFromFile("resource/object.png");
 	fireGif.load(_object, 96, 125, 16, 16, 5);
-	fireGif.setScale(8, 8);
+	fireGif.setScale(2, 2);
 	fireGif.setSpeed(0.5);
 }
 
