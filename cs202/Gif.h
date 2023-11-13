@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -27,4 +29,26 @@ public:
 	int getHeight() const { return height; }
 	double getScaleX() const { return sprite.getScale().x; }
 	double getScaleY() const { return sprite.getScale().y; }
+};
+
+class GifManager {
+private:
+	sf::Texture texture;
+	std::vector<Gif> gifs;
+	double width;
+	double height;
+	int totalFrame;
+	double speed;
+	double scaleX;
+	double scaleY;
+public:
+	void addGif(int x, int y);
+	void popGif() { gifs.pop_back();  }
+	void load(std::string filename, int x, int y, int width, int height, int totalFrame, double speed, double scaleX, double scaleY);
+	void update();
+	void drawTo(sf::RenderWindow& window);
+	double getWidth() const { return width; }
+	double getHeight() const { return height; }
+	double getScaleX() const { return scaleX; }
+	double getScaleY() const { return scaleY; }
 };

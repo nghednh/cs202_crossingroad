@@ -24,8 +24,7 @@ private:
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
 	sf::Texture _object;
-	sf::Texture _click;
-	Gif clickGif;
+	GifManager clickGif;
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;

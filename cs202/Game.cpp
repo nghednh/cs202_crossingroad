@@ -38,10 +38,7 @@ void Game::loadTexture()
 	_backgroundPlay.loadFromFile("resource/backgroundPlay.png");
 	backgroundPlay.setTexture(_backgroundPlay);
 	_object.loadFromFile("resource/object.png");
-	_click.loadFromFile("resource/clickSprite.png");
-	clickGif.load(_click, 0, 0, 100, 100, 30, 0.1);
-	clickGif.setScale(2, 2);
-	//clickGif.setSpeed(0.1);
+	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
 	_backButton0.loadFromFile("resource/backButton0.png");
 	_backButton1.loadFromFile("resource/backButton1.png");
 	backButton.setTexture(_backButton0);
@@ -68,11 +65,11 @@ void Game::handleEvent()
 		if (state == MENU)
 		{
 			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
-				clickGif.update();
 				clickSound.play();
-				clickGif.setPosition(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
+				clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
 				if (playButton.isMouseOver(window)) {
 					this->state = PLAY;
+					clickGif.popGif();
 				}
 				if (exitButton.isMouseOver(window)) {
 					window.close();
@@ -115,8 +112,7 @@ void Game::update()
 			selectArrow.setTextColor(darkBeige);
 		else
 			selectArrow.setTextColor(sf::Color::Transparent);
-		if (clickGif.needUpdate())
-			clickGif.update();
+		clickGif.update();
 	}
 	else if (state == PLAY) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -141,8 +137,7 @@ void Game::draw()
 		tutorialButton.drawTo(window);
 		creditButton.drawTo(window);
 		selectArrow.drawTo(window);
-		if (clickGif.needUpdate())
-			clickGif.drawTo(window);
+		clickGif.drawTo(window);
 	}
 	else if (this->state == PLAY)
 	{
