@@ -23,6 +23,8 @@ private:
 	sf::Sprite backgroundMenu;
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
+	sf::Texture _backgroundCredit;
+	sf::Sprite backgroundCredit;
 	sf::Texture _object;
 	GifManager clickGif;
 

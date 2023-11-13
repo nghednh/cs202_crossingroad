@@ -37,12 +37,14 @@ void Game::loadTexture()
 	backgroundMenu.setTexture(_backgroundMenu);
 	_backgroundPlay.loadFromFile("resource/backgroundPlay.png");
 	backgroundPlay.setTexture(_backgroundPlay);
+	_backgroundCredit.loadFromFile("resource/credit.jpg");
+	backgroundCredit.setTexture(_backgroundCredit);
 	_object.loadFromFile("resource/object.png");
 	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
 	_backButton0.loadFromFile("resource/backButton0.png");
 	_backButton1.loadFromFile("resource/backButton1.png");
 	backButton.setTexture(_backButton0);
-	backButton.setPosition(10, 10);
+	backButton.setPosition(50, 20);
 }
 
 void Game::run()
@@ -76,6 +78,7 @@ void Game::handleEvent()
 				}
 				if (creditButton.isMouseOver(window)) {
 					this->state = CREDIT;
+					clickGif.popGif();
 				}
 				if (tutorialButton.isMouseOver(window)) {
 					this->state = TUTORIAL;
@@ -86,7 +89,22 @@ void Game::handleEvent()
 		{
 			if (event.type == sf::Event::MouseButtonReleased) {
 				clickSound.play();
-				state = MENU;
+				if (isMouseOver(backButton, window)) {
+					this->state = MENU;
+				}
+			}
+		}
+		else if (state == CREDIT) {
+			if (event.type == sf::Event::MouseButtonReleased) {
+				clickSound.play();
+				if (isMouseOver(backButton, window)) {
+					this->state = MENU;
+				}
+			}
+		}
+		else if (state == TUTORIAL) {
+			if (event.type == sf::Event::MouseButtonReleased) {
+				clickSound.play();
 			}
 		}
 	}
@@ -115,8 +133,14 @@ void Game::update()
 		clickGif.update();
 	}
 	else if (state == PLAY) {
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			this->state = MENU;
+		if (isMouseOver(backButton, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				backButton.setTexture(_backButton1);
+		}
+		else
+			backButton.setTexture(_backButton0);
+	}
+	else if (state == CREDIT) {
 		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				backButton.setTexture(_backButton1);
@@ -129,7 +153,7 @@ void Game::update()
 void Game::draw()
 {
 	window.clear();
-	if (this->state == MENU)
+	if (state == MENU)
 	{
 		window.draw(backgroundMenu);
 		playButton.drawTo(window);
@@ -139,9 +163,13 @@ void Game::draw()
 		selectArrow.drawTo(window);
 		clickGif.drawTo(window);
 	}
-	else if (this->state == PLAY)
+	else if (state == PLAY)
 	{
 		window.draw(backgroundPlay);
+		window.draw(backButton);
+	}
+	else if (state == CREDIT) {
+		window.draw(backgroundCredit);
 		window.draw(backButton);
 	}
 	window.display();
