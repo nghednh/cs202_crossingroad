@@ -16,11 +16,15 @@ private:
 	sf::Sprite sprite;
 	bool loop;
 public:
-	void load(const sf::Texture& texture, int x, int y, int width, int height, int totalFrame);
+	void load(const sf::Texture& texture, int x, int y, int width, int height, int totalFrame, double speed);
 	void update();
 	void drawTo(sf::RenderWindow& window);
 	void setPosition(int x, int y);
 	void setScale(float x, float y);
 	void setSpeed(double speed);
 	bool needUpdate();
+	int getWidth() const { return width; }
+	int getHeight() const { return height; }
+	double getScaleX() const { return sprite.getScale().x; }
+	double getScaleY() const { return sprite.getScale().y; }
 };

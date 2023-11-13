@@ -24,7 +24,8 @@ private:
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
 	sf::Texture _object;
-	Gif fireGif;
+	sf::Texture _click;
+	Gif clickGif;
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;
@@ -38,6 +39,10 @@ private:
 	Button creditButton;
 	Button exitButton;
 	Button selectArrow;
+
+	sf::Texture _backButton0;
+	sf::Texture _backButton1;
+	sf::Sprite backButton;
 public:
 	Game();
 	void loadSound();

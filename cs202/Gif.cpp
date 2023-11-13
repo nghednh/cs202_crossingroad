@@ -1,6 +1,6 @@
 #include "Gif.h"
 
-void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, int totalFrame)
+void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, int totalFrame, double speed)
 {
 	this->x = x;
 	this->y = y;
@@ -8,7 +8,7 @@ void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, 
 	this->height = height;
 	this->totalFrame = totalFrame;
 	this->currentFrame = 0;
-	this->cycle = 1;
+	this->cycle = speed;
 	this->sprite.setTexture(texture);
 	this->sprite.setTextureRect(sf::IntRect(x, y, width, height));
 	frameTime = cycle / totalFrame;

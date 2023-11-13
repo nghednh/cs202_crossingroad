@@ -86,6 +86,22 @@ bool Button::isMouseOver(sf::RenderWindow& window) {
     return false;
 }
 
+bool isMouseOver(sf::Sprite& button, sf::RenderWindow& window) {
+	int mouseX = sf::Mouse::getPosition(window).x;
+	int mouseY = sf::Mouse::getPosition(window).y;
+
+	int btnPosX = button.getPosition().x;
+	int btnPosY = button.getPosition().y;
+
+	int btnxPosWidth = button.getPosition().x + button.getGlobalBounds().width;
+	int btnyPosHeight = button.getPosition().y + button.getGlobalBounds().height;
+
+    if (mouseX < btnxPosWidth && mouseX > btnPosX && mouseY < btnyPosHeight && mouseY > btnPosY) {
+		return true;
+	}
+	return false;
+}
+
 void Button::update(sf::RenderWindow& window)
 {
     sf::Color grey(0, 0, 0, 120);

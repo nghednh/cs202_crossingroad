@@ -51,4 +51,5 @@ private:
 	int btnHeight;
 };
 
+bool isMouseOver(sf::Sprite& button, sf::RenderWindow& window);
 #endif
