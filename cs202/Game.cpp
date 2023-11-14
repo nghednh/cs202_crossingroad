@@ -20,11 +20,11 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 
 void Game::loadSound()
 {
-	if (!music.openFromFile("resource/background.wav"))
+	if (!music.openFromFile("resource/sound/background.wav"))
 		std::cout << "Error" << std::endl;
 	music.play();
 	music.setLoop(true);
-	if (!clickBuffer.loadFromFile("resource/click.wav"))
+	if (!clickBuffer.loadFromFile("resource/sound/click.wav"))
 	{
 		std::cout << "Error" << std::endl;
 	}
@@ -33,11 +33,11 @@ void Game::loadSound()
 
 void Game::loadTexture()
 {
-	_backgroundMenu.loadFromFile("resource/menu.jpg");
+	_backgroundMenu.loadFromFile("resource/background/menu.jpg");
 	backgroundMenu.setTexture(_backgroundMenu);
-	_backgroundPlay.loadFromFile("resource/backgroundPlay.png");
+	_backgroundPlay.loadFromFile("resource/background/backgroundPlay.png");
 	backgroundPlay.setTexture(_backgroundPlay);
-	_backgroundCredit.loadFromFile("resource/credit.jpg");
+	_backgroundCredit.loadFromFile("resource/background/credit.jpg");
 	backgroundCredit.setTexture(_backgroundCredit);
 	_object.loadFromFile("resource/object.png");
 	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
