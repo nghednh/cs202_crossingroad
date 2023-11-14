@@ -20,15 +20,16 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 
 void Game::loadSound()
 {
-	if (!music.openFromFile("resource/sound/background.wav"))
+	if (!musicMenu.openFromFile("resource/sound/background.wav"))
 		std::cout << "Error" << std::endl;
-	music.play();
-	music.setLoop(true);
 	if (!clickBuffer.loadFromFile("resource/sound/click.wav"))
-	{
 		std::cout << "Error" << std::endl;
-	}
+	if (!musicInGame.openFromFile("resource/sound/musicInGame.wav"))
+		std::cout << "Error" << std::endl;
+	musicMenu.play();
+	musicMenu.setLoop(true);
 	clickSound.setBuffer(clickBuffer);
+	musicInGame.setLoop(true);
 }
 
 void Game::loadTexture()
@@ -66,12 +67,15 @@ void Game::handleEvent()
 			window.close();
 		if (state == MENU)
 		{
+			
 			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
 				clickSound.play();
 				clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
 				if (playButton.isMouseOver(window)) {
 					this->state = PLAY;
 					clickGif.popGif();
+					musicMenu.stop();
+					musicInGame.play();
 				}
 				if (exitButton.isMouseOver(window)) {
 					window.close();
@@ -91,6 +95,8 @@ void Game::handleEvent()
 				clickSound.play();
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
+					musicInGame.stop();
+					musicMenu.play();
 				}
 			}
 		}

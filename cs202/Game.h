@@ -32,7 +32,8 @@ private:
 	sf::SoundBuffer backgroundBuffer;
 	sf::Sound clickSound;
 	sf::SoundBuffer clickBuffer;
-	sf::Music music;
+	sf::Music musicMenu;
+	sf::Music musicInGame;
 
 	sf::Font font;
 	Button playButton;
