@@ -17,14 +17,20 @@ void delayFunction() {
     }
 }
 
-string pos[6] =
+const int numTitle = 7;
+
+string pos[numTitle] =
 {
-    "resource/tiles/grass1.png",
-    "resource/tiles/grass2.png",
-    "resource/tiles/grass3.png",
-    "resource/tiles/grass4.png",
+    "resource/tiles/grass.jpg",
+//    "resource/tiles/grass2.png",
+//    "resource/tiles/grass3.png",
+//    "resource/tiles/grass4.png",
+    "resource/tiles/road.png",
+    "resource/tiles/grass.jpg",
     "resource/tiles/train.png",
-    "resource/tiles/road.png"
+    "resource/tiles/road.png",
+    "resource/tiles/grass.jpg",
+    "resource/tiles/grass.jpg"
 };
 
 void loadGrass()
@@ -40,7 +46,7 @@ void loadGrass()
 
     for (int i = 0; i < 11; i++)
     {
-        _grass[i].loadFromFile(pos[randomNum(6) - 1]);
+        _grass[i].loadFromFile(pos[randomNum(numTitle) - 1]);
         grass[i].setTexture(_grass[i]);
         grass[i].setPosition(Vector2f(0, i * 64));
     }
@@ -58,7 +64,7 @@ void loadGrass()
         for (int i = 0; i < 11; i++)
         {
             if (grass[i].getPosition().y >= 639) {
-                _grass[i].loadFromFile(pos[randomNum(6) - 1]);
+                _grass[i].loadFromFile(pos[randomNum(numTitle) - 1]);
                 grass[i].setPosition(Vector2f(0, -63));
             }
             else
