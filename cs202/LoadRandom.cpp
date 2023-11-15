@@ -17,20 +17,15 @@ void delayFunction() {
     }
 }
 
-const int numTitle = 8;
+const int numTitle = 6;
 
 string pos[numTitle] =
 {
     "resource/tiles/grass.jpg",
-//    "resource/tiles/grass2.png",
-//    "resource/tiles/grass3.png",
-//    "resource/tiles/grass4.png",
     "resource/tiles/road.png",
     "resource/tiles/grassFlower.jpg",
     "resource/tiles/train.png",
-    "resource/tiles/grass.jpg",
     "resource/tiles/road.png",
-    "resource/tiles/grass.jpg",
     "resource/tiles/grassFlower.jpg"
 };
 
