@@ -24,16 +24,16 @@ public:
         return bulletTexture;
     }
 private:
-    static Texture bulletTexture;
+    Texture bulletTexture;
 
     BulletTexture() {
+        cout << "Construct" << endl;
         bulletTexture.loadFromFile("resource/bullet.png");
     }
     ~BulletTexture() = default;
     BulletTexture(const BulletTexture&) = delete;
     BulletTexture& operator=(const BulletTexture&) = delete;
 };
-
 
 class Bullet {
 private:
