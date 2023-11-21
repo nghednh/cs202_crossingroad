@@ -8,10 +8,10 @@ void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, 
 	this->height = height;
 	this->totalFrame = totalFrame;
 	this->currentFrame = 0;
-	this->cycle = speed;
+	this->speed = speed;
 	this->sprite.setTexture(texture);
 	this->sprite.setTextureRect(sf::IntRect(x, y, width, height));
-	frameTime = cycle / totalFrame;
+	frameTime = speed / totalFrame;
 	loop = false;
 }
 
@@ -50,7 +50,7 @@ void Gif::setScale(float x, float y)
 
 void Gif::setSpeed(double speed)
 {
-	this->cycle = speed;
+	this->speed = speed;
 }
 
 bool Gif::needUpdate()

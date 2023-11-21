@@ -137,6 +137,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gif.cpp" />
+    <ClCompile Include="Lane.cpp" />
     <ClCompile Include="LoadRandom.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gif.h" />
+    <ClInclude Include="Lane.h" />
     <ClInclude Include="LoadRandom.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

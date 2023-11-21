@@ -13,7 +13,7 @@ private:
 	int height; //width and height of each frame
 	int currentFrame; //which frame is the gif currently on
 	int totalFrame; //how many frames are there in the gif
-	double cycle; //how many seconds will it take for the gif to finish
+	double speed; //how many seconds will it take for the gif to finish
 	double frameTime; //how many seconds will it take for each frame to change
 	sf::Sprite sprite;
 	bool loop;

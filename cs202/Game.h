@@ -6,6 +6,7 @@
 #include <string>
 #include "Button.h"
 #include "Gif.h"
+#include "Lane.h"
 
 class Game {
 private:
@@ -27,6 +28,7 @@ private:
 	sf::Sprite backgroundCredit;
 	sf::Texture _object;
 	GifManager clickGif;
+	LaneManager laneManager;
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;
