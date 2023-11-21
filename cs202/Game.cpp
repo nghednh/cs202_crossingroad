@@ -7,6 +7,7 @@ creditButton("  credit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::T
 exitButton("   exit   ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font)
 {
+	//window.setFramerateLimit(60);
 	this->state = MENU;
 	loadTexture();
 	loadSound();
@@ -16,6 +17,8 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	creditButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 550);
 	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
+	for (int i = 0; i < 9; i++)
+		laneManager.addLane(900 - i * 128);
 }
 
 void Game::loadSound()
@@ -111,6 +114,9 @@ void Game::handleEvent()
 		else if (state == TUTORIAL) {
 			if (event.type == sf::Event::MouseButtonReleased) {
 				clickSound.play();
+				if (isMouseOver(backButton, window)) {
+					this->state = MENU;
+				}
 			}
 		}
 	}
@@ -145,8 +151,17 @@ void Game::update()
 		}
 		else
 			backButton.setTexture(_backButton0);
+		laneManager.update();
 	}
 	else if (state == CREDIT) {
+		if (isMouseOver(backButton, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				backButton.setTexture(_backButton1);
+		}
+		else
+			backButton.setTexture(_backButton0);
+	}
+	else if (state == TUTORIAL) {
 		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				backButton.setTexture(_backButton1);
@@ -172,10 +187,14 @@ void Game::draw()
 	else if (state == PLAY)
 	{
 		window.draw(backgroundPlay);
+		laneManager.drawTo(window);
 		window.draw(backButton);
 	}
 	else if (state == CREDIT) {
 		window.draw(backgroundCredit);
+		window.draw(backButton);
+	}
+	else if (state == TUTORIAL) {
 		window.draw(backButton);
 	}
 	window.display();
