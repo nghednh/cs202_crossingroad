@@ -27,7 +27,6 @@ private:
     Texture bulletTexture;
 
     BulletTexture() {
-        cout << "Construct" << endl;
         bulletTexture.loadFromFile("resource/bullet.png");
     }
     ~BulletTexture() = default;
