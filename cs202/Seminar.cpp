@@ -1,5 +1,7 @@
 #include "Seminar.h"
 
+Texture& bulletText = BulletTexture::Instance().getBulletTexture();
+
 bool Bullet::update()
 {
 	x += sin(atan((directionX - x) / (directionY - y))) * speed;
@@ -24,7 +26,7 @@ Sprite& Bullet::getTexture()
 Bullet::Bullet(Player& src, double desX, double desY, double speed) :
 	x(src.x), y(src.y), directionX(desX), directionY(desY), speed(speed) 
 {
-	texture.setTexture(BulletTexture::Instance().getBulletTexture());
+	texture.setTexture(bulletText);
 }
 
 void Player::render(RenderWindow& window)
