@@ -7,11 +7,12 @@
 class Lane
 {
 private:
+	bool isGrass;
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
 public:
-	Lane(sf::Texture& texture, int y);
+	Lane(sf::Texture& texture, int y, bool isGrass);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y+128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move();
