@@ -1,10 +1,11 @@
 #include "Lane.h"
 
-Lane::Lane(sf::Texture& texture, int y)
+Lane::Lane(sf::Texture& texture, int y, bool isGrass)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
+	this->isGrass = isGrass;
 }
 
 void Lane::drawTo(sf::RenderWindow& window)
@@ -40,15 +41,15 @@ void LaneManager::addLane(int y)
 {
 	int random = rand() % 100;
 	if (random < 20)
-		this->lanes.insert(lanes.begin(), Lane(this->texture[1], y));
+		this->lanes.insert(lanes.begin(), Lane(this->texture[1], y, false));
 	else if (random < 40)
-		this->lanes.insert(lanes.begin(), Lane(this->texture[2], y));
+		this->lanes.insert(lanes.begin(), Lane(this->texture[2], y, true));
 	else if (random < 60)
-		this->lanes.insert(lanes.begin(), Lane(this->texture[3], y));
+		this->lanes.insert(lanes.begin(), Lane(this->texture[3], y, true));
 	else if (random < 80)
-		this->lanes.insert(lanes.begin(), Lane(this->texture[4], y));
+		this->lanes.insert(lanes.begin(), Lane(this->texture[4], y, true));
 	else
-		this->lanes.insert(lanes.begin(), Lane(this->texture[5], y));
+		this->lanes.insert(lanes.begin(), Lane(this->texture[5], y, true));
 }
 
 void LaneManager::update()

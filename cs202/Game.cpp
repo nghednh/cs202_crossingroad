@@ -43,7 +43,7 @@ void Game::loadTexture()
 	backgroundPlay.setTexture(_backgroundPlay);
 	_backgroundCredit.loadFromFile("resource/background/credit.jpg");
 	backgroundCredit.setTexture(_backgroundCredit);
-	_object.loadFromFile("resource/object.png");
+	_object.loadFromFile("resource/object/object.png");
 	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
 	_backButton0.loadFromFile("resource/backButton0.png");
 	_backButton1.loadFromFile("resource/backButton1.png");
