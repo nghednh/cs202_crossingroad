@@ -43,6 +43,11 @@ void Gif::setPosition(int x, int y)
 	this->sprite.setPosition(x, y);
 }
 
+void Gif::move(int offsetX, int offsetY)
+{
+	this->sprite.move(offsetX, offsetY);
+}
+
 void Gif::setScale(float x, float y)
 {
 	this->sprite.setScale(x, y);
@@ -55,6 +60,8 @@ void Gif::setSpeed(double speed)
 
 bool Gif::needUpdate()
 {
+	if (loop == true)
+		return true;
 	if (this->currentFrame + 1 >= this->totalFrame && loop == false)
 		return false;
 	return true;

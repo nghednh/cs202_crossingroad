@@ -15,7 +15,7 @@ public:
 	Lane(sf::Texture& texture, int y, bool isGrass);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y+128 > height; }
 	void drawTo(sf::RenderWindow& window);
-	void move();
+	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
 };
 
@@ -31,7 +31,7 @@ public:
 	LaneManager();
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
-	void update();
+	void update(bool& shouldGoFaster);
 	void drawTo(sf::RenderWindow& window);
 	int getWidth() const { return width; }
 	int getHeight() const { return height; }
