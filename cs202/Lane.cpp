@@ -14,12 +14,17 @@ void Lane::drawTo(sf::RenderWindow& window)
 	window.draw(this->sprite);
 }
 
-void Lane::move()
+void Lane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
-		this->sprite.move(0, 1);
-		y++;
+		this->sprite.move(0, 2);
+		if (shouldGoFaster)
+		{
+			this->sprite.move(0, 3);
+			y += 3;
+		}
+		y += 2;
 		clock.restart();
 	}
 }
@@ -52,11 +57,11 @@ void LaneManager::addLane(int y)
 		this->lanes.insert(lanes.begin(), Lane(this->texture[5], y, true));
 }
 
-void LaneManager::update()
+void LaneManager::update(bool& shouldGoFaster)
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		this->lanes[i].move();
+		this->lanes[i].move(shouldGoFaster);
 	}
 	if (this->lanes[0].isOutOfScreen(this->height))
 	{

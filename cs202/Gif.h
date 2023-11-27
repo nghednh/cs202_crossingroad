@@ -22,6 +22,7 @@ public:
 	void update();
 	void drawTo(sf::RenderWindow& window);
 	void setPosition(int x, int y);
+	void move(int offsetX, int offsetY);
 	void setScale(float x, float y);
 	void setSpeed(double speed);
 	bool needUpdate();

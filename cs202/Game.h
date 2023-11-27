@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "Gif.h"
 #include "Lane.h"
+#include "Character.h"
 
 class Game {
 private:
@@ -29,6 +30,8 @@ private:
 	sf::Texture _object;
 	GifManager clickGif;
 	LaneManager laneManager;
+	Character character;
+	bool shouldGoFaster;
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;
