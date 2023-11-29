@@ -11,58 +11,72 @@ using namespace std;
 using namespace sf;
 
 
-class Bullet;
+class MovingParticle;
+class Particle;
 class Player;
+class Game;
 
-class BulletTexture {
-public:
-    static BulletTexture& Instance() {
-        static BulletTexture instance; 
-        return instance;
-    }
-    Texture& getBulletTexture() {
-        return bulletTexture;
-    }
+class SetTexture {
 private:
-    Texture bulletTexture;
+    static Texture* texture;
 
-    BulletTexture() {
-        bulletTexture.loadFromFile("resource/bullet.png");
+    SetTexture() {
+        texture = new Texture[2];
+        texture[0].loadFromFile("resource/bullet.png");
+        texture[1].loadFromFile("resource/gun.png");
     }
-    ~BulletTexture() = default;
-    BulletTexture(const BulletTexture&) = delete;
-    BulletTexture& operator=(const BulletTexture&) = delete;
+
+    ~SetTexture() = default;
+    SetTexture(const SetTexture&) = delete;
+    SetTexture& operator=(const SetTexture&) = delete;
+
+public:
+    static Texture& getTexture(int i) {
+        if (!texture) SetTexture();
+        return texture[i];
+    }
 };
 
-class Bullet {
+class Particle {
 private:
-    double x, y;
+    Sprite sprite;
+public:
+    Particle(double x, double y, int textNum);
+    void update(double x, double y);
+    Vector2f getPos();
+    Sprite& getSprite();
+};
+
+class MovingParticle : public Particle {
+private:
     double directionX, directionY;
     double speed;
-    Sprite texture;
 public:
-    Bullet(Player& src, double desX, double desY, double speed);
+    MovingParticle(int x, int y, double desX, double desY, double speed);
     bool update();
-    Sprite& getTexture();
-};
-
-class Player {
-private:
-    int x;
-    int y;
-	vector <Bullet> bullets;
-public:
-	void addParticle(double desX, double desY, double speed);
-	void render(RenderWindow&);
-    friend Bullet::Bullet(Player& src, double desX, double desY, double speed);
+    Sprite& getSprite();
 };
 
 class Game {
 private:
-	vector <Player> player;
+    vector <Particle> particles;
+    vector <MovingParticle> mps;
     RenderWindow window;
 public:
     Game();
-	void render();
+    void render();
+    void updateAndDraw();
+    void addMovingParticle(Unit& src, Unit& des, double speed);
+    void addParticle(double x, double y);
 };
 
+class Unit : public Game {
+private:
+    int x;
+    int y;
+public:
+    Unit(int x, int y);
+    void fireAt(Unit& target);
+    void placeGun();
+    friend void Game::addMovingParticle(Unit& src, Unit& des, double speed);
+};

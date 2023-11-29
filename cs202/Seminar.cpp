@@ -1,55 +1,52 @@
 #include "Seminar.h"
 
-Texture& bulletText = BulletTexture::Instance().getBulletTexture();
-
-bool Bullet::update()
+Particle::Particle(double x, double y, int textNum)
 {
-	x += sin(atan((directionX - x) / (directionY - y))) * speed;
-	y += cos(atan((directionX - x) / (directionY - y))) * speed;
+	sprite.setTexture(SetTexture::getTexture(textNum));
+	sprite.setPosition(x, y);
+}
 
-	x /= 60;
-	y /= 60;
+MovingParticle::MovingParticle(int x, int y, double desX, double desY, double speed) 
+: Particle(x, y, 0), directionX(desX), directionY(desY), speed(speed) {}
+
+bool MovingParticle::update()
+{
+	Vector2f tmp = Particle::getPos();
+
+	double x = tmp.x + sin(atan((directionX - tmp.x) / (directionY - tmp.y))) * speed;
+	double y = tmp.y + cos(atan((directionX - tmp.x) / (directionY - tmp.y))) * speed;
+
+	x /= 60;	y /= 60;
 
 	if (x > 1600 && y > 900) return false;
-	else 
+	else
 	{
-		texture.setPosition(x, y);
+		Particle::update(x, y);
 		return true;
 	}
 }
 
-Sprite& Bullet::getTexture()
+void Particle::update(double x, double y)
 {
-	return texture;
+	sprite.setPosition(x, y);
 }
 
-Bullet::Bullet(Player& src, double desX, double desY, double speed) :
-	x(src.x), y(src.y), directionX(desX), directionY(desY), speed(speed) 
+Vector2f Particle::getPos()
 {
-	texture.setTexture(bulletText);
-}
-
-void Player::render(RenderWindow& window)
-{
-	for (int i = 0; i < bullets.size(); i++)
-	{
-		if (bullets[i].update())
-			window.draw(bullets[i].getTexture());
-		else
-		{
-			bullets.erase(bullets.begin() + i);
-			i--;
-		}
-	}
-}
-
-void Player::addParticle(double desX, double desY, double speed)
-{
-	Bullet tmp(*this, desX, desY, speed);
-	bullets.push_back(tmp);
+	return sprite.getPosition();
 }
 
 Game::Game() : window(sf::VideoMode(1600, 900), "Game", sf::Style::Close) {};
+
+Sprite& Particle::getSprite()
+{
+	return sprite;
+}
+
+Sprite& MovingParticle::getSprite()
+{
+	return Particle::getSprite();
+}
 
 void Game::render()
 {
@@ -62,10 +59,60 @@ void Game::render()
 		{
 			if (event.type == Event::Closed) window.close();
 			if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
-
-			for (int i = 0; i < player.size(); i++)
-				player[i].Player::render(window);
 		}
-		render();
+		window.clear();
+		updateAndDraw();
+		window.display();
 	}
+}
+
+void Game::updateAndDraw()
+{
+	for (int i = 0; i < mps.size(); i++)
+		if (mps[i].update())
+			window.draw(mps[i].getSprite());
+		else
+		{
+			mps.erase(mps.begin() + i);
+			i--;
+		}
+	for (int i = 0; i < particles.size(); i++)
+		window.draw(particles[i].getSprite());
+}
+
+void Game::addMovingParticle(Unit& src, Unit& des, double speed)
+{
+	MovingParticle tmp(src.x, src.y, des.x, des.y, speed);
+	mps.push_back(tmp);
+}
+
+void Game::addParticle(double x, double y)
+{
+	Particle tmp(x, y, 1);
+	particles.push_back(tmp);
+}
+
+void Unit::fireAt(Unit& target)
+{
+	Game::addMovingParticle(*this, target, 100);
+}
+
+void Unit::placeGun()
+{
+	Game::addParticle(x, y);
+}
+
+/*
+
+void Player::addParticle(double desX, double desY, double speed)
+{
+	Bullet tmp(*this, desX, desY, speed);
+	bullets.push_back(tmp);
+}
+*/
+
+Unit::Unit(int x, int y) : Game()
+{
+	this->x = x;
+	this->y = y;
 }
