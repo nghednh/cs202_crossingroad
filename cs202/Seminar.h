@@ -7,76 +7,81 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
+#include <unordered_map>
 using namespace std;
 using namespace sf;
 
 
-class MovingParticle;
-class Particle;
-class Player;
-class Game;
-
-class SetTexture {
-private:
-    static Texture* texture;
-
-    SetTexture() {
-        texture = new Texture[2];
-        texture[0].loadFromFile("resource/bullet.png");
-        texture[1].loadFromFile("resource/gun.png");
-    }
-
-    ~SetTexture() = default;
-    SetTexture(const SetTexture&) = delete;
-    SetTexture& operator=(const SetTexture&) = delete;
-
-public:
-    static Texture& getTexture(int i) {
-        if (!texture) SetTexture();
-        return texture[i];
-    }
-};
-
-class Particle {
+class Bullet {
 private:
     Sprite sprite;
 public:
-    Particle(double x, double y, int textNum);
-    void update(double x, double y);
-    Vector2f getPos();
-    Sprite& getSprite();
+    Bullet(Texture& texture) : sprite(texture) {}
+
+    void draw(RenderWindow& window)
+    {
+        window.draw(sprite);
+    }
+
+    void move(double offsetX, double offsetY)
+    {
+        sprite.move(offsetX, offsetY);
+    }
 };
 
-class MovingParticle : public Particle {
-private:
-    double directionX, directionY;
-    double speed;
+class BulletFactory {
 public:
-    MovingParticle(int x, int y, double desX, double desY, double speed);
-    bool update();
-    Sprite& getSprite();
+    unordered_map<string, Texture> textures;
+    vector <string> type = { "RED", "BLACK", "GRAY", "PURPLE"};
+
+    BulletFactory()
+    {
+        textures["RED"].loadFromFile("resource/backButton0.png");
+        textures["BLACK"].loadFromFile("resource/backButton1.png");
+        textures["GRAY"].loadFromFile("resource/bullet.png");
+        textures["GRAY"].loadFromFile("resource/object.png");
+    }
+
+    Bullet createBullet()
+    {
+        return Bullet(textures[type[rand() % 4]]);
+    }
 };
 
 class Game {
 private:
-    vector <Particle> particles;
-    vector <MovingParticle> mps;
+    vector <Bullet> bullets;
     RenderWindow window;
+    BulletFactory bulletFactory;
 public:
-    Game();
-    void render();
-    void updateAndDraw();
-    void addMovingParticle(Unit& src, Unit& des, double speed);
-    void addParticle(double x, double y);
+    Game() : bulletFactory()
+    {
+        RenderWindow window(sf::VideoMode(800, 600), "Flyweight Pattern Example");
+
+        while (window.isOpen()) {
+            Event event;
+            while (window.pollEvent(event)) {
+                if (event.type == Event::Closed) window.close();
+                else if (event.type == Event::MouseButtonPressed) {
+                    auto bullet = bulletFactory.createBullet();
+                    bullets.push_back(bullet);
+                }
+            }
+
+            for (auto& bullet : bullets) {
+                bullet.move(1, 1);
+            }
+
+            window.clear();
+            for (auto& bullet : bullets) {
+                bullet.draw(window);
+            }
+            window.display();
+        }
+    }
 };
 
-class Unit : public Game {
-private:
-    int x;
-    int y;
-public:
-    Unit(int x, int y);
-    void fireAt(Unit& target);
-    void placeGun();
-    friend void Game::addMovingParticle(Unit& src, Unit& des, double speed);
-};
+int main()
+{
+    Game a;
+}

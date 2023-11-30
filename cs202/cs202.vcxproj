@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Seminar.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Seminar.h" />
