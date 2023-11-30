@@ -5,6 +5,6 @@ int main()
 {
     Game game;
     game.run();
-    //loadGrass();
+    loadGrass();
     return 0;
 }

@@ -147,6 +147,7 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gif.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Lane.h" />
     <ClInclude Include="LoadRandom.h" />
   </ItemGroup>

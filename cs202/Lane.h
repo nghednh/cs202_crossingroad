@@ -3,6 +3,7 @@
 #include <SFML/Window.hpp>
 #include <vector>
 #include <string>
+#include "Object.h"
 
 class Lane
 {
@@ -11,12 +12,19 @@ private:
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
+	int nob;
+	Object *ob;
+
 public:
-	Lane(sf::Texture& texture, int y, bool isGrass);
+	Lane(sf::Texture& texture, int y, bool isGrass, sf::Texture &rock, sf::Texture &car);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y+128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
+	bool isGras() { return isGrass; }
+	void initOb(sf::Texture& rock);
+	void moveobx(int a,int b);
+	int returnnob() { return nob; }
 };
 
 class LaneManager
@@ -24,6 +32,8 @@ class LaneManager
 private:
 	std::vector<Lane> lanes;
 	sf::Texture texture[6];
+	sf::Texture rock;
+	sf::Texture car;
 	int width;
 	int height;
 	int difficulty;
@@ -38,4 +48,3 @@ public:
 	int getDifficulty() const { return difficulty; }
 	void setDifficulty(int difficulty) { this->difficulty = difficulty; }
 };
-
