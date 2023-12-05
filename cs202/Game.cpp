@@ -17,7 +17,7 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	creditButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 550);
 	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 9; i++)			
 		laneManager.addLane(900 - i * 128);
 	shouldGoFaster = false;
 }
