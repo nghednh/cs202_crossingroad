@@ -19,7 +19,13 @@ private:
 	double speed;
 	bool dead;
 	bool isOutOfScreen;
+	bool upPressed;
+	bool downPressed;
+	bool leftPressed;
+	bool rightPressed;
+	int counter;
 public:
+	bool blocked;
 	Character();
 	void update();
 	void up();

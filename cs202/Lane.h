@@ -7,30 +7,74 @@
 
 class Lane
 {
+public:
+	virtual bool isOutOfScreen(int& height) const = 0;
+	virtual void drawTo(sf::RenderWindow& window) = 0;
+	virtual void move(bool& shouldGoFaster) = 0;
+	virtual int getY() const = 0;
+};
+
+class GrassLane : public Lane
+{
 private:
-	bool isGrass;
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
-	int nob;
-	Object *ob;
+	//int nob;
+	//Object* ob;
 
 public:
-	Lane(sf::Texture& texture, int y, bool isGrass, sf::Texture &rock, sf::Texture &car);
-	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y+128 > height; }
+	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
-	bool isGras() { return isGrass; }
-	void initOb(sf::Texture& rock);
-	void moveobx(int a,int b);
-	int returnnob() { return nob; }
+	//void initOb(sf::Texture& rock);
+	//void moveobx(int a, int b);
+	//int returnnob() { return nob; }
+};
+
+class RoadLane : public Lane
+{
+private:
+	sf::Sprite sprite;
+	int y;
+	sf::Clock clock;
+	//int nob;
+	//Object* ob;
+public:
+	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
+	void drawTo(sf::RenderWindow& window);
+	void move(bool& shouldGoFaster);
+	int getY() const { return y; }
+	//void initOb(sf::Texture& rock);
+	//void moveobx(int a, int b);
+	//int returnnob() { return nob; }
+};
+
+class RailLane : public Lane
+{
+private:
+	sf::Sprite sprite;
+	int y;
+	sf::Clock clock;
+	Object train;
+	bool redLight;
+public:
+	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
+	void drawTo(sf::RenderWindow& window);
+	void move(bool& shouldGoFaster);
+	int getY() const { return y; }
+	//void initOb(sf::Texture& rock);
+	//void moveobx(int a, int b);
 };
 
 class LaneManager
 {
 private:
-	std::vector<Lane> lanes;
+	std::vector<Lane*> lanes;
 	sf::Texture texture[6];
 	sf::Texture rock;
 	sf::Texture car;
@@ -39,6 +83,7 @@ private:
 	int difficulty;
 public:
 	LaneManager();
+	~LaneManager();
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
 	void update(bool& shouldGoFaster);
