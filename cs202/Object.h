@@ -24,6 +24,7 @@ public:
 	void setScale(int x, int y) {
 		sprite.setScale(x, y);
 	}
+
 	void setTextureRect(int a, int b, int c, int d) {
 		sprite.setTextureRect(sf::IntRect(a,b,c,d));
 	}

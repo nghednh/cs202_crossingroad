@@ -20,18 +20,18 @@ private:
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
-	//int nob;
-	//Object* ob;
+	int nob;
+	Object* ob;
 
 public:
-	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
-	//void initOb(sf::Texture& rock);
-	//void moveobx(int a, int b);
-	//int returnnob() { return nob; }
+	void initOb(sf::Texture& rock);
+	void moveobx(int a, int b);
+	int returnnob() { return nob; }
 };
 
 class RoadLane : public Lane
@@ -40,17 +40,17 @@ private:
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
-	//int nob;
-	//Object* ob;
+	int nob;
+	Object* ob;
 public:
-	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture &train);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
-	//void initOb(sf::Texture& rock);
-	//void moveobx(int a, int b);
-	//int returnnob() { return nob; }
+	void initOb(sf::Texture& rock);
+	void moveobx(int a, int b);
+	int returnnob() { return nob; }
 };
 
 class RailLane : public Lane
@@ -59,16 +59,16 @@ private:
 	sf::Sprite sprite;
 	int y;
 	sf::Clock clock;
-	Object train;
+	Object *train;
 	bool redLight;
 public:
-	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car);
+	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
-	//void initOb(sf::Texture& rock);
-	//void moveobx(int a, int b);
+	void initOb(sf::Texture& rock);
+	void moveobx(int a, int b);
 };
 
 class LaneManager
@@ -78,6 +78,7 @@ private:
 	sf::Texture texture[6];
 	sf::Texture rock;
 	sf::Texture car;
+	sf::Texture train;
 	int width;
 	int height;
 	int difficulty;
