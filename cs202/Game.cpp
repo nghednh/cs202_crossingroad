@@ -201,7 +201,7 @@ void Game::draw()
 	}
 	else if (state == PLAY)
 	{
-		window.draw(backgroundPlay);
+		//window.draw(backgroundPlay);
 		laneManager.drawTo(window);
 		window.draw(backButton);
 		character.draw(window);

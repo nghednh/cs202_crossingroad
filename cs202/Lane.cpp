@@ -7,7 +7,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	nob = rand() % 6 + 1;
+	nob = rand() % 11 + 1;
 	this->ob = new ObjectStable [nob];
 	initOb(rock);
 }
@@ -41,15 +41,15 @@ void GrassLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
-		this->sprite.move(0, 2);
-		moveobx(15,2);
+		this->sprite.move(0, 10);
+		moveobx(15,10);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 3);
-			moveobx(0,3);
-			y += 3;
+			this->sprite.move(0, 20);
+			moveobx(0, 20);
+			y += 20;
 		}
-		y += 2;
+		y += 10;
 		clock.restart();
 	}
 }
@@ -65,7 +65,7 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	nob = rand()%4+1;
+	nob = rand()%10+1;
 	this->ob = new ObjectMoving[nob];
 	initOb(car);
 
@@ -117,15 +117,15 @@ void RoadLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
-		this->sprite.move(0, 2);
-		moveobx(15, 2);
+		this->sprite.move(0, 10);
+		moveobx(15, 10);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 3);
-			moveobx(0, 3);
-			y += 3;
+			this->sprite.move(0, 20);
+			moveobx(0, 20);
+			y += 20;
 		}
-		y += 2;
+		y += 10;
 		clock.restart();
 	}
 }
@@ -166,16 +166,16 @@ void RailLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
-		this->sprite.move(0, 2);
-		if (this->greenLight()) moveobx(50, 2);
-		else moveobx(0, 2);
+		this->sprite.move(0, 10);
+		if (this->greenLight()) moveobx(50, 10);
+		else moveobx(0, 10);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 3);
-			moveobx(0, 3);
-			y += 3;
+			this->sprite.move(0, 20);
+			moveobx(0, 20);
+			y += 20;
 		}
-		y += 2;
+		y += 10;
 		clock.restart();
 	}
 }
@@ -219,9 +219,9 @@ void LaneManager::addLane(int y)
 	else if (random < 60)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, rock, car,train));
 	else if (random < 80)
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[3], y, rock, car,train));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, rock, car,train));
 	else if (random < 90)
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[4], y, rock, car,train));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car,train));
 	else
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car,train));
 }

@@ -103,7 +103,6 @@ public:
 		return x;
 	}
 	void setPos(int x, int y) {
-		std::cout << "1";
 		if (!rfleft()) sprite.setPosition(x * 200, y);
 		else sprite.setPosition(x*200-1000, y);
 	}
@@ -117,7 +116,6 @@ public:
 		setScale(1.28, 1.28);
 	}
 	virtual void setPos(int x, int y) {
-		std::cout << 2;
 		if (!rfleft()) sprite.setPosition(x * 64*2+2000, y);
 		else sprite.setPosition(x * 64 * 2-2000, y);
 	}
