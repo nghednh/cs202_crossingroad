@@ -7,8 +7,8 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	nob = rand() % 5 + 1;
-	this->ob = new ObjectStable[nob];
+	nob = rand() % 6 + 1;
+	this->ob = new ObjectStable [nob];
 	initOb(rock);
 }
 
@@ -18,7 +18,6 @@ void GrassLane::initOb(sf::Texture& rock) {
 	int b = -2;
 	for (int i = 0; i < nob; i++) {
 		this->ob[i].setup(rock);
-		ob[i].randomx();
 		b = ob[i].randomx();
 		while (a == b) b = ob[i].randomx();
 		a = b;
@@ -66,9 +65,10 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	nob = 1;
+	nob = rand()%4+1;
 	this->ob = new ObjectMoving[nob];
 	initOb(car);
+
 }
 
 void RoadLane::initOb(sf::Texture& rock) {
@@ -76,15 +76,30 @@ void RoadLane::initOb(sf::Texture& rock) {
 	int a = -1;
 	//std::cout << nob;
 	int b = -2;
+	bool bef;
 	for (int i = 0; i < nob; i++) {
-		this->ob[i].setup(rock);
-		ob[i].randomx();
-		b = ob[i].randomx();
-		while (a == b) b = ob[i].randomx();
-		a = b;
-		ob[i].setPos(ob[i].returnx(), y);
-		if (ob[i].rfleft()) ob[i].setScale(-1, 1);
+		if (i==0) {
+			this->ob[i].setup(rock);
+			//ob[i].randomx();
+			b = ob[i].randomx();
+			while (a == b) b = ob[i].randomx();
+			a = b;
+			ob[i].setPos(ob[i].returnx(), y);
+			if (ob[i].rfleft()) ob[i].setScale(-1, 1);
+			bef = ob[i].rfleft();
+		}
+		else {
+			this->ob[i].setup(rock);
+			ob[i].randomxx(bef);
+			b = ob[i].randomxx(bef);
+			while (a == b) b = ob[i].randomxx(bef);
+			a = b;
+			ob[i].setPos(ob[i].returnx(), y);
+			if (ob[i].rfleft()) ob[i].setScale(-1, 1);
+		}
+		
 	}
+
 }
 
 void RoadLane::drawTo(sf::RenderWindow& window)
@@ -127,13 +142,16 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	this->train = new ObjectMoving;
+	this->train = new TrainObject;
 	initOb(train);
+	
 }
 
 void RailLane::initOb(sf::Texture& rock) {
 	this->train->setup(rock);
-	this->train->setPos(0, y);
+	this->train->randomx();
+	this->train->setPos(train->returnx(), y);
+	if (this->train->rfleft())  this->train->setScale(-1, 1);
 }
 
 void RailLane::drawTo(sf::RenderWindow& window)
@@ -149,7 +167,8 @@ void RailLane::move(bool& shouldGoFaster)
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
 		this->sprite.move(0, 2);
-		moveobx(15, 2);
+		if (this->greenLight()) moveobx(50, 2);
+		else moveobx(0, 2);
 		if (shouldGoFaster)
 		{
 			this->sprite.move(0, 3);
@@ -179,7 +198,7 @@ LaneManager::LaneManager()
 	this->texture[5].loadFromFile("resource/tiles/grass3.png");
 	this->rock.loadFromFile("resource/object/object.png");
 	this->car.loadFromFile("resource/object/vehicle/left0.png");
-	this->train.loadFromFile("resource/object/vehicle/trainLeft.png");
+	this->train.loadFromFile("resource/object/trainLeft.png");
 }
 
 LaneManager::~LaneManager()
@@ -200,9 +219,9 @@ void LaneManager::addLane(int y)
 	else if (random < 60)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, rock, car,train));
 	else if (random < 80)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, rock, car,train));
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[3], y, rock, car,train));
 	else if (random < 90)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car,train));
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[4], y, rock, car,train));
 	else
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car,train));
 }
@@ -217,6 +236,7 @@ void LaneManager::update(bool& shouldGoFaster)
 	{
 		delete lanes.back();
 		lanes.pop_back();
+
 		addLane(lanes[0]->getY() - 128);
 	}
 }
@@ -225,4 +245,14 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 		lanes[i]->drawTo(window);
+}
+Lane::~Lane() {}
+GrassLane::~GrassLane() {
+	delete [] ob;
+}
+RoadLane::~RoadLane() {
+	delete [] ob;
+}
+RailLane::~RailLane() {
+	delete train;
 }

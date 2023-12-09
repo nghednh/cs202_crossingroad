@@ -18,7 +18,7 @@ public:
 	void drawTo(sf::RenderWindow &win) {
 		win.draw(sprite);
 	}
-	void setPos(int x, int y) {
+	virtual void setPos(int x, int y) {
 		sprite.setPosition(x*64*2, y);
 	}
 	void setScale(int x, int y) {
@@ -49,8 +49,12 @@ public:
 	virtual bool rfleft() {
 		return true;
 	}
+	virtual int randomxx(bool l) {
+		return 0;
+	}
 };
 class ObjectStable : public Object {
+private:
 public:
 	int returnx() {
 		return this->x;
@@ -65,26 +69,56 @@ class ObjectMoving : public Object {
 private:
 	bool fleft;
 public:
-	void setup(sf::Texture& tex) {
+	virtual void setup(sf::Texture& tex) {
 		setTexture(tex);
 		setTextureRect(0, 0, 100, 100);
 		setScale(1.28,1.28);
 	}
 	int returnx(){
-		return x;
+		return this->x;
 	}
-	int randomx() {
-		if (rand()%2==0) {
-			x = 13;
+	virtual int randomx() {
+		if (rand()%2!=0) {
+			x = rand()%13;
 			fleft = false;
 		}
 		else {
-			x = 0;
+			x = rand()%13;
 			fleft = true;
 		}
 		return x;
 	}
-	bool rfleft() {
+	virtual bool rfleft() {
 		return fleft;
+	}
+	int randomxx(bool l) {
+		if (!l) {
+			x = rand()%13;
+			fleft = false;
+		}
+		else {
+			x = rand()%13;
+			fleft = true;
+		}
+		return x;
+	}
+	void setPos(int x, int y) {
+		std::cout << "1";
+		if (!rfleft()) sprite.setPosition(x * 200, y);
+		else sprite.setPosition(x*200-1000, y);
+	}
+};
+class TrainObject : public ObjectMoving {
+public:
+	
+	virtual void setup(sf::Texture& tex) {
+		setTexture(tex);
+		setTextureRect(0, 0, 512, 64);
+		setScale(1.28, 1.28);
+	}
+	virtual void setPos(int x, int y) {
+		std::cout << 2;
+		if (!rfleft()) sprite.setPosition(x * 64*2+2000, y);
+		else sprite.setPosition(x * 64 * 2-2000, y);
 	}
 };
