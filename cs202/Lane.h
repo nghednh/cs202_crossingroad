@@ -7,8 +7,10 @@
 
 class Lane
 {
+protected:
+	int index;
 public:
-	Lane() {};
+	virtual ~Lane() {}
 	virtual bool isOutOfScreen(int& height) const = 0;
 	virtual void drawTo(sf::RenderWindow& window) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
@@ -26,8 +28,7 @@ private:
 	ObjectStable* ob;
 
 public:
-	~GrassLane();
-	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train);
+	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
@@ -47,12 +48,8 @@ private:
 	ObjectMoving* ob;
 public:
 	~RoadLane();
-	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture &train);
-	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
-	void drawTo(sf::RenderWindow& window);
-	void move(bool& shouldGoFaster);
+	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture &train, int index);
 	int getY() const { return y; }
-	void initOb(sf::Texture& rock);
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
 };
@@ -67,7 +64,7 @@ private:
 	bool redLight=false;
 public:
 	~RailLane();
-	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train);
+	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
@@ -88,6 +85,7 @@ private:
 	int width;
 	int height;
 	int difficulty;
+	int index;
 public:
 	LaneManager();
 	~LaneManager();

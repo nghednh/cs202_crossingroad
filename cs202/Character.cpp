@@ -3,7 +3,7 @@
 Character::Character()
 {
 	this->jumping.loadFromFile("resource/character/jumping.png");
-	this->gif.load(this->jumping, 0, 0, 32, 32, 8, 2);
+	this->gif.load(this->jumping, 0, 0, 32, 32, 8, 1);
 	this->gif.setScale(3, 3);
 	this->x = 0;
 	this->y = 32;
@@ -32,26 +32,26 @@ void Character::update()
 		this->y += 10;
 		clock.restart();
 		if (upPressed) {
-			this->gif.move(0, -16);
-			this->y -= 16;
+			this->gif.move(0, -32);
+			this->y -= 32;
 			counter++;
 		}
 		if (downPressed) {
-			this->gif.move(0, 16);
-			this->y += 16;
+			this->gif.move(0, 32);
+			this->y += 32;
 			counter++;
 		}
 		if (leftPressed) {
-			this->gif.move(-16, 0);
-			this->x -= 16;
+			this->gif.move(-32, 0);
+			this->x -= 32;
 			counter++;
 		}
 		if (rightPressed) {
-			this->gif.move(16, 0);
-			this->x += 16;
+			this->gif.move(32, 0);
+			this->x += 32;
 			counter++;
 		}
-		if (counter == 4) {
+		if (counter == 2) {
 			upPressed = false;
 			downPressed = false;
 			leftPressed = false;
