@@ -15,7 +15,6 @@ public:
 	virtual void drawTo(sf::RenderWindow& window) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
-	virtual ~Lane();
 };
 
 class GrassLane : public Lane
