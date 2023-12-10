@@ -5,28 +5,28 @@
 #include <iostream>
 class Object {
 protected:
-		sf::Sprite sprite;
-		int x;
+	sf::Sprite sprite;
+	int x;
 public:
 	Object() = default;
-	Object(sf::Texture &ob) {
+	Object(sf::Texture& ob) {
 		sprite.setTexture(ob);
 	}
-	void setTexture(sf::Texture &tex) {
+	void setTexture(sf::Texture& tex) {
 		sprite.setTexture(tex);
 	}
-	void drawTo(sf::RenderWindow &win) {
+	void drawTo(sf::RenderWindow& win) {
 		win.draw(sprite);
 	}
 	void setPos(int x, int y) {
-		sprite.setPosition(x*64*2, y);
+		sprite.setPosition(x * 64 * 2 - 40, y - 26);
 	}
 	void setScale(int x, int y) {
 		sprite.setScale(x, y);
 	}
 
 	void setTextureRect(int a, int b, int c, int d) {
-		sprite.setTextureRect(sf::IntRect(a,b,c,d));
+		sprite.setTextureRect(sf::IntRect(a, b, c, d));
 	}
 	void move(int x, int y) {
 		sprite.move(x, y);
@@ -41,7 +41,7 @@ public:
 	virtual int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture & tex) {
+	virtual void setup(sf::Texture& tex) {
 		setTexture(tex);
 		setTextureRect(0, 0, 64, 64);
 		setScale(2, 2);
@@ -65,16 +65,16 @@ class ObjectMoving : public Object {
 private:
 	bool fleft;
 public:
-	void setup(sf::Texture& tex) {
+	void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
 		setTexture(tex);
-		setTextureRect(0, 0, 100, 100);
-		setScale(1.28,1.28);
+		setTextureRect(xTopLeft, yTopLeft, width, height);
+		setScale(scaleX, scaleY);
 	}
-	int returnx(){
+	int returnx() {
 		return x;
 	}
 	int randomx() {
-		if (rand()%2==0) {
+		if (rand() % 2 == 0) {
 			x = 13;
 			fleft = false;
 		}

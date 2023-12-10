@@ -23,7 +23,7 @@ private:
 	bool downPressed;
 	bool leftPressed;
 	bool rightPressed;
-	int counter;
+	int counter; //use for animation
 public:
 	bool blocked;
 	Character();
