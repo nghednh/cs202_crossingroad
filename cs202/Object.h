@@ -5,28 +5,28 @@
 #include <iostream>
 class Object {
 protected:
-		sf::Sprite sprite;
-		int x;
+	sf::Sprite sprite;
+	int x;
 public:
 	Object() = default;
-	Object(sf::Texture &ob) {
+	Object(sf::Texture& ob) {
 		sprite.setTexture(ob);
 	}
-	void setTexture(sf::Texture &tex) {
+	void setTexture(sf::Texture& tex) {
 		sprite.setTexture(tex);
 	}
-	void drawTo(sf::RenderWindow &win) {
+	void drawTo(sf::RenderWindow& win) {
 		win.draw(sprite);
 	}
 	virtual void setPos(int x, int y) {
-		sprite.setPosition(x*64*2, y);
+		sprite.setPosition(x * 64 * 2 - 20, y - 26);
 	}
 	void setScale(int x, int y) {
 		sprite.setScale(x, y);
 	}
 
 	void setTextureRect(int a, int b, int c, int d) {
-		sprite.setTextureRect(sf::IntRect(a,b,c,d));
+		sprite.setTextureRect(sf::IntRect(a, b, c, d));
 	}
 	void move(int x, int y) {
 		sprite.move(x, y);
@@ -41,10 +41,10 @@ public:
 	virtual int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture & tex) {
+	virtual void setup(sf::Texture& tex) {
 		setTexture(tex);
 		setTextureRect(0, 0, 64, 64);
-		setScale(2, 2);
+		setScale(2.56, 2.56);
 	}
 	virtual bool rfleft() {
 		return true;
@@ -69,12 +69,12 @@ class ObjectMoving : public Object {
 private:
 	bool fleft;
 public:
-	virtual void setup(sf::Texture& tex) {
+	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
 		setTexture(tex);
-		setTextureRect(0, 0, 100, 100);
-		setScale(1.28,1.28);
+		setTextureRect(xTopLeft, yTopLeft, width, height);
+		setScale(scaleX, scaleY);
 	}
-	int returnx(){
+	int returnx() {
 		return this->x;
 	}
 	virtual int randomx() {
@@ -103,8 +103,8 @@ public:
 		return x;
 	}
 	void setPos(int x, int y) {
-		if (!rfleft()) sprite.setPosition(x * 200, y);
-		else sprite.setPosition(x*200-1000, y);
+		if (!rfleft()) sprite.setPosition(x * 200, y - 30);
+		else sprite.setPosition(x*200-1000, y - 30);
 	}
 };
 class TrainObject : public ObjectMoving {
@@ -113,10 +113,10 @@ public:
 	virtual void setup(sf::Texture& tex) {
 		setTexture(tex);
 		setTextureRect(0, 0, 512, 64);
-		setScale(1.28, 1.28);
+		setScale(4, 4);
 	}
 	virtual void setPos(int x, int y) {
-		if (!rfleft()) sprite.setPosition(x * 64*2+2000, y);
-		else sprite.setPosition(x * 64 * 2-2000, y);
+		if (!rfleft()) sprite.setPosition(x * 64*2+2000, y - 120);
+		else sprite.setPosition(x * 64 * 2-2000, y - 120);
 	}
 };
