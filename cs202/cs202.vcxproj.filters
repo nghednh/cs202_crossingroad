@@ -30,10 +30,10 @@
     <ClCompile Include="LoadRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lane.cpp">
+    <ClCompile Include="Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
+    <ClCompile Include="Lane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

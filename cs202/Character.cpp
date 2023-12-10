@@ -24,12 +24,12 @@ void Character::update()
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time > 0.05) {
-		this->gif.move(0, 2);
+		this->gif.move(0, 10);
 		if (this->shouldGoFaster()) {
-			this->gif.move(0, 3);
-			this->y += 3;
+			this->gif.move(0, 20);
+			this->y += 20;
 		}
-		this->y += 2;
+		this->y += 10;
 		clock.restart();
 		if (upPressed) {
 			this->gif.move(0, -32);
