@@ -27,8 +27,8 @@ void Character::update()
 		this->gif.move(0, 5);
 		this->y += 5;
 		if (this->shouldGoFaster()) {
-			this->gif.move(0, 16);
-			this->y += 16;
+			this->gif.move(0, 0);
+			this->y += 0;
 		}
 		clock.restart();
 		if (upPressed) {

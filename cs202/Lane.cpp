@@ -36,6 +36,7 @@ void GrassLane::drawTo(sf::RenderWindow& window)
 		ob[i].drawTo(window);
 	}
 
+
 }
 
 void GrassLane::move(bool& shouldGoFaster)
@@ -47,9 +48,10 @@ void GrassLane::move(bool& shouldGoFaster)
 		moveobx(15, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 16);
-			moveobx(0, 16);
-			y += 16;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
+			y += 0;
 		}
 		clock.restart();
 	}
@@ -124,9 +126,9 @@ void RoadLane::move(bool& shouldGoFaster)
 		moveobx(15, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 16);
-			moveobx(0, 16);
-			y += 16;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
 		}
 		clock.restart();
 	}
@@ -175,9 +177,9 @@ void RailLane::move(bool& shouldGoFaster)
 		else moveobx(0, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 16);
-			moveobx(0, 16);
-			y += 16;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
 		}
 		clock.restart();
 	}
