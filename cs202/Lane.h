@@ -55,6 +55,7 @@ public:
 	int getY() const { return y; }
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
+	void initOb(sf::Texture& rock);
 };
 
 class RailLane : public Lane
