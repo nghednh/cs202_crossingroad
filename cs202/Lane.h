@@ -15,7 +15,6 @@ public:
 	virtual void drawTo(sf::RenderWindow& window) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
-	virtual ~Lane();
 };
 
 class GrassLane : public Lane
@@ -28,6 +27,7 @@ private:
 	ObjectStable* ob;
 
 public:
+	~GrassLane();
 	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
@@ -49,6 +49,9 @@ private:
 public:
 	~RoadLane();
 	RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture &train, int index);
+	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
+	void drawTo(sf::RenderWindow& window);
+	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }

@@ -23,32 +23,32 @@ Character::Character()
 void Character::update()
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time > 0.05) {
-		this->gif.move(0, 10);
+	if (time >= 0.05) {
+		this->gif.move(0, 5);
+		this->y += 5;
 		if (this->shouldGoFaster()) {
-			this->gif.move(0, 20);
-			this->y += 20;
+			this->gif.move(0, 0);
+			this->y += 0;
 		}
-		this->y += 10;
 		clock.restart();
 		if (upPressed) {
-			this->gif.move(0, -32);
-			this->y -= 32;
+			this->gif.move(0, -64);
+			this->y -= 64;
 			counter++;
 		}
 		if (downPressed) {
-			this->gif.move(0, 32);
-			this->y += 32;
+			this->gif.move(0, 64);
+			this->y += 64;
 			counter++;
 		}
 		if (leftPressed) {
-			this->gif.move(-32, 0);
-			this->x -= 32;
+			this->gif.move(-64, 0);
+			this->x -= 64;
 			counter++;
 		}
 		if (rightPressed) {
-			this->gif.move(32, 0);
-			this->x += 32;
+			this->gif.move(64, 0);
+			this->x += 64;
 			counter++;
 		}
 		if (counter == 2) {
@@ -57,6 +57,7 @@ void Character::update()
 			leftPressed = false;
 			rightPressed = false;
 			counter = 0;
+			std::cout << this->x << " " << this->y << std::endl;
 		}
 	}
 	else
@@ -70,42 +71,38 @@ void Character::up()
 {
 	if (upPressed || downPressed || leftPressed || rightPressed)
 		return;
-	this->y -= 64;
-	this->gif.move(0, -64);
 	upPressed = true;
+	std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::down()
 {
 	if (upPressed || downPressed || leftPressed || rightPressed)
 		return;
-	if (this->y + 64 >= 900)
+	if (this->y + 128 >= 900)
 		return;
-	this->y += 64;
-	this->gif.move(0, 64);
 	downPressed = true;
+	std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::left()
 {
 	if (upPressed || downPressed || leftPressed || rightPressed)
 		return;
-	if (this->x - 64 <= 0)
+	if (this->x - 128 <= 0)
 		return;
-	this->x -= 64;
-	this->gif.move(-64, 0);
 	leftPressed = true;
+	std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::right()
 {
 	if (upPressed || downPressed || leftPressed || rightPressed)
 		return;
-	if (this->x + 64 >= 1600)
+	if (this->x + 128 >= 1600)
 		return;
-	this->x += 64;
-	this->gif.move(64, 0);
 	rightPressed = true;
+	std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::draw(sf::RenderWindow& window)

@@ -7,8 +7,9 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
+	this->index = index;
 	nob = rand() % 11 + 1;
-	this->ob = new ObjectStable [nob];
+	this->ob = new ObjectStable[nob];
 	initOb(rock);
 }
 
@@ -35,21 +36,23 @@ void GrassLane::drawTo(sf::RenderWindow& window)
 		ob[i].drawTo(window);
 	}
 
+
 }
 
 void GrassLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time > 0.05) {
-		this->sprite.move(0, 10);
-		moveobx(15,10);
+	if (time >= 0.05) {
+		this->sprite.move(0, 5);
+		y += 5;
+		moveobx(15, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 20);
-			moveobx(0, 20);
-			y += 20;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
+			y += 0;
 		}
-		y += 10;
 		clock.restart();
 	}
 }
@@ -65,7 +68,8 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
-	nob = rand()%10+1;
+	this->index = index;
+	nob = rand() % 10 + 1;
 	this->ob = new ObjectMoving[nob];
 	initOb(car);
 
@@ -78,26 +82,26 @@ void RoadLane::initOb(sf::Texture& rock) {
 	int b = -2;
 	bool bef;
 	for (int i = 0; i < nob; i++) {
-		if (i==0) {
-			this->ob[i].setup(rock);
+		if (i == 0) {
+			this->ob[i].setup(rock, 2.56, 2.56, 0, 0, 100, 100);
 			//ob[i].randomx();
 			b = ob[i].randomx();
 			while (a == b) b = ob[i].randomx();
 			a = b;
 			ob[i].setPos(ob[i].returnx(), y);
-			if (ob[i].rfleft()) ob[i].setScale(-1, 1);
+			if (ob[i].rfleft()) ob[i].setScale(-2.56, 2.56);
 			bef = ob[i].rfleft();
 		}
 		else {
-			this->ob[i].setup(rock);
+			this->ob[i].setup(rock, 2.56, 2.56, 0, 0, 100, 100);
 			ob[i].randomxx(bef);
 			b = ob[i].randomxx(bef);
 			while (a == b) b = ob[i].randomxx(bef);
 			a = b;
 			ob[i].setPos(ob[i].returnx(), y);
-			if (ob[i].rfleft()) ob[i].setScale(-1, 1);
+			if (ob[i].rfleft()) ob[i].setScale(-2.56, 2.56);
 		}
-		
+
 	}
 
 }
@@ -116,16 +120,16 @@ void RoadLane::drawTo(sf::RenderWindow& window)
 void RoadLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time > 0.05) {
-		this->sprite.move(0, 10);
-		moveobx(15, 10);
+	if (time >= 0.05) {
+		this->sprite.move(0, 5);
+		y += 5;
+		moveobx(15, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 20);
-			moveobx(0, 20);
-			y += 20;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
 		}
-		y += 10;
 		clock.restart();
 	}
 }
@@ -143,16 +147,16 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	this->train = new ObjectMoving;
+	this->train = new TrainObject;
 	initOb(train);
-	
+
 }
 
 void RailLane::initOb(sf::Texture& rock) {
 	this->train->setup(rock);
 	this->train->randomx();
 	this->train->setPos(train->returnx(), y);
-	if (this->train->rfleft())  this->train->setScale(-1, 1);
+	if (this->train->rfleft())  this->train->setScale(-4, 4);
 }
 
 void RailLane::drawTo(sf::RenderWindow& window)
@@ -166,17 +170,17 @@ void RailLane::drawTo(sf::RenderWindow& window)
 void RailLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time > 0.05) {
-		this->sprite.move(0, 10);
-		if (this->greenLight()) moveobx(50, 10);
-		else moveobx(0, 10);
+	if (time >= 0.05) {
+		this->sprite.move(0, 5);
+		y += 5;
+		if (this->greenLight()) moveobx(50, 5);
+		else moveobx(0, 5);
 		if (shouldGoFaster)
 		{
-			this->sprite.move(0, 20);
-			moveobx(0, 20);
-			y += 20;
+			this->sprite.move(0, 0);
+			moveobx(0, 0);
+			y += 0;
 		}
-		y += 10;
 		clock.restart();
 	}
 }
@@ -250,12 +254,12 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 	for (int i = 0; i < this->lanes.size(); i++)
 		lanes[i]->drawTo(window);
 }
-Lane::~Lane() {}
+
 GrassLane::~GrassLane() {
-	delete [] ob;
+	delete[] ob;
 }
 RoadLane::~RoadLane() {
-	delete [] ob;
+	delete[] ob;
 }
 RailLane::~RailLane() {
 	delete train;
