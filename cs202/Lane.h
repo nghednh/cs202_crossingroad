@@ -84,7 +84,7 @@ private:
 	std::vector<Lane*> lanes;
 	sf::Texture texture[6];
 	sf::Texture rock;
-	sf::Texture car;
+	sf::Texture car[6];
 	sf::Texture train;
 	int width;
 	int height;

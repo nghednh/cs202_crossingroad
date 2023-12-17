@@ -203,7 +203,12 @@ LaneManager::LaneManager()
 	this->texture[4].loadFromFile("resource/tiles/grass2.png");
 	this->texture[5].loadFromFile("resource/tiles/grass3.png");
 	this->rock.loadFromFile("resource/object/object.png");
-	this->car.loadFromFile("resource/object/vehicle/left0.png");
+	this->car[0].loadFromFile("resource/object/vehicle/left0.png");
+	this->car[1].loadFromFile("resource/object/vehicle/left1.png");
+	this->car[2].loadFromFile("resource/object/vehicle/left21.png");
+	this->car[3].loadFromFile("resource/object/vehicle/left7.png");
+	this->car[4].loadFromFile("resource/object/vehicle/left4.png");
+	this->car[5].loadFromFile("resource/object/vehicle/left5.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 }
 
@@ -217,19 +222,20 @@ LaneManager::~LaneManager()
 
 void LaneManager::addLane(int y)
 {
+	int n = 3;
 	int random = rand() % 100;
 	if (random < 20)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car[rand()%3], train, index));
 	else if (random < 40)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car[rand()%3], train, index));
 	else if (random < 60)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, rock, car[0], train, index));
 	else if (random < 80)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, rock, car[0], train, index));
 	else if (random < 90)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car[0], train, index));
 	else
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car, train, index));
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car[0], train, index));
 	index++;
 	std::cout << "added lane with index: " << index << std::endl;
 }
