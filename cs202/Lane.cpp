@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 
-GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index)
+GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2, sf::Texture& car, sf::Texture& train, int index)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -10,16 +10,20 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture
 	this->index = index;
 	nob = rand() % 11 + 1;
 	this->ob = new ObjectStable[nob];
-	initOb(rock);
+	initOb(plant, rock1, rock2);
 	this->character = nullptr;
 }
 
-void GrassLane::initOb(sf::Texture& rock) {
+void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2) {
 	int a = -1;
 	//std::cout << nob;
 	int b = -2;
 	for (int i = 0; i < nob; i++) {
-		this->ob[i].setup(rock);
+		if (rand() % 3 == 0)
+			this->ob[i].setup(rock1, 2, 2, 195, -9, 70, 70);
+		else if (rand() % 3 == 2)
+			this->ob[i].setup(rock2, 2, 2, 384, 200, 64, 64);
+		else this->ob[i].setup(plant, 2, 2, 216, 185, 50, 50);
 		b = ob[i].randomx();
 		while (a == b) b = ob[i].randomx();
 		a = b;
@@ -188,7 +192,9 @@ LaneManager::LaneManager()
 	this->texture[3].loadFromFile("resource/tiles/grass1.png");
 	this->texture[4].loadFromFile("resource/tiles/grass2.png");
 	this->texture[5].loadFromFile("resource/tiles/grass3.png");
-	this->rock.loadFromFile("resource/object/object.png");
+	this->rock[0].loadFromFile("resource/object/object.png");
+	this->rock[1].loadFromFile("resource/object/object.png");
+	this->plant.loadFromFile("resource/object/plant.png");
 	this->car[0].loadFromFile("resource/object/vehicle/left0.png");
 	this->car[1].loadFromFile("resource/object/vehicle/left1.png");
 	this->car[2].loadFromFile("resource/object/vehicle/left21.png");
@@ -218,17 +224,17 @@ void LaneManager::addLane(int y)
 	int n = 3;
 	int random = rand() % 100;
 	if (random < 20)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car[rand()%3], train, index));
+		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock[0], car[rand() % 3], train, index));
 	else if (random < 40)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock, car[rand()%3], train, index));
+		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, rock[0], car[rand() % 3], train, index));
 	else if (random < 60)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, rock, car[0], train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock[0], rock[1], car[0], train, index));
 	else if (random < 80)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, rock, car[0], train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
 	else if (random < 90)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car[0], train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
 	else
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car[0], train, index));
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock[0], car[0], train, index));
 	std::cout << "added lane: " << index << std::endl;
 	index++;
 }

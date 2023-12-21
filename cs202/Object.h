@@ -59,10 +59,10 @@ public:
 	int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture& tex) {
+	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
 		setTexture(tex);
-		setTextureRect(0, 0, 64, 64);
-		setScale(2, 2);
+		setTextureRect(xTopLeft, yTopLeft, width, height);
+		setScale(scaleX, scaleY);
 	}
 };
 class ObjectMoving : public Object {
