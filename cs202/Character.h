@@ -26,8 +26,8 @@ private:
 	bool leftPressed;
 	bool rightPressed;
 	int counter; //use for animation
-	int position; // x = position * 128 (basically dividing the lane into blocks)
 public:
+	int position; // x = position * 128 (basically dividing the lane into blocks)
 	int index;
 	bool blocked;
 	Character();

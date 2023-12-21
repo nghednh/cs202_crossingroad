@@ -113,7 +113,7 @@ void Game::handleEvent()
 				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				character.up();
+				laneManager.processUp();
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 				character.down();

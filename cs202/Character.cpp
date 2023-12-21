@@ -85,6 +85,8 @@ void Character::up()
 {
 	if (upPressed || downPressed || leftPressed || rightPressed)
 		return;
+	if (this->y - 128 < 0)
+		return;
 	upPressed = true;
 	gif.setFrame(0);
 	std::cout << this->x << " " << this->y << std::endl;

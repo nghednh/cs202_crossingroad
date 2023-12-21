@@ -6,6 +6,13 @@
 #include "Object.h"
 #include "Character.h"
 
+enum LaneType
+{
+	GRASS,
+	ROAD,
+	RAIL
+};
+
 class Lane
 {
 protected:
@@ -13,12 +20,14 @@ protected:
 	int index;
 	int y;
 	Character* character;
+	LaneType type;
 public:
 	virtual ~Lane() {}
 	virtual bool isOutOfScreen(int& height) const = 0;
 	virtual void drawTo(sf::RenderWindow& window) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
+	virtual void processUp(Character* character) = 0;
 	int getIndex() const { return index; }
 	void setCharacter(Character* character) { this->character = character; }
 	Character* getCharacter() const { return character; }
@@ -40,6 +49,7 @@ public:
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
+	void processUp(Character* character);
 	int getY() const { return y; }
 	void initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2);
 	void moveobx(int a, int b);
@@ -58,6 +68,7 @@ public:
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
+	void processUp(Character* character);
 	int getY() const { return y; }
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
@@ -76,6 +87,7 @@ public:
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
+	void processUp(Character* character);
 	int getY() const { return y; }
 	void initOb(sf::Texture& rock);
 	void moveobx(int a, int b);
@@ -104,6 +116,7 @@ public:
 	void initCharacter(Character* character);
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
+	void processUp();
 	void update(bool& shouldGoFaster);
 	void drawTo(sf::RenderWindow& window);
 	int getWidth() const { return width; }

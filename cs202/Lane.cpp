@@ -12,6 +12,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	this->ob = new ObjectStable[nob];
 	initOb(plant, rock1, rock2);
 	this->character = nullptr;
+	this->type = GRASS;
 }
 
 void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2) {
@@ -73,6 +74,16 @@ void GrassLane::move(bool& shouldGoFaster)
 	}
 }
 
+void GrassLane::processUp(Character* character) {
+	for (int i = 0; i < nob; i++) {
+		if (character->position == ob[i].returnx()) {
+			std::cout << "BLOCKED UP GRASS" << std::endl;
+			return;
+		}
+	}
+	character->up();
+}
+
 void GrassLane::moveobx(int a, int b) {
 	for (int i = 0; i < nob; i++) {
 		this->ob[i].move(0, b);
@@ -89,6 +100,7 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->ob = new ObjectMoving[nob];
 	initOb(car);
 	this->character = nullptr;
+	this->type = ROAD;
 }
 
 void RoadLane::initOb(sf::Texture& rock) {
@@ -146,6 +158,11 @@ void RoadLane::move(bool& shouldGoFaster)
 	}
 }
 
+void RoadLane::processUp(Character* character)
+{
+	character->up();
+}
+
 void RoadLane::moveobx(int a, int b) {
 	for (int i = 0; i < nob; i++) {
 		if (ob[i].rfleft()) this->ob[i].move(a, b);
@@ -162,6 +179,7 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->train = new TrainObject;
 	initOb(train);
 	this->character = nullptr;
+	this->type = RAIL;
 }
 
 void RailLane::initOb(sf::Texture& rock) {
@@ -191,6 +209,11 @@ void RailLane::move(bool& shouldGoFaster)
 		else moveobx(0, 5);
 		clock.restart();
 	}
+}
+
+void RailLane::processUp(Character* character)
+{
+	character->up();
 }
 
 void RailLane::moveobx(int a, int b) {
@@ -252,6 +275,18 @@ void LaneManager::addLane(int y)
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock[0], car[0], train, index));
 	std::cout << "added lane: " << index << std::endl;
 	index++;
+}
+
+void LaneManager::processUp()
+{
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		if (lanes[i]->getIndex() == character->index)
+		{
+			lanes[i-1]->processUp(lanes[i]->getCharacter());
+			break;
+		}
+	}
 }
 
 void LaneManager::update(bool& shouldGoFaster)
