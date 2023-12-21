@@ -25,7 +25,11 @@ private:
 	bool leftPressed;
 	bool rightPressed;
 	int counter; //use for animation
+	int position;
+	int laneXOffset;
+	int laneYOffset;
 public:
+	int index;
 	bool blocked;
 	Character();
 	void update();

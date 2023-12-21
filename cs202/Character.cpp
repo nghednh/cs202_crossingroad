@@ -5,8 +5,9 @@ Character::Character()
 	this->jumping.loadFromFile("resource/character/jumping.png");
 	this->gif.load(this->jumping, 0, 0, 32, 32, 8, 1);
 	this->gif.setScale(3, 3);
-	this->x = 0;
-	this->y = 32;
+	this->x = 7*128;
+	this->y = 900 - 128*2;
+	this->gif.setPosition(this->x, this->y);
 	this->width = 32;
 	this->height = 32;
 	this->speed = 0.05;
@@ -18,37 +19,45 @@ Character::Character()
 	this->rightPressed = false;
 	this->counter = 0;
 	this->blocked = false;
+	this->index = 3;
+	this->position = 7;
+	this->laneXOffset = 0;
+	this->laneYOffset = 0;
 }
 
 void Character::update()
 {
-	double time = clock.getElapsedTime().asSeconds();
-	if (time >= 0.05) {
+	double time = clock.getElapsedTime().asMilliseconds();
+	if (time >= 50) {
 		this->gif.move(0, 5);
 		this->y += 5;
-		if (this->shouldGoFaster()) {
-			this->gif.move(0, 0);
-			this->y += 0;
-		}
 		clock.restart();
 		if (upPressed) {
-			this->gif.move(0, -64);
 			this->y -= 64;
+			this->gif.setPosition(x, y);
+			if (counter == 1)
+				index++;
 			counter++;
 		}
 		if (downPressed) {
-			this->gif.move(0, 64);
 			this->y += 64;
+			this->gif.setPosition(x, y);
+			if (counter == 1)
+				index--;
 			counter++;
 		}
 		if (leftPressed) {
-			this->gif.move(-64, 0);
 			this->x -= 64;
+			this->gif.setPosition(x, y);
+			if (counter == 1)
+				position--;
 			counter++;
 		}
 		if (rightPressed) {
-			this->gif.move(64, 0);
 			this->x += 64;
+			this->gif.setPosition(x, y);
+			if (counter == 1)
+				position++;
 			counter++;
 		}
 		if (counter == 2) {
@@ -57,7 +66,7 @@ void Character::update()
 			leftPressed = false;
 			rightPressed = false;
 			counter = 0;
-			std::cout << this->x << " " << this->y << std::endl;
+			std::cout << this->x << " " << this->y << " index: " << this->index << std::endl;
 		}
 	}
 	else

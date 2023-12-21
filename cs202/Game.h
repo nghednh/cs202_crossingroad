@@ -28,6 +28,9 @@ private:
 	sf::Texture _backgroundCredit;
 	sf::Sprite backgroundCredit;
 	sf::Texture _object;
+	sf::Sprite filter;
+	sf::Texture _filter;
+
 	GifManager clickGif;
 	LaneManager laneManager;
 	Character character;

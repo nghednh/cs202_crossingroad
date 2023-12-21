@@ -20,6 +20,7 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	for (int i = 0; i < 9; i++)			
 		laneManager.addLane(900 - i * 128);
 	shouldGoFaster = false;
+	laneManager.initCharacter(&character);
 }
 
 void Game::loadSound()
@@ -40,12 +41,20 @@ void Game::loadTexture()
 {
 	_backgroundMenu.loadFromFile("resource/background/menu.jpg");
 	backgroundMenu.setTexture(_backgroundMenu);
-	_backgroundPlay.loadFromFile("resource/background/backgroundPlay.png");
+
+	_backgroundPlay.loadFromFile("resource/background/play.jpg");
 	backgroundPlay.setTexture(_backgroundPlay);
+
 	_backgroundCredit.loadFromFile("resource/background/credit.jpg");
 	backgroundCredit.setTexture(_backgroundCredit);
+
 	_object.loadFromFile("resource/object/object.png");
+
+	_filter.loadFromFile("resource/filter.png");
+	filter.setTexture(_filter);
+
 	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
+
 	_backButton0.loadFromFile("resource/backButton0.png");
 	_backButton1.loadFromFile("resource/backButton1.png");
 	backButton.setTexture(_backButton0);
@@ -202,9 +211,11 @@ void Game::draw()
 	else if (state == PLAY)
 	{
 		//window.draw(backgroundPlay);
+		window.draw(backgroundPlay);
 		laneManager.drawTo(window);
+		window.draw(filter);
 		window.draw(backButton);
-		character.draw(window);
+		//character.draw(window);
 	}
 	else if (state == CREDIT) {
 		window.draw(backgroundCredit);

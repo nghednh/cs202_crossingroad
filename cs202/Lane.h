@@ -4,24 +4,31 @@
 #include <vector>
 #include <string>
 #include "Object.h"
+#include "Character.h"
 
 class Lane
 {
 protected:
+	sf::Sprite sprite;
 	int index;
+	int y;
+	Character* character;
 public:
 	virtual ~Lane() {}
 	virtual bool isOutOfScreen(int& height) const = 0;
 	virtual void drawTo(sf::RenderWindow& window) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
+	int getIndex() const { return index; }
+	void setCharacter(Character* character) { this->character = character; }
+	Character* getCharacter() const { return character; }
+	void drawCharacterTo(sf::RenderWindow& window) {if (character) character->draw(window); }
+	void drawBackgroundTo(sf::RenderWindow& window) { this->sprite.setPosition(0, y); window.draw(sprite); }
 };
 
 class GrassLane : public Lane
 {
 private:
-	sf::Sprite sprite;
-	int y;
 	sf::Clock clock;
 	int nob;
 	ObjectStable* ob;
@@ -41,8 +48,6 @@ public:
 class RoadLane : public Lane
 {
 private:
-	sf::Sprite sprite;
-	int y;
 	sf::Clock clock;
 	int nob;
 	ObjectMoving* ob;
@@ -61,8 +66,6 @@ public:
 class RailLane : public Lane
 {
 private:
-	sf::Sprite sprite;
-	int y;
 	sf::Clock clock;
 	TrainObject *train;
 	bool redLight=false;
@@ -90,9 +93,13 @@ private:
 	int height;
 	int difficulty;
 	int index;
+	Character* character;
+	sf::Font font;
+	sf::Text text;
 public:
 	LaneManager();
 	~LaneManager();
+	void initCharacter(Character* character);
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
 	void update(bool& shouldGoFaster);

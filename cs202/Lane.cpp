@@ -11,6 +11,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture
 	nob = rand() % 11 + 1;
 	this->ob = new ObjectStable[nob];
 	initOb(rock);
+	this->character = nullptr;
 }
 
 void GrassLane::initOb(sf::Texture& rock) {
@@ -30,29 +31,22 @@ void GrassLane::drawTo(sf::RenderWindow& window)
 {
 	this->sprite.setPosition(0, y);
 
-	window.draw(this->sprite);
+	//window.draw(this->sprite);
 	for (int i = 0; i < nob; i++)
 	{
 		ob[i].drawTo(window);
 	}
-
-
+	if (this->character != nullptr)
+		this->character->draw(window);
 }
 
 void GrassLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time >= 0.05) {
-		this->sprite.move(0, 5);
 		y += 5;
+		this->sprite.setPosition(0, y);
 		moveobx(15, 5);
-		if (shouldGoFaster)
-		{
-			this->sprite.move(0, 0);
-			moveobx(0, 0);
-			y += 0;
-			y += 0;
-		}
 		clock.restart();
 	}
 }
@@ -72,7 +66,7 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	nob = rand() % 10 + 1;
 	this->ob = new ObjectMoving[nob];
 	initOb(car);
-
+	this->character = nullptr;
 }
 
 void RoadLane::initOb(sf::Texture& rock) {
@@ -110,26 +104,22 @@ void RoadLane::drawTo(sf::RenderWindow& window)
 {
 	this->sprite.setPosition(0, y);
 
-	window.draw(this->sprite);
+	//window.draw(this->sprite);
 	for (int i = 0; i < nob; i++)
 	{
 		ob[i].drawTo(window);
 	}
+	if (this->character != nullptr)
+		this->character->draw(window);
 }
 
 void RoadLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time >= 0.05) {
-		this->sprite.move(0, 5);
 		y += 5;
+		this->sprite.setPosition(0, y);
 		moveobx(15, 5);
-		if (shouldGoFaster)
-		{
-			this->sprite.move(0, 0);
-			moveobx(0, 0);
-			y += 0;
-		}
 		clock.restart();
 	}
 }
@@ -149,7 +139,7 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->index = index;
 	this->train = new TrainObject;
 	initOb(train);
-
+	this->character = nullptr;
 }
 
 void RailLane::initOb(sf::Texture& rock) {
@@ -163,24 +153,20 @@ void RailLane::drawTo(sf::RenderWindow& window)
 {
 	this->sprite.setPosition(0, y);
 
-	window.draw(this->sprite);
+	//window.draw(this->sprite);
 	this->train->drawTo(window);
+	if (this->character != nullptr)
+		this->character->draw(window);
 }
 
 void RailLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
 	if (time >= 0.05) {
-		this->sprite.move(0, 5);
 		y += 5;
+		this->sprite.setPosition(0, y);
 		if (this->greenLight()) moveobx(50, 5);
 		else moveobx(0, 5);
-		if (shouldGoFaster)
-		{
-			this->sprite.move(0, 0);
-			moveobx(0, 0);
-			y += 0;
-		}
 		clock.restart();
 	}
 }
@@ -210,6 +196,8 @@ LaneManager::LaneManager()
 	this->car[4].loadFromFile("resource/object/vehicle/left4.png");
 	this->car[5].loadFromFile("resource/object/vehicle/left5.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
+	this->character = nullptr;
+	font.loadFromFile("resource/fibberish.ttf");
 }
 
 LaneManager::~LaneManager()
@@ -218,6 +206,11 @@ LaneManager::~LaneManager()
 	{
 		delete lanes[i];
 	}
+}
+
+void LaneManager::initCharacter(Character* character)
+{
+	this->character = character;
 }
 
 void LaneManager::addLane(int y)
@@ -236,8 +229,8 @@ void LaneManager::addLane(int y)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, rock, car[0], train, index));
 	else
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock, car[0], train, index));
+	std::cout << "added lane: " << index << std::endl;
 	index++;
-	std::cout << "added lane with index: " << index << std::endl;
 }
 
 void LaneManager::update(bool& shouldGoFaster)
@@ -252,13 +245,41 @@ void LaneManager::update(bool& shouldGoFaster)
 		lanes.pop_back();
 
 		addLane(lanes[0]->getY() - 128);
+		for (int i = 0; i < this->lanes.size(); i++)
+		{
+			std::cout << lanes[i]->getIndex() << (lanes[i]->getCharacter() ? "x " : " ");
+		}
+		std::cout << std::endl << character->index << std::endl;
+	}
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		if (lanes[i]->getIndex() == character->index)
+		{
+			lanes[i]->setCharacter(character);
+		}
+		else
+		{
+			lanes[i]->setCharacter(nullptr);
+		}
 	}
 }
 
 void LaneManager::drawTo(sf::RenderWindow& window)
 {
 	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		lanes[i]->drawBackgroundTo(window);
+	}
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
 		lanes[i]->drawTo(window);
+		text.setFont(font);
+		text.setString(std::to_string(lanes[i]->getIndex()));
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::White);
+		text.setPosition(0, lanes[i]->getY());
+		window.draw(text);
+	}
 }
 
 GrassLane::~GrassLane() {
