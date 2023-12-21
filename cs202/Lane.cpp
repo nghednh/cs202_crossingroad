@@ -256,6 +256,7 @@ void LaneManager::update(bool& shouldGoFaster)
 		if (lanes[i]->getIndex() == character->index)
 		{
 			lanes[i]->setCharacter(character);
+			lanes[i]->setCharacterPosition(lanes[i]->getY());
 		}
 		else
 		{

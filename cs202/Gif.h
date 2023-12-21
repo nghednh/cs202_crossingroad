@@ -30,6 +30,7 @@ public:
 	int getHeight() const { return height; }
 	double getScaleX() const { return sprite.getScale().x; }
 	double getScaleY() const { return sprite.getScale().y; }
+	void setFrame(int frame);
 };
 
 class GifManager {

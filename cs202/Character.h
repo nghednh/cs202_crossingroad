@@ -11,7 +11,8 @@ class Character
 private:
 	Gif gif;
 	sf::Texture jumping;
-	sf::Texture dying;
+	sf::Texture flash;
+	sf::Sprite normal;
 	sf::Clock clock;
 	int x;
 	int y;
@@ -25,9 +26,7 @@ private:
 	bool leftPressed;
 	bool rightPressed;
 	int counter; //use for animation
-	int position;
-	int laneXOffset;
-	int laneYOffset;
+	int position; // x = position * 128 (basically dividing the lane into blocks)
 public:
 	int index;
 	bool blocked;
@@ -40,5 +39,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	bool isDead();
 	bool shouldGoFaster();
+	void setX(int x) { this->x = x; this->gif.setPosition(x, y); }
+	void setY(int y) { this->y = y; this->gif.setPosition(x, y); }
 };
 

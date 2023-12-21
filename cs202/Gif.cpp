@@ -67,6 +67,11 @@ bool Gif::needUpdate()
 	return true;
 }
 
+void Gif::setFrame(int frame)
+{
+	this->currentFrame = frame;
+}
+
 void GifManager::addGif(int x, int y)
 {
 	Gif gif;

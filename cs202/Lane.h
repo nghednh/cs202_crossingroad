@@ -24,6 +24,7 @@ public:
 	Character* getCharacter() const { return character; }
 	void drawCharacterTo(sf::RenderWindow& window) {if (character) character->draw(window); }
 	void drawBackgroundTo(sf::RenderWindow& window) { this->sprite.setPosition(0, y); window.draw(sprite); }
+	void setCharacterPosition(int y) { if (character) character->setY(y); }
 };
 
 class GrassLane : public Lane
