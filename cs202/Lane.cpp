@@ -18,17 +18,35 @@ void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock
 	int a = -1;
 	//std::cout << nob;
 	int b = -2;
-	for (int i = 0; i < nob; i++) {
-		if (rand() % 3 == 0)
-			this->ob[i].setup(rock1, 2, 2, 195, -9, 70, 70);
-		else if (rand() % 3 == 2)
-			this->ob[i].setup(rock2, 2, 2, 384, 200, 64, 64);
-		else this->ob[i].setup(plant, 2, 2, 216, 185, 50, 50);
-		b = ob[i].randomx();
-		while (a == b) b = ob[i].randomx();
-		a = b;
-		ob[i].setPos(ob[i].returnx(), y);
+	bool* idx = new bool[13];
+	for (int i = 0; i < 13; i++) {
+		idx[i] = 0;
 	}
+	for (int i = 0; i < nob; i++) {
+		int tmp = 0;
+		if (rand() % 3 == 0) {
+			this->ob[i].setup(rock1, 2, 2, 195, -9, 70, 70);
+		}
+		else if (rand() % 3 == 2) {
+			this->ob[i].setup(rock2, 2, 2, 384, 200, 64, 64);
+			tmp = 1;
+		}
+		else {
+			this->ob[i].setup(plant, 2, 2, 216, 185, 50, 50);
+			tmp = 2;
+		}
+		b = ob[i].randomx(idx, 13);
+		while (a == b) b = ob[i].randomx(idx, 13);
+		a = b;
+		if (tmp == 1) {
+			ob[i].setPos(ob[i].returnx(), y+40);
+		}
+		else if (tmp == 2) {
+			ob[i].setPos(ob[i].returnx(), y + 50);
+		}
+		else ob[i].setPos(ob[i].returnx(), y);
+	}
+	delete[] idx;
 }
 
 void GrassLane::drawTo(sf::RenderWindow& window)

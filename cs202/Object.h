@@ -64,6 +64,17 @@ public:
 		setTextureRect(xTopLeft, yTopLeft, width, height);
 		setScale(scaleX, scaleY);
 	}
+	virtual int randomx(bool*& idx, int n) {
+		for (int i = 0; i > -1; i++) {
+			int tmp = rand() % 13;
+			if (idx[tmp] == 0) {
+				x = tmp;
+				idx[tmp] = 1;
+				break;
+			}
+		}
+		return x;
+	}
 };
 class ObjectMoving : public Object {
 private:
