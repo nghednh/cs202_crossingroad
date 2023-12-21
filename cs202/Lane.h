@@ -36,12 +36,12 @@ private:
 
 public:
 	~GrassLane();
-	GrassLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
+	GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	int getY() const { return y; }
-	void initOb(sf::Texture& rock);
+	void initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2);
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
 };
@@ -87,7 +87,8 @@ class LaneManager
 private:
 	std::vector<Lane*> lanes;
 	sf::Texture texture[6];
-	sf::Texture rock;
+	sf::Texture rock[2];
+	sf::Texture plant;
 	sf::Texture car[6];
 	sf::Texture train;
 	int width;

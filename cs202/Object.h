@@ -59,10 +59,21 @@ public:
 	int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture& tex) {
+	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
 		setTexture(tex);
-		setTextureRect(0, 0, 64, 64);
-		setScale(2, 2);
+		setTextureRect(xTopLeft, yTopLeft, width, height);
+		setScale(scaleX, scaleY);
+	}
+	virtual int randomx(bool*& idx, int n) {
+		for (int i = 0; i > -1; i++) {
+			int tmp = rand() % 13;
+			if (idx[tmp] == 0) {
+				x = tmp;
+				idx[tmp] = 1;
+				break;
+			}
+		}
+		return x;
 	}
 };
 class ObjectMoving : public Object {
