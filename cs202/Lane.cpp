@@ -216,9 +216,6 @@ LaneManager::LaneManager()
 	this->car[0].loadFromFile("resource/object/vehicle/left0.png");
 	this->car[1].loadFromFile("resource/object/vehicle/left1.png");
 	this->car[2].loadFromFile("resource/object/vehicle/left21.png");
-	this->car[3].loadFromFile("resource/object/vehicle/left7.png");
-	this->car[4].loadFromFile("resource/object/vehicle/left4.png");
-	this->car[5].loadFromFile("resource/object/vehicle/left5.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 	this->character = nullptr;
 	font.loadFromFile("resource/fibberish.ttf");
