@@ -3,8 +3,8 @@
 Character::Character()
 {
 	this->jumping.loadFromFile("resource/character/jumping.png");
-	this->flash.loadFromFile("resource/character/die1.png");
-	this->gif.load(this->flash, 0, 0, 32, 32, 8, 0.4);
+	this->flash.loadFromFile("resource/character/die2.png");
+	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.7);
 	this->gif.setScale(3, 3);
 	this->x = 7*128;
 	this->y = 900 - 128*2;
@@ -30,13 +30,13 @@ Character::Character()
 void Character::update()
 {
 	double time = clock.getElapsedTime().asMilliseconds();
-	if (time >= 50) {
+	if (time >= 100) {
 		clock.restart();
 		if (upPressed) {
 			//this->y -= 64;
 			this->x = position * 128;
 			this->gif.setPosition(x, y);
-			if (counter == 4)
+			if (counter == 2)
 				index++;
 			counter++;
 		}
@@ -44,7 +44,7 @@ void Character::update()
 			//this->y += 64;
 			this->x = position * 128;
 			this->gif.setPosition(x, y);
-			if (counter == 4)
+			if (counter == 2)
 				index--;
 			counter++;
 		}
@@ -52,7 +52,7 @@ void Character::update()
 			//this->x -= 64;
 			this->x = position * 128;
 			this->gif.setPosition(x, y);
-			if (counter == 4)
+			if (counter == 2)
 				position--;
 			counter++;
 		}
@@ -60,11 +60,11 @@ void Character::update()
 			//this->x += 64;
 			this->x = position * 128;
 			this->gif.setPosition(x, y);
-			if (counter == 4)
+			if (counter == 2)
 				position++;
 			counter++;
 		}
-		if (counter == 7) {
+		if (counter == 6) {
 			upPressed = false;
 			downPressed = false;
 			leftPressed = false;
