@@ -102,13 +102,27 @@ public:
 	virtual bool rfleft() {
 		return fleft;
 	}
-	int randomxx(bool l) {
+	int randomxx(bool l, bool*& idx) {
 		if (!l) {
-			x = rand()%13;
+			for (int i = 0; i > -1; i++) {
+				int tmp = rand() % 13;
+				if (idx[tmp] == 0) {
+					x = tmp;
+					idx[tmp] = 1;
+					break;
+				}
+			}
 			fleft = false;
 		}
 		else {
-			x = rand()%13;
+			for (int i = 0; i > -1; i++) {
+				int tmp = rand() % 13;
+				if (idx[tmp] == 0) {
+					x = tmp;
+					idx[tmp] = 1;
+					break;
+				}
+			}
 			fleft = true;
 		}
 		return x;
