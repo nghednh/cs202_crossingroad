@@ -116,13 +116,13 @@ void Game::handleEvent()
 				laneManager.processUp();
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				character.down();
+				laneManager.processDown();
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				character.left();
+				laneManager.processLeft();
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				character.right();
+				laneManager.processRight();
 			}
 		}
 		else if (state == CREDIT) {
@@ -173,7 +173,7 @@ void Game::update()
 		}
 		else
 			backButton.setTexture(_backButton0);
-		shouldGoFaster = character.shouldGoFaster();
+		//shouldGoFaster = character.shouldGoFaster();
 		laneManager.update(shouldGoFaster);
 		character.update();
 	}

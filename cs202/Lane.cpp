@@ -84,6 +84,39 @@ void GrassLane::processUp(Character* character) {
 	character->up();
 }
 
+void GrassLane::processDown(Character* character)
+{
+	for (int i = 0; i < nob; i++) {
+		if (character->position == ob[i].returnx()) {
+			std::cout << "BLOCKED DOWN GRASS" << std::endl;
+			return;
+		}
+	}
+	character->down();
+}
+
+void GrassLane::processLeft(Character* character)
+{
+	for (int i = 0; i < nob; i++) {
+		if (character->position - 1 == ob[i].returnx()) {
+			std::cout << "BLOCKED LEFT GRASS" << std::endl;
+			return;
+		}
+	}
+	character->left();
+}
+
+void GrassLane::processRight(Character* character)
+{
+	for (int i = 0; i < nob; i++) {
+		if (character->position + 1 == ob[i].returnx()) {
+			std::cout << "BLOCKED RIGHT GRASS" << std::endl;
+			return;
+		}
+	}
+	character->right();
+}
+
 void GrassLane::moveobx(int a, int b) {
 	for (int i = 0; i < nob; i++) {
 		this->ob[i].move(0, b);
@@ -173,6 +206,21 @@ void RoadLane::processUp(Character* character)
 	character->up();
 }
 
+void RoadLane::processDown(Character* character)
+{
+	character->down();
+}
+
+void RoadLane::processLeft(Character* character)
+{
+	character->left();
+}
+
+void RoadLane::processRight(Character* character)
+{
+	character->right();
+}
+
 void RoadLane::moveobx(int a, int b) {
 	for (int i = 0; i < nob; i++) {
 		if (ob[i].rfleft()) this->ob[i].move(a, b);
@@ -224,6 +272,21 @@ void RailLane::move(bool& shouldGoFaster)
 void RailLane::processUp(Character* character)
 {
 	character->up();
+}
+
+void RailLane::processDown(Character* character)
+{
+	character->down();
+}
+
+void RailLane::processLeft(Character* character)
+{
+	character->left();
+}
+
+void RailLane::processRight(Character* character)
+{
+	character->right();
 }
 
 void RailLane::moveobx(int a, int b) {
@@ -293,7 +356,47 @@ void LaneManager::processUp()
 	{
 		if (lanes[i]->getIndex() == character->index)
 		{
-			lanes[i-1]->processUp(lanes[i]->getCharacter());
+			if (lanes[i]->getCharacter())
+				lanes[i-1]->processUp(lanes[i]->getCharacter());
+			break;
+		}
+	}
+}
+
+void LaneManager::processDown()
+{
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		if (lanes[i]->getIndex() == character->index)
+		{
+			if (lanes[i]->getCharacter())
+				lanes[i+1]->processDown(lanes[i]->getCharacter());
+			break;
+		}
+	}
+}
+
+void LaneManager::processLeft()
+{
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		if (lanes[i]->getIndex() == character->index)
+		{
+			if (lanes[i]->getCharacter())
+				lanes[i]->processLeft(lanes[i]->getCharacter());
+			break;
+		}
+	}
+}
+
+void LaneManager::processRight()
+{
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		if (lanes[i]->getIndex() == character->index)
+		{
+			if (lanes[i]->getCharacter())
+				lanes[i]->processRight(lanes[i]->getCharacter());
 			break;
 		}
 	}

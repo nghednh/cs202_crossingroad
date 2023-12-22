@@ -28,6 +28,9 @@ public:
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
 	virtual void processUp(Character* character) = 0;
+	virtual void processDown(Character* character) = 0;
+	virtual void processLeft(Character* character) = 0;
+	virtual void processRight(Character* character) = 0;
 	int getIndex() const { return index; }
 	void setCharacter(Character* character) { this->character = character; }
 	Character* getCharacter() const { return character; }
@@ -50,6 +53,9 @@ public:
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
+	void processDown(Character* character);
+	void processLeft(Character* character);
+	void processRight(Character* character);
 	int getY() const { return y; }
 	void initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2);
 	void moveobx(int a, int b);
@@ -69,6 +75,9 @@ public:
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
+	void processDown(Character* character);
+	void processLeft(Character* character);
+	void processRight(Character* character);
 	int getY() const { return y; }
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
@@ -88,6 +97,9 @@ public:
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
+	void processDown(Character* character);
+	void processLeft(Character* character);
+	void processRight(Character* character);
 	int getY() const { return y; }
 	void initOb(sf::Texture& rock);
 	void moveobx(int a, int b);
@@ -117,6 +129,9 @@ public:
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
 	void processUp();
+	void processDown();
+	void processLeft();
+	void processRight();
 	void update(bool& shouldGoFaster);
 	void drawTo(sf::RenderWindow& window);
 	int getWidth() const { return width; }

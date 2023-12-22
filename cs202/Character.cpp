@@ -70,7 +70,7 @@ void Character::update()
 			leftPressed = false;
 			rightPressed = false;
 			counter = 0;
-			std::cout << this->x << " " << this->y << " index: " << this->index << " pos: " << this->position << std::endl;
+			//std::cout << this->x << " " << this->y << " index: " << this->index << " pos: " << this->position << std::endl;
 			
 		}
 	}
@@ -89,7 +89,7 @@ void Character::up()
 		return;
 	upPressed = true;
 	gif.setFrame(0);
-	std::cout << this->x << " " << this->y << std::endl;
+	//std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::down()
@@ -100,7 +100,7 @@ void Character::down()
 		return;
 	downPressed = true;
 	gif.setFrame(0);
-	std::cout << this->x << " " << this->y << std::endl;
+	//std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::left()
@@ -111,7 +111,7 @@ void Character::left()
 		return;
 	leftPressed = true;
 	gif.setFrame(0);
-	std::cout << this->x << " " << this->y << std::endl;
+	//std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::right()
@@ -122,7 +122,7 @@ void Character::right()
 		return;
 	rightPressed = true;
 	gif.setFrame(0);
-	std::cout << this->x << " " << this->y << std::endl;
+	//std::cout << this->x << " " << this->y << std::endl;
 }
 
 void Character::draw(sf::RenderWindow& window)

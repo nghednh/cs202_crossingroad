@@ -52,6 +52,18 @@ public:
 	virtual int randomxx(bool l) {
 		return 0;
 	}
+	int spriteX() {
+		return sprite.getPosition().x;
+	}
+	int spriteY() {
+		return sprite.getPosition().y;
+	}
+	int spriteWidth() {
+		return sprite.getTextureRect().width;
+	}
+	int spriteHeight() {
+		return sprite.getTextureRect().height;
+	}
 };
 class ObjectStable : public Object {
 private:
