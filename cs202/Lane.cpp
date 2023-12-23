@@ -149,27 +149,27 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 	for (int i = 0; i < nob; i++) {
 		int rdm = rand() % 5;
 		switch (rdm) {
-			case 1:
+			case 0:
 			{
 				this->ob[i].setup(car1, 2.56, 2.56, 0, 0, 100, 100);
 				break;
 			}
-			case 2:
+			case 1:
 			{
 				this->ob[i].setup(car2, 2.56, 2.56, 0, 0, 100, 100);
 				break;
 			}
-			case 3:
+			case 2:
 			{
 				this->ob[i].setup(car3, 2.56, 2.56, 0, 0, 100, 100);
 				break;
 			}
-			case 4:
+			case 3:
 			{
 				this->ob[i].setup(car4, 2.56, 2.56, 0, 0, 100, 100);
 				break;
 			}
-			case 5:
+			case 4:
 			{
 				this->ob[i].setup(car5, 2.56, 2.56, 0, 0, 100, 100);
 				break;
@@ -177,8 +177,8 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 		}
 		if (i == 0) {
 			//ob[i].randomx();
-			b = ob[i].randomx();
-			while (a == b) b = ob[i].randomx();
+			b = ob[i].randomx(idx);
+			while (a == b) b = ob[i].randomx(idx);
 			a = b;
 			ob[i].setPos(ob[i].returnx(), y);
 			if (ob[i].rfleft()) ob[i].setScale(-2.56, 2.56);
@@ -260,10 +260,12 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 }
 
 void RailLane::initOb(sf::Texture& rock) {
+	bool* dummy = new bool[1];
 	this->train->setup(rock);
-	this->train->randomx();
+	this->train->randomx(dummy);
 	this->train->setPos(train->returnx(), y);
 	if (this->train->rfleft())  this->train->setScale(-4, 4);
+	delete[] dummy;
 }
 
 void RailLane::drawTo(sf::RenderWindow& window)

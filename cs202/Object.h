@@ -100,13 +100,27 @@ public:
 	int returnx() {
 		return this->x;
 	}
-	virtual int randomx() {
+	virtual int randomx(bool *& idx) {
 		if (rand()%2!=0) {
-			x = rand()%13;
+			for (int i = 0; i > -1; i++) {
+				int tmp = rand() % 13;
+				if (idx[tmp] == 0) {
+					x = tmp;
+					idx[tmp] = 1;
+					break;
+				}
+			}
 			fleft = false;
 		}
 		else {
-			x = rand()%13;
+			for (int i = 0; i > -1; i++) {
+				int tmp = rand() % 13;
+				if (idx[tmp] == 0) {
+					x = tmp;
+					idx[tmp] = 1;
+					break;
+				}
+			}
 			fleft = true;
 		}
 		return x;
