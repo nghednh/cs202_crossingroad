@@ -70,7 +70,7 @@ private:
 	ObjectMoving* ob;
 public:
 	~RoadLane();
-	RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture &train, int index);
+	RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture &car4, sf::Texture& car5, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window);
 	void move(bool& shouldGoFaster);
@@ -81,7 +81,7 @@ public:
 	int getY() const { return y; }
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
-	void initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3);
+	void initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5);
 };
 
 class RailLane : public Lane
@@ -113,7 +113,7 @@ private:
 	sf::Texture texture[6];
 	sf::Texture rock[2];
 	sf::Texture plant;
-	sf::Texture car[6];
+	sf::Texture car[5];
 	sf::Texture train;
 	int width;
 	int height;
