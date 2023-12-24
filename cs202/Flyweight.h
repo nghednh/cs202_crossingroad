@@ -69,7 +69,7 @@ public:
             }
 
             for (auto& bullet : bullets) {
-                bullet.move(1, 1);
+                bullet.move(0.1, 0.1);
             }
 
             window.clear();
@@ -80,8 +80,3 @@ public:
         }
     }
 };
-
-int main()
-{
-    Game a;
-}
