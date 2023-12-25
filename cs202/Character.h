@@ -20,6 +20,7 @@ private:
 	int height;
 	double speed;
 	bool dead;
+	bool crashed;
 	bool isOutOfScreen;
 	bool upPressed;
 	bool downPressed;
@@ -41,5 +42,9 @@ public:
 	bool shouldGoFaster();
 	void setX(int x) { this->x = x; this->gif.setPosition(x, y); }
 	void setY(int y) { this->y = y; this->gif.setPosition(x, y); }
+	void die();
+	bool isCrashed() { return crashed; }
+	int getX() { return x; }
+	int getY() { return y; }
 };
 

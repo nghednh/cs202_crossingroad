@@ -31,6 +31,7 @@ public:
 	virtual void processDown(Character* character) = 0;
 	virtual void processLeft(Character* character) = 0;
 	virtual void processRight(Character* character) = 0;
+	virtual void checkCollision() = 0;
 	int getIndex() const { return index; }
 	void setCharacter(Character* character) { this->character = character; }
 	Character* getCharacter() const { return character; }
@@ -56,6 +57,7 @@ public:
 	void processDown(Character* character);
 	void processLeft(Character* character);
 	void processRight(Character* character);
+	void checkCollision();
 	int getY() const { return y; }
 	void initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2);
 	void moveobx(int a, int b);
@@ -82,6 +84,7 @@ public:
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
 	void initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5);
+	void checkCollision();
 };
 
 class RailLane : public Lane
@@ -104,6 +107,7 @@ public:
 	void initOb(sf::Texture& rock);
 	void moveobx(int a, int b);
 	bool greenLight() { return !redLight; };
+	void checkCollision();
 };
 
 class LaneManager

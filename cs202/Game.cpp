@@ -2,7 +2,7 @@
 
 Game::Game() : window(sf::VideoMode(1600, 900), "Cross The Road", sf::Style::Close),
 playButton("play", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-tutorialButton(" tutorial ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+settingButton(" setting ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 creditButton("  credit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 exitButton("   exit   ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
 selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font)
@@ -13,14 +13,16 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	loadSound();
 	font.loadFromFile("resource/fibberish.ttf");
 	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350 + 10);
-	tutorialButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 450);
-	creditButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 550);
-	exitButton.setPosition((int)((1600 - tutorialButton.getSize().x) / 2), 650);
+	settingButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 450);
+	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 550);
+	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 650);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
 	for (int i = 0; i < 9; i++)			
 		laneManager.addLane(900 - i * 128);
 	shouldGoFaster = false;
 	laneManager.initCharacter(&character);
+	crashed = false;
+	crashAnimationCounter = 0;
 }
 
 void Game::loadSound()
@@ -52,6 +54,11 @@ void Game::loadTexture()
 
 	_filter.loadFromFile("resource/filter.png");
 	filter.setTexture(_filter);
+
+	crash.loadFromFile("resource/explode.png");
+	crashSprite.setTexture(crash);
+	crashSprite.setTextureRect(sf::IntRect(0, 0, 120, 109));
+	crashSprite.setScale(2, 2);
 
 	clickGif.load("resource/clickSprite.png", 0, 0, 100, 100, 30, 0.2, 2, 2);
 
@@ -97,8 +104,8 @@ void Game::handleEvent()
 					this->state = CREDIT;
 					clickGif.popGif();
 				}
-				if (tutorialButton.isMouseOver(window)) {
-					this->state = TUTORIAL;
+				if (settingButton.isMouseOver(window)) {
+					this->state = SETTING;
 				}
 			}
 		}
@@ -133,7 +140,7 @@ void Game::handleEvent()
 				}
 			}
 		}
-		else if (state == TUTORIAL) {
+		else if (state == SETTING) {
 			if (event.type == sf::Event::MouseButtonReleased) {
 				clickSound.play();
 				if (isMouseOver(backButton, window)) {
@@ -148,19 +155,19 @@ void Game::update()
 {
 	if (state == MENU) {
 		playButton.updateHalfTransparent(window);
-		tutorialButton.updateHalfTransparent(window);
+		settingButton.updateHalfTransparent(window);
 		creditButton.updateHalfTransparent(window);
 		exitButton.updateHalfTransparent(window);
 		selectArrow.updateHalfTransparent(window);
 		if (playButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
-		if (tutorialButton.isMouseOver(window))
+		if (settingButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 450 - 5);
 		if (creditButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 550 - 5);
 		if (exitButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650 - 5);
-		if (playButton.isMouseOver(window) || tutorialButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
+		if (playButton.isMouseOver(window) || settingButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
 			selectArrow.setTextColor(darkBeige);
 		else
 			selectArrow.setTextColor(sf::Color::Transparent);
@@ -174,8 +181,14 @@ void Game::update()
 		else
 			backButton.setTexture(_backButton0);
 		//shouldGoFaster = character.shouldGoFaster();
-		laneManager.update(shouldGoFaster);
-		character.update();
+		if (character.isDead()) {
+
+		}
+		else {
+			laneManager.update(shouldGoFaster);
+			character.update();
+			crashed = character.isCrashed();
+		}
 	}
 	else if (state == CREDIT) {
 		if (isMouseOver(backButton, window)) {
@@ -185,7 +198,7 @@ void Game::update()
 		else
 			backButton.setTexture(_backButton0);
 	}
-	else if (state == TUTORIAL) {
+	else if (state == SETTING) {
 		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				backButton.setTexture(_backButton1);
@@ -203,25 +216,48 @@ void Game::draw()
 		window.draw(backgroundMenu);
 		playButton.drawTo(window);
 		exitButton.drawTo(window);
-		tutorialButton.drawTo(window);
+		settingButton.drawTo(window);
 		creditButton.drawTo(window);
 		selectArrow.drawTo(window);
 		clickGif.drawTo(window);
 	}
 	else if (state == PLAY)
 	{
-		//window.draw(backgroundPlay);
-		window.draw(backgroundPlay);
-		laneManager.drawTo(window);
-		window.draw(filter);
-		window.draw(backButton);
-		//character.draw(window);
+		if (character.isDead()) {
+			window.draw(backgroundPlay);
+			laneManager.drawTo(window);
+			window.draw(filter);
+			window.draw(backButton);
+			//character.draw(window);
+			crashSprite.setPosition(character.getX() - 120 / 2, character.getY() - 109 / 2);
+			if (crashAnimationCounter < 29) {
+				crashSprite.setTextureRect(sf::IntRect(120 * crashAnimationCounter, 0, 120, 109));
+				window.draw(crashSprite);
+				crashAnimationCounter++;
+				std::cout << crashAnimationCounter << std::endl;
+			}
+			else {
+				sf::Text dead;
+				dead.setFont(font);
+				dead.setCharacterSize(100);
+				dead.setString("YOU DIED!");
+				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width / 2, 900 / 2 - dead.getGlobalBounds().height / 2);
+				window.draw(dead);
+			}
+		}
+		else {
+			window.draw(backgroundPlay);
+			laneManager.drawTo(window);
+			window.draw(filter);
+			window.draw(backButton);
+			character.draw(window);
+		}
 	}
 	else if (state == CREDIT) {
 		window.draw(backgroundCredit);
 		window.draw(backButton);
 	}
-	else if (state == TUTORIAL) {
+	else if (state == SETTING) {
 		window.draw(backButton);
 	}
 	window.display();

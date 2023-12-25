@@ -117,6 +117,11 @@ void GrassLane::processRight(Character* character)
 	character->right();
 }
 
+void GrassLane::checkCollision()
+{
+	return;
+}
+
 void GrassLane::moveobx(int a, int b) {
 	for (int i = 0; i < nob; i++) {
 		this->ob[i].move(0, b);
@@ -194,6 +199,25 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 		}
 	}
 	delete[] idx;
+}
+
+void RoadLane::checkCollision()
+{
+	if (character == nullptr)
+		return;
+	for (int i = 0; i < nob; i++)
+	{
+		int objectX = ob[i].spriteX();
+		int objectWidth = ob[i].spriteWidth();
+		int characterX = character->position * 128;
+		if (characterX + 96 <= objectX || characterX >= objectX + objectWidth) {
+			continue;
+		}
+		else {
+			character->die();
+			return;
+		}
+	}
 }
 
 void RoadLane::drawTo(sf::RenderWindow& window)
@@ -315,6 +339,21 @@ void RailLane::moveobx(int a, int b) {
 	else train->move(-a, b);
 }
 
+void RailLane::checkCollision()
+{
+	if (character == nullptr)
+		return;
+	int objectX = train->spriteX();
+	int objectWidth = train->spriteWidth();
+	int characterX = character->position * 128;
+	if (characterX + 96 <= objectX || characterX >= objectX + objectWidth)
+		return;
+	else {
+		character->die();
+		return;
+	}
+}
+
 LaneManager::LaneManager()
 {
 	this->difficulty = 0;
@@ -427,6 +466,10 @@ void LaneManager::processRight()
 
 void LaneManager::update(bool& shouldGoFaster)
 {
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		lanes[i]->checkCollision();
+	}
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
 		lanes[i]->move(shouldGoFaster);

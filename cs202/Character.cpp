@@ -16,6 +16,7 @@ Character::Character()
 	this->height = 32;
 	this->speed = 0.05;
 	this->dead = false;
+	this->crashed = false;
 	this->isOutOfScreen = false;
 	this->upPressed = false;
 	this->downPressed = false;
@@ -29,6 +30,8 @@ Character::Character()
 
 void Character::update()
 {
+	if (this->y > 900)
+		this->dead = true;
 	double time = clock.getElapsedTime().asMilliseconds();
 	if (time >= 100) {
 		clock.restart();
@@ -145,4 +148,10 @@ bool Character::shouldGoFaster()
 	if (this->y < 250)
 		return true;
 	return false;
+}
+
+void Character::die()
+{
+	this->dead = true;
+	this->crashed = true;
 }

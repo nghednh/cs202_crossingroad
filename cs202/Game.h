@@ -15,7 +15,7 @@ private:
 		MENU,
 		PLAY,
 		PAUSE,
-		TUTORIAL,
+		SETTING,
 		CREDIT
 	};
 	State state;
@@ -23,13 +23,22 @@ private:
 private:
 	sf::Texture _backgroundMenu;
 	sf::Sprite backgroundMenu;
+
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
+
 	sf::Texture _backgroundCredit;
 	sf::Sprite backgroundCredit;
+
 	sf::Texture _object;
+
 	sf::Sprite filter;
 	sf::Texture _filter;
+
+	sf::Texture crash;
+	sf::Sprite crashSprite;
+	bool crashed;
+	int crashAnimationCounter;
 
 	GifManager clickGif;
 	LaneManager laneManager;
@@ -38,14 +47,17 @@ private:
 
 	sf::Sound backgroundMusic;
 	sf::SoundBuffer backgroundBuffer;
+
 	sf::Sound clickSound;
 	sf::SoundBuffer clickBuffer;
+
 	sf::Music musicMenu;
 	sf::Music musicInGame;
 
 	sf::Font font;
+
 	Button playButton;
-	Button tutorialButton;
+	Button settingButton;
 	Button creditButton;
 	Button exitButton;
 	Button selectArrow;
