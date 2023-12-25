@@ -24,7 +24,7 @@ protected:
 public:
 	virtual ~Lane() {}
 	virtual bool isOutOfScreen(int& height) const = 0;
-	virtual void drawTo(sf::RenderWindow& window) = 0;
+	virtual void drawTo(sf::RenderWindow& window, sf::Font& font) = 0;
 	virtual void move(bool& shouldGoFaster) = 0;
 	virtual int getY() const = 0;
 	virtual void processUp(Character* character) = 0;
@@ -51,7 +51,7 @@ public:
 	~GrassLane();
 	GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
-	void drawTo(sf::RenderWindow& window);
+	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
 	void processDown(Character* character);
@@ -74,7 +74,7 @@ public:
 	~RoadLane();
 	RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture &car4, sf::Texture& car5, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
-	void drawTo(sf::RenderWindow& window);
+	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
 	void processDown(Character* character);
@@ -97,7 +97,7 @@ public:
 	~RailLane();
 	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
-	void drawTo(sf::RenderWindow& window);
+	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
 	void processUp(Character* character);
 	void processDown(Character* character);

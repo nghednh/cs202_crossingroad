@@ -15,8 +15,15 @@ public:
 	void setTexture(sf::Texture& tex) {
 		sprite.setTexture(tex);
 	}
-	void drawTo(sf::RenderWindow& win) {
+	void drawTo(sf::RenderWindow& win, sf::Font& font) {
 		win.draw(sprite);
+		sf::Text text;
+		text.setString(std::to_string(x));
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::White);
+		text.setFont(font);
+		text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+		win.draw(text);
 	}
 	virtual void setPos(int x, int y) {
 		sprite.setPosition(x * 64 * 2 - 20, y - 26);
@@ -63,6 +70,12 @@ public:
 	}
 	int spriteHeight() {
 		return sprite.getTextureRect().height;
+	}
+	int spriteScaleX() {
+		return sprite.getScale().x;
+	}
+	int spriteScaleY() {
+		return sprite.getScale().y;
 	}
 };
 class ObjectStable : public Object {

@@ -131,6 +131,9 @@ void Game::handleEvent()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 				laneManager.processRight();
 			}
+			if (crashed) {
+				musicInGame.stop();
+			}
 		}
 		else if (state == CREDIT) {
 			if (event.type == sf::Event::MouseButtonReleased) {
@@ -241,7 +244,7 @@ void Game::draw()
 				dead.setFont(font);
 				dead.setCharacterSize(100);
 				dead.setString("YOU DIED!");
-				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width / 2, 900 / 2 - dead.getGlobalBounds().height / 2);
+				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width / 1.5, 900 / 2 - dead.getGlobalBounds().height / 1.5);
 				window.draw(dead);
 			}
 		}

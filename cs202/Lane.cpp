@@ -8,9 +8,15 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	nob = rand() % 9 + 1;
-	this->ob = new ObjectStable[nob];
-	initOb(plant, rock1, rock2);
+	if (index <= 4)	{
+		nob = 0;
+		this->ob = nullptr;
+	}
+	else {
+		nob = rand() % 9 + 1;
+		this->ob = new ObjectStable[nob];
+		initOb(plant, rock1, rock2);
+	}
 	this->character = nullptr;
 	this->type = GRASS;
 }
@@ -50,14 +56,14 @@ void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock
 	delete[] idx;
 }
 
-void GrassLane::drawTo(sf::RenderWindow& window)
+void GrassLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
 	this->sprite.setPosition(0, y);
 
 	//window.draw(this->sprite);
 	for (int i = 0; i < nob; i++)
 	{
-		ob[i].drawTo(window);
+		ob[i].drawTo(window, font);
 	}
 	if (this->character != nullptr)
 		this->character->draw(window);
@@ -210,24 +216,37 @@ void RoadLane::checkCollision()
 		int objectX = ob[i].spriteX();
 		int objectWidth = ob[i].spriteWidth();
 		int characterX = character->position * 128;
-		if (characterX + 96 <= objectX || characterX >= objectX + objectWidth) {
-			continue;
+		if (ob[i].rfleft()) {
+			if (characterX - 20 >= objectX || characterX + 96 <= objectX - objectWidth) {
+				continue;
+			}
+			else {
+				std::cout << "COLLISION: " << characterX << " " << objectX << std::endl;
+				character->die();
+				return;
+			}
 		}
 		else {
-			character->die();
-			return;
+			if (characterX + 96 <= objectX || characterX >= objectX + objectWidth) {
+				continue;
+			}
+			else {
+				std::cout << "COLLISION: " << characterX << " " << objectX << std::endl;
+				character->die();
+				return;
+			}
 		}
 	}
 }
 
-void RoadLane::drawTo(sf::RenderWindow& window)
+void RoadLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
 	this->sprite.setPosition(0, y);
 
 	//window.draw(this->sprite);
 	for (int i = 0; i < nob; i++)
 	{
-		ob[i].drawTo(window);
+		ob[i].drawTo(window, font);
 	}
 	if (this->character != nullptr)
 		this->character->draw(window);
@@ -292,12 +311,12 @@ void RailLane::initOb(sf::Texture& rock) {
 	delete[] dummy;
 }
 
-void RailLane::drawTo(sf::RenderWindow& window)
+void RailLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
 	this->sprite.setPosition(0, y);
 
 	//window.draw(this->sprite);
-	this->train->drawTo(window);
+	this->train->drawTo(window, font);
 	if (this->character != nullptr)
 		this->character->draw(window);
 }
@@ -394,20 +413,23 @@ void LaneManager::initCharacter(Character* character)
 
 void LaneManager::addLane(int y)
 {
-	int n = 3;
 	int random = rand() % 100;
-	if (random < 20)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
-	else if (random < 40)
-		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
-	else if (random < 60)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock[0], rock[1], car[0], train, index));
-	else if (random < 80)
+	if (index <= 4)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
-	else if (random < 90)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
-	else
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock[0], car[0], train, index));
+	else {
+		if (random < 20)
+			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
+		else if (random < 40)
+			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
+		else if (random < 60)
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock[0], rock[1], car[0], train, index));
+		else if (random < 80)
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
+		else if (random < 90)
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
+		else
+			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock[0], car[0], train, index));
+	}
 	std::cout << "added lane: " << index << std::endl;
 	index++;
 }
@@ -508,7 +530,7 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 	}
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		lanes[i]->drawTo(window);
+		lanes[i]->drawTo(window, font);
 		text.setFont(font);
 		text.setString(std::to_string(lanes[i]->getIndex()));
 		text.setCharacterSize(24);
