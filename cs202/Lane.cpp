@@ -72,10 +72,10 @@ void GrassLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 void GrassLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time >= 0.05) {
-		y += 5;
+	if (time >= 0.01) {
+		y += 1;
 		this->sprite.setPosition(0, y);
-		moveobx(15, 5);
+		moveobx(3, 1);
 		clock.restart();
 	}
 }
@@ -216,10 +216,12 @@ void RoadLane::checkCollision()
 	for (int i = 0; i < nob; i++)
 	{
 		int objectX = ob[i].spriteX();
-		int objectWidth = ob[i].spriteWidth();
+		double objectScale = ob[i].spriteScaleX();
+		double objectWidth = ob[i].spriteWidth() * 1;
 		int characterX = character->position * 128;
 		if (ob[i].rfleft()) {
-			if (characterX - 20 >= objectX || characterX + 96 <= objectX - objectWidth) {
+			if (characterX + 21 >= objectX || characterX + 72 - 27 <= objectX - objectWidth) {
+				std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
 				continue;
 			}
 			else {
@@ -229,7 +231,7 @@ void RoadLane::checkCollision()
 			}
 		}
 		else {
-			if (characterX + 96 <= objectX || characterX >= objectX + objectWidth) {
+			if (characterX + 72 - 27 <= objectX || characterX + 21 >= objectX + objectWidth) {
 				continue;
 			}
 			else {
@@ -257,10 +259,10 @@ void RoadLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 void RoadLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time >= 0.05) {
-		y += 5;
+	if (time >= 0.01) {
+		y += 1;
 		this->sprite.setPosition(0, y);
-		moveobx(15, 5);
+		moveobx(3, 1);
 		clock.restart();
 	}
 }
@@ -326,11 +328,11 @@ void RailLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 void RailLane::move(bool& shouldGoFaster)
 {
 	double time = clock.getElapsedTime().asSeconds();
-	if (time >= 0.05) {
-		y += 5;
+	if (time >= 0.01) {
+		y += 1;
 		this->sprite.setPosition(0, y);
-		if (this->greenLight()) moveobx(50, 5);
-		else moveobx(0, 5);
+		if (this->greenLight()) moveobx(10, 1);
+		else moveobx(0, 1);
 		clock.restart();
 	}
 }

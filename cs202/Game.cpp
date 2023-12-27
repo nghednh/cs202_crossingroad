@@ -237,14 +237,14 @@ void Game::draw()
 				crashSprite.setTextureRect(sf::IntRect(120 * crashAnimationCounter, 0, 120, 109));
 				window.draw(crashSprite);
 				crashAnimationCounter++;
-				std::cout << crashAnimationCounter << std::endl;
+				//std::cout << crashAnimationCounter << std::endl;
 			}
 			else {
 				sf::Text dead;
 				dead.setFont(font);
 				dead.setCharacterSize(100);
 				dead.setString("YOU DIED!");
-				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width / 1.5, 900 / 2 - dead.getGlobalBounds().height / 1.5);
+				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width/2, 900 / 2 - dead.getGlobalBounds().height);
 				window.draw(dead);
 			}
 		}

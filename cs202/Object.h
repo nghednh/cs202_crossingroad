@@ -59,10 +59,10 @@ public:
 	virtual int randomxx(bool l) {
 		return 0;
 	}
-	int spriteX() {
+	double spriteX() {
 		return sprite.getPosition().x;
 	}
-	int spriteY() {
+	double spriteY() {
 		return sprite.getPosition().y;
 	}
 	int spriteWidth() {
@@ -71,10 +71,10 @@ public:
 	int spriteHeight() {
 		return sprite.getTextureRect().height;
 	}
-	int spriteScaleX() {
+	double spriteScaleX() {
 		return sprite.getScale().x;
 	}
-	int spriteScaleY() {
+	double spriteScaleY() {
 		return sprite.getScale().y;
 	}
 };
