@@ -84,7 +84,8 @@ void GrassLane::processUp(Character* character) {
 	for (int i = 0; i < nob; i++) {
 		if (character->position == ob[i].returnx()) {
 			std::cout << "BLOCKED UP GRASS" << std::endl;
-			return;
+			//return;
+			// tempo for debug
 		}
 	}
 	character->up();
@@ -159,30 +160,31 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 	}
 	for (int i = 0; i < nob; i++) {
 		int rdm = rand() % 5;
+		rdm = 0; // tempo for debug
 		switch (rdm) {
 			case 0:
 			{
-				this->ob[i].setup(car1, 2.56, 2.56, 0, 0, 100, 100);
+				this->ob[i].setup(car1, 2.56, 2.56, 3,27, 84,49);
 				break;
 			}
 			case 1:
 			{
-				this->ob[i].setup(car2, 2.56, 2.56, 0, 0, 100, 100);
+				this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49);
 				break;
 			}
 			case 2:
 			{
-				this->ob[i].setup(car3, 2.56, 2.56, 0, 0, 100, 100);
+				this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49);
 				break;
 			}
 			case 3:
 			{
-				this->ob[i].setup(car4, 2.56, 2.56, 0, 0, 100, 100);
+				this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49);
 				break;
 			}
 			case 4:
 			{
-				this->ob[i].setup(car5, 2.56, 2.56, 0, 0, 100, 100);
+				this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49);
 				break;
 			}
 		}
