@@ -15,7 +15,7 @@ public:
 	void setTexture(sf::Texture& tex) {
 		sprite.setTexture(tex);
 	}
-	void drawTo(sf::RenderWindow& win, sf::Font& font) {
+	virtual void drawTo(sf::RenderWindow& win, sf::Font& font) {
 		win.draw(sprite);
 		sf::Text text;
 		text.setString(std::to_string(x));
@@ -169,6 +169,20 @@ public:
 	void setPos(int x, int y) {
 		if (!rfleft()) sprite.setPosition(x * 200, y - 30);
 		else sprite.setPosition(x*200-1000, y - 30);
+	}
+	void drawTo(sf::RenderWindow& win, sf::Font& font) {
+		win.draw(sprite);
+		sf::Text text;
+		text.setString(std::to_string(x));
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::White);
+		text.setFont(font);
+		text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+		win.draw(text);
+		text.setString("width: " + std::to_string(spriteWidth() * spriteScaleX()));
+		text.setPosition(sprite.getPosition().x + this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
+		//if (rfleft()) text.setPosition(sprite.getPosition().x - this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
+		win.draw(text);
 	}
 };
 class TrainObject : public ObjectMoving {

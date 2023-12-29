@@ -124,7 +124,7 @@ void GrassLane::processRight(Character* character)
 	character->right();
 }
 
-void GrassLane::checkCollision()
+void GrassLane::checkCollision(sf::Font& font)
 {
 	return;
 }
@@ -209,7 +209,7 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 	delete[] idx;
 }
 
-void RoadLane::checkCollision()
+void RoadLane::checkCollision(sf::Font& font)
 {
 	if (character == nullptr)
 		return;
@@ -221,7 +221,8 @@ void RoadLane::checkCollision()
 		int characterX = character->position * 128;
 		if (ob[i].rfleft()) {
 			if (characterX + 21 >= objectX || characterX + 72 - 27 <= objectX - objectWidth) {
-				std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
+				
+				//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
 				continue;
 			}
 			else {
@@ -362,7 +363,7 @@ void RailLane::moveobx(int a, int b) {
 	else train->move(-a, b);
 }
 
-void RailLane::checkCollision()
+void RailLane::checkCollision(sf::Font& font)
 {
 	if (character == nullptr)
 		return;
@@ -494,7 +495,7 @@ void LaneManager::update(bool& shouldGoFaster)
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		lanes[i]->checkCollision();
+		lanes[i]->checkCollision(font);
 	}
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
@@ -541,6 +542,15 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 		text.setFillColor(sf::Color::White);
 		text.setPosition(0, lanes[i]->getY());
 		window.draw(text);
+		if (lanes[i]->getCharacter()) {
+			text.setCharacterSize(12);
+			text.setString(std::to_string(character->getX() + 21));
+			text.setPosition(character->getX() + 21, character->getY());
+			window.draw(text);
+			text.setString(std::to_string(character->getX() + 72 - 12));
+			text.setPosition(character->getX() + 72 - 12, character->getY());
+			window.draw(text);
+		}
 	}
 }
 
