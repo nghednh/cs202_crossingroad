@@ -90,7 +90,7 @@ public:
 		setScale(scaleX, scaleY);
 	}
 	virtual int randomx(bool*& idx, int n) {
-		for (int i = 0; i > -1; i++) {
+		for (int i = 0; ; i++) {
 			int tmp = rand() % 13;
 			if (idx[tmp] == 0) {
 				x = tmp;
@@ -115,7 +115,7 @@ public:
 	}
 	virtual int randomx(bool *& idx) {
 		if (rand()%2!=0) {
-			for (int i = 0; i > -1; i++) {
+			for (int i = 0; ; i++) {
 				int tmp = rand() % 13;
 				if (idx[tmp] == 0) {
 					x = tmp;
@@ -126,7 +126,7 @@ public:
 			fleft = false;
 		}
 		else {
-			for (int i = 0; i > -1; i++) {
+			for (int i = 0; ; i++) {
 				int tmp = rand() % 13;
 				if (idx[tmp] == 0) {
 					x = tmp;
@@ -143,7 +143,7 @@ public:
 	}
 	int randomxx(bool l, bool*& idx) {
 		if (!l) {
-			for (int i = 0; i > -1; i++) {
+			for (int i = 0; ; i++) {
 				int tmp = rand() % 13;
 				if (idx[tmp] == 0) {
 					x = tmp;
@@ -154,7 +154,7 @@ public:
 			fleft = false;
 		}
 		else {
-			for (int i = 0; i > -1; i++) {
+			for (int i = 0; ; i++) {
 				int tmp = rand() % 13;
 				if (idx[tmp] == 0) {
 					x = tmp;

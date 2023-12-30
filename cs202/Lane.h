@@ -92,7 +92,8 @@ class RailLane : public Lane
 private:
 	sf::Clock clock;
 	TrainObject *train;
-	bool redLight=false;
+	bool redLight;
+	ObjectStable light;
 public:
 	~RailLane();
 	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
@@ -106,6 +107,7 @@ public:
 	int getY() const { return y; }
 	void initOb(sf::Texture& rock);
 	void moveobx(int a, int b);
+	void randomInitLight() { redLight = rand() % 2; }
 	bool greenLight() { return !redLight; };
 	void checkCollision(sf::Font& font);
 };
@@ -119,6 +121,8 @@ private:
 	sf::Texture plant;
 	sf::Texture car[5];
 	sf::Texture train;
+	sf::Texture redLight;
+	sf::Texture greenLight;
 	int width;
 	int height;
 	int difficulty;

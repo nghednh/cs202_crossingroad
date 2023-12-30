@@ -301,8 +301,10 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
+	randomInitLight();
 	this->train = new TrainObject;
 	initOb(train);
+	light.setup(rock, 2, 2, 0, 0, 64, 64);
 	this->character = nullptr;
 	this->type = RAIL;
 }
@@ -321,6 +323,10 @@ void RailLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 	this->sprite.setPosition(0, y);
 
 	//window.draw(this->sprite);
+	this->light.drawTo(window, font);
+	if(!this->train->rfleft())
+		this->light.setPos(12, y+30);
+	else this->light.setPos(0, y + 30);
 	this->train->drawTo(window, font);
 	if (this->character != nullptr)
 		this->character->draw(window);
@@ -359,8 +365,8 @@ void RailLane::processRight(Character* character)
 }
 
 void RailLane::moveobx(int a, int b) {
-	if (train->rfleft()) this->train->move(a, b);
-	else train->move(-a, b);
+		if (train->rfleft()) this->train->move(a, b);
+		else train->move(-a, b);
 }
 
 void RailLane::checkCollision(sf::Font& font)
@@ -399,6 +405,7 @@ LaneManager::LaneManager()
 	this->car[3].loadFromFile("resource/object/vehicle/left9.png");
 	this->car[4].loadFromFile("resource/object/vehicle/left31.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
+	this->greenLight.loadFromFile("resource/object/greenlight.png");
 	this->character = nullptr;
 	font.loadFromFile("resource/fibberish.ttf");
 }
@@ -433,7 +440,7 @@ void LaneManager::addLane(int y)
 		else if (random < 90)
 			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
 		else
-			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, rock[0], car[0], train, index));
+			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, car[0], train, index));
 	}
 	std::cout << "added lane: " << index << std::endl;
 	index++;
