@@ -173,13 +173,13 @@ public:
 	void drawTo(sf::RenderWindow& win, sf::Font& font) {
 		win.draw(sprite);
 		sf::Text text;
-		text.setString(std::to_string(x));
+		text.setString(std::to_string(sprite.getPosition().x));
 		text.setCharacterSize(24);
 		text.setFillColor(sf::Color::White);
 		text.setFont(font);
 		text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
 		win.draw(text);
-		text.setString("width: " + std::to_string(spriteWidth() * spriteScaleX()));
+		text.setString(std::to_string((int)(sprite.getPosition().x + spriteWidth() * spriteScaleX())));
 		text.setPosition(sprite.getPosition().x + this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
 		//if (rfleft()) text.setPosition(sprite.getPosition().x - this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
 		win.draw(text);

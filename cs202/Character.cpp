@@ -14,7 +14,7 @@ Character::Character()
 	this->normal.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	this->width = 32;
 	this->height = 32;
-	this->speed = 0.05;
+	this->speed = 2;
 	this->dead = false;
 	this->crashed = false;
 	this->isOutOfScreen = false;

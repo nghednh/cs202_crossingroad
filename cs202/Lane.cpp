@@ -83,7 +83,7 @@ void GrassLane::move(bool& shouldGoFaster)
 void GrassLane::processUp(Character* character) {
 	for (int i = 0; i < nob; i++) {
 		if (character->position == ob[i].returnx()) {
-			std::cout << "BLOCKED UP GRASS" << std::endl;
+			//std::cout << "BLOCKED UP GRASS" << std::endl;
 			//return;
 			// tempo for debug
 		}
@@ -95,7 +95,7 @@ void GrassLane::processDown(Character* character)
 {
 	for (int i = 0; i < nob; i++) {
 		if (character->position == ob[i].returnx()) {
-			std::cout << "BLOCKED DOWN GRASS" << std::endl;
+			//std::cout << "BLOCKED DOWN GRASS" << std::endl;
 			return;
 		}
 	}
@@ -106,7 +106,7 @@ void GrassLane::processLeft(Character* character)
 {
 	for (int i = 0; i < nob; i++) {
 		if (character->position - 1 == ob[i].returnx()) {
-			std::cout << "BLOCKED LEFT GRASS" << std::endl;
+			//std::cout << "BLOCKED LEFT GRASS" << std::endl;
 			return;
 		}
 	}
@@ -117,7 +117,7 @@ void GrassLane::processRight(Character* character)
 {
 	for (int i = 0; i < nob; i++) {
 		if (character->position + 1 == ob[i].returnx()) {
-			std::cout << "BLOCKED RIGHT GRASS" << std::endl;
+			//std::cout << "BLOCKED RIGHT GRASS" << std::endl;
 			return;
 		}
 	}
@@ -220,7 +220,7 @@ void RoadLane::checkCollision(sf::Font& font)
 		double objectWidth = ob[i].spriteWidth() * 1;
 		int characterX = character->position * 128;
 		if (ob[i].rfleft()) {
-			if (characterX + 21 >= objectX || characterX + 72 - 27 <= objectX - objectWidth) {
+			if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
 				
 				//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
 				continue;
@@ -232,7 +232,7 @@ void RoadLane::checkCollision(sf::Font& font)
 			}
 		}
 		else {
-			if (characterX + 72 - 27 <= objectX || characterX + 21 >= objectX + objectWidth) {
+			if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
 				continue;
 			}
 			else {
@@ -390,13 +390,30 @@ void RailLane::checkCollision(sf::Font& font)
 	if (character == nullptr)
 		return;
 	int objectX = train->spriteX();
-	int objectWidth = train->spriteWidth();
+	double objectScale = train->spriteScaleX();
+	double objectWidth = train->spriteWidth() * 1;
 	int characterX = character->position * 128;
-	if (characterX + 96 <= objectX || characterX >= objectX + objectWidth)
-		return;
+	if (train->rfleft()) {
+		if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
+
+			//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
+			return;
+		}
+		else {
+			std::cout << "COLLISION: " << characterX << " " << objectX << std::endl;
+			character->die();
+			return;
+		}
+	}
 	else {
-		character->die();
-		return;
+		if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
+			return;
+		}
+		else {
+			std::cout << "COLLISION: " << characterX << " " << objectX << std::endl;
+			character->die();
+			return;
+		}
 	}
 }
 
