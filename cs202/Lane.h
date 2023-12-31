@@ -10,7 +10,8 @@ enum LaneType
 {
 	GRASS,
 	ROAD,
-	RAIL
+	RAIL,
+	ANIMAL
 };
 
 class Lane
@@ -113,6 +114,30 @@ public:
 	void checkCollision(sf::Font& font);
 };
 
+//this lane works like road lane but the texture is grass and the object does not move, but you can jump to them and get hit
+class AnimalLane : public Lane
+{
+private:
+	sf::Clock clock;
+	int nob;
+	ObjectStable* ob;
+public:
+	~AnimalLane();
+	AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index);
+	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
+	void drawTo(sf::RenderWindow& window, sf::Font& font);
+	void move(bool& shouldGoFaster);
+	void processUp(Character* character);
+	void processDown(Character* character);
+	void processLeft(Character* character);
+	void processRight(Character* character);
+	int getY() const { return y; }
+	void initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5);
+	void moveobx(int a, int b);
+	int returnnob() { return nob; }
+	void checkCollision(sf::Font& font);
+};
+
 class LaneManager
 {
 private:
@@ -121,6 +146,7 @@ private:
 	sf::Texture rock[2];
 	sf::Texture plant;
 	sf::Texture car[5];
+	sf::Texture animal[5];
 	sf::Texture train;
 	sf::Texture redLight;
 	sf::Texture greenLight;

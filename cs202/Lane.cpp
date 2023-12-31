@@ -437,6 +437,11 @@ LaneManager::LaneManager()
 	this->car[2].loadFromFile("resource/object/vehicle/left21.png");
 	this->car[3].loadFromFile("resource/object/vehicle/left9.png");
 	this->car[4].loadFromFile("resource/object/vehicle/left31.png");
+	this->animal[0].loadFromFile("resource/object/animal/cow.png");
+	this->animal[1].loadFromFile("resource/object/animal/sheep.png");
+	this->animal[2].loadFromFile("resource/object/animal/goat.png");
+	this->animal[3].loadFromFile("resource/object/animal/dog.png");
+	this->animal[4].loadFromFile("resource/object/animal/pig.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 	this->greenLight.loadFromFile("resource/object/TrafficLight.png");
 	this->redLight.loadFromFile("resource/object/TrafficLight.png");
@@ -467,18 +472,22 @@ void LaneManager::addLane(int y)
 	else if(index == 9)
 		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 	else {
-		if (random < 20)
+		if (random < 12)
 			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
-		else if (random < 40)
+		else if (random < 24)
 			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
-		else if (random < 60)
+		else if (random < 36)
 			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock[0], rock[1], car[0], train, index));
-		else if (random < 80)
+		else if (random < 48)
 			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
-		else if (random < 90)
+		else if (random < 60)
 			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
-		else
+		else if (random < 72)
 			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
+		else if (random < 84)
+			this->lanes.insert(lanes.begin(), new AnimalLane(this->texture[5], y, animal[0], animal[1], animal[2], animal[3], animal[4], index));
+		else
+			this->lanes.insert(lanes.begin(), new AnimalLane(this->texture[5], y, animal[0], animal[1], animal[2], animal[3], animal[4], index));
 	}
 	std::cout << "added lane: " << index << std::endl;
 	index++;
@@ -607,4 +616,121 @@ RoadLane::~RoadLane() {
 }
 RailLane::~RailLane() {
 	delete train;
+}
+
+AnimalLane::~AnimalLane()
+{
+	delete[] ob;
+}
+
+AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index)
+{
+	this->sprite.setTexture(texture);
+	this->sprite.setScale(4, 4);
+	this->y = y;
+	this->index = index;
+	nob = rand() % 10 + 1;
+	this->ob = new ObjectStable[nob];
+	initOb(animal1, animal2, animal3, animal4, animal5);
+	this->character = nullptr;
+	this->type = ANIMAL;
+}
+
+void AnimalLane::drawTo(sf::RenderWindow& window, sf::Font& font)
+{
+this->sprite.setPosition(0, y);
+
+	//window.draw(this->sprite);
+	for (int i = 0; i < nob; i++)
+	{
+		ob[i].drawTo(window, font);
+	}
+	if (this->character != nullptr)
+		this->character->draw(window);
+}
+
+void AnimalLane::move(bool& shouldGoFaster)
+{
+	double time = clock.getElapsedTime().asSeconds();
+	if (time >= 0.01) {
+		y += 1;
+		this->sprite.setPosition(0, y);
+		moveobx(0, 1); // animals don't move
+		clock.restart();
+	}
+}
+
+void AnimalLane::processUp(Character* character)
+{
+	character->up();
+}
+
+void AnimalLane::processDown(Character* character)
+{
+	character->down();
+}
+
+void AnimalLane::processLeft(Character* character)
+{
+	character->left();
+}
+
+void AnimalLane::processRight(Character* character)
+{
+	character->right();
+}
+
+void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5)
+{
+	int a = -1;
+	//std::cout << nob;
+	int b = -2;
+	bool* idx = new bool[13];
+	for (int i = 0; i < 13; i++) {
+		idx[i] = 0;
+	}
+	for (int i = 0; i < nob; i++) {
+		int tmp = 0;
+		if (rand() % 3 == 0) {
+			this->ob[i].setup(animal1, 4, 4, 0, 0, 16, 16);
+		}
+		else if (rand() % 3 == 2) {
+			this->ob[i].setup(animal2, 4, 4, 0, 0, 16, 16);
+			tmp = 1;
+		}
+		else {
+			this->ob[i].setup(animal3, 4, 4, 0, 0, 16, 16);
+			tmp = 2;
+		}
+		b = ob[i].randomx(idx, 13);
+		while (a == b) b = ob[i].randomx(idx, 13);
+		a = b;
+		if (tmp == 1) {
+			ob[i].setPos(ob[i].returnx(), y + 30);
+		}
+		else if (tmp == 2) {
+			ob[i].setPos(ob[i].returnx(), y + 50);
+		}
+		else ob[i].setPos(ob[i].returnx(), y);
+	}
+	delete[] idx;
+}
+
+void AnimalLane::moveobx(int a, int b)
+{
+	for (int i = 0; i < nob; i++) {
+		this->ob[i].move(0, b);
+	}
+}
+
+void AnimalLane::checkCollision(sf::Font& font)
+{
+	if (character == nullptr)
+		return;
+	for (int i = 0; i < nob; i++) {
+		if (character->position == ob[i].returnx()) {
+			character->die();
+			return;
+		}
+	}
 }

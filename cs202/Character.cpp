@@ -4,7 +4,8 @@ Character::Character()
 {
 	this->jumping.loadFromFile("resource/character/jumping.png");
 	this->flash.loadFromFile("resource/character/die2.png");
-	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.7);
+	this->speed = 1;
+	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.35 * speed);
 	this->gif.setScale(3, 3);
 	this->x = 7*128;
 	this->y = 900 - 128*2;
@@ -14,7 +15,6 @@ Character::Character()
 	this->normal.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	this->width = 32;
 	this->height = 32;
-	this->speed = 2;
 	this->dead = false;
 	this->crashed = false;
 	this->isOutOfScreen = false;
@@ -33,7 +33,7 @@ void Character::update()
 	if (this->y > 900)
 		this->dead = true;
 	double time = clock.getElapsedTime().asMilliseconds();
-	if (time >= 100) {
+	if (time >= 50 * speed) {
 		clock.restart();
 		if (upPressed) {
 			//this->y -= 64;
