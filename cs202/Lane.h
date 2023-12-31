@@ -93,7 +93,8 @@ private:
 	sf::Clock clock;
 	TrainObject *train;
 	bool redLight;
-	ObjectStable light;
+	ObjectStable light1;
+	ObjectStable light2;
 public:
 	~RailLane();
 	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);

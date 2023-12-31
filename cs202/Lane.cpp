@@ -304,7 +304,8 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	randomInitLight();
 	this->train = new TrainObject;
 	initOb(train);
-	light.setup(rock, 2, 2, 0, 0, 64, 64);
+	light1.setup(rock, 2.6, 2.6, 57, 49, 18, 73);
+	light2.setup(car, 2.6, 2.6, 91, 49, 18, 73);
 	this->character = nullptr;
 	this->type = RAIL;
 }
@@ -320,14 +321,29 @@ void RailLane::initOb(sf::Texture& rock) {
 
 void RailLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
-	this->sprite.setPosition(0, y);
-
+	this->sprite.setPosition(0, y+30);
 	//window.draw(this->sprite);
-	this->light.drawTo(window, font);
-	if(!this->train->rfleft())
-		this->light.setPos(12, y+30);
-	else this->light.setPos(0, y + 30);
 	this->train->drawTo(window, font);
+	if (!this->train->rfleft()) {
+		if (this->redLight == true) {
+			this->light2.drawTo(window, font);
+			this->light2.setPos(12, y+30);
+		}
+		else {
+			this->light1.drawTo(window, font);
+			this->light1.setPos(12, y+30);
+		}
+	}
+	else {
+		if (this->redLight == true) {
+			this->light2.drawTo(window, font);
+			this->light2.setPos(1, y+30);
+		}
+		else {
+			this->light1.drawTo(window, font);
+			this->light1.setPos(1, y+30);
+		}
+	}
 	if (this->character != nullptr)
 		this->character->draw(window);
 }
@@ -405,7 +421,8 @@ LaneManager::LaneManager()
 	this->car[3].loadFromFile("resource/object/vehicle/left9.png");
 	this->car[4].loadFromFile("resource/object/vehicle/left31.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
-	this->greenLight.loadFromFile("resource/object/greenlight.png");
+	this->greenLight.loadFromFile("resource/object/TrafficLight.png");
+	this->redLight.loadFromFile("resource/object/TrafficLight.png");
 	this->character = nullptr;
 	font.loadFromFile("resource/fibberish.ttf");
 }
@@ -426,8 +443,12 @@ void LaneManager::initCharacter(Character* character)
 void LaneManager::addLane(int y)
 {
 	int random = rand() % 100;
-	if (index <= 4)
+	if(index <= 4)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
+	else if (index == 10)
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
+	else if(index == 9)
+		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 	else {
 		if (random < 20)
 			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
@@ -440,7 +461,7 @@ void LaneManager::addLane(int y)
 		else if (random < 90)
 			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
 		else
-			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, car[0], train, index));
+			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
 	}
 	std::cout << "added lane: " << index << std::endl;
 	index++;
