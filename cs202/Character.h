@@ -46,5 +46,7 @@ public:
 	bool isCrashed() { return crashed; }
 	int getX() { return x; }
 	int getY() { return y; }
+	void reset();
+	bool isAnimating() { return (upPressed || downPressed || leftPressed || rightPressed); }
 };
 

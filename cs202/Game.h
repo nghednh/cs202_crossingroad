@@ -35,6 +35,9 @@ private:
 	sf::Sprite filter;
 	sf::Texture _filter;
 
+	sf::Sprite gameOver;
+	sf::Texture _gameOver;
+
 	sf::Texture crash;
 	sf::Sprite crashSprite;
 	bool crashed;
@@ -50,6 +53,10 @@ private:
 
 	sf::Sound clickSound;
 	sf::SoundBuffer clickBuffer;
+	bool crashSoundPlayed;
+
+	sf::Sound crashSound;
+	sf::SoundBuffer crashBuffer;
 
 	sf::Music musicMenu;
 	sf::Music musicInGame;
@@ -65,6 +72,12 @@ private:
 	sf::Texture _backButton0;
 	sf::Texture _backButton1;
 	sf::Sprite backButton;
+
+	sf::Texture _replayButton0;
+	sf::Texture _replayButton1;
+	sf::Sprite replayButton;
+
+	sf::Clock clock;
 public:
 	Game();
 	void loadSound();

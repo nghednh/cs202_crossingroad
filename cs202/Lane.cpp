@@ -8,7 +8,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	if (index <= 4)	{
+	if (index <= 4) {
 		nob = 0;
 		this->ob = nullptr;
 	}
@@ -46,10 +46,10 @@ void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock
 		while (a == b) b = ob[i].randomx(idx, 13);
 		a = b;
 		if (tmp == 1) {
-			ob[i].setPos(ob[i].returnx(), y+30);
+			ob[i].setPos(ob[i].returnx(), y + 30);
 		}
 		else if (tmp == 2) {
-			ob[i].setPos(ob[i].returnx(), y+50);
+			ob[i].setPos(ob[i].returnx(), y + 50);
 		}
 		else ob[i].setPos(ob[i].returnx(), y);
 	}
@@ -162,31 +162,31 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 		int rdm = rand() % 5;
 		rdm = 0; // tempo for debug
 		switch (rdm) {
-			case 0:
-			{
-				this->ob[i].setup(car1, 2.56, 2.56, 3,27, 84,49);
-				break;
-			}
-			case 1:
-			{
-				this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49);
-				break;
-			}
-			case 2:
-			{
-				this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49);
-				break;
-			}
-			case 3:
-			{
-				this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49);
-				break;
-			}
-			case 4:
-			{
-				this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49);
-				break;
-			}
+		case 0:
+		{
+			this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49);
+			break;
+		}
+		case 1:
+		{
+			this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49);
+			break;
+		}
+		case 2:
+		{
+			this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49);
+			break;
+		}
+		case 3:
+		{
+			this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49);
+			break;
+		}
+		case 4:
+		{
+			this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49);
+			break;
+		}
 		}
 		if (i == 0) {
 			//ob[i].randomx();
@@ -221,7 +221,7 @@ void RoadLane::checkCollision(sf::Font& font)
 		int characterX = character->position * 128;
 		if (ob[i].rfleft()) {
 			if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
-				
+
 				//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
 				continue;
 			}
@@ -321,27 +321,27 @@ void RailLane::initOb(sf::Texture& rock) {
 
 void RailLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
-	this->sprite.setPosition(0, y+30);
+	this->sprite.setPosition(0, y + 30);
 	//window.draw(this->sprite);
 	this->train->drawTo(window, font);
 	if (!this->train->rfleft()) {
 		if (this->redLight == true) {
 			this->light2.drawTo(window, font);
-			this->light2.setPos(12, y+30);
+			this->light2.setPos(12, y + 30);
 		}
 		else {
 			this->light1.drawTo(window, font);
-			this->light1.setPos(12, y+30);
+			this->light1.setPos(12, y + 30);
 		}
 	}
 	else {
 		if (this->redLight == true) {
 			this->light2.drawTo(window, font);
-			this->light2.setPos(1, y+30);
+			this->light2.setPos(1, y + 30);
 		}
 		else {
 			this->light1.drawTo(window, font);
-			this->light1.setPos(1, y+30);
+			this->light1.setPos(1, y + 30);
 		}
 	}
 	if (this->character != nullptr)
@@ -381,8 +381,8 @@ void RailLane::processRight(Character* character)
 }
 
 void RailLane::moveobx(int a, int b) {
-		if (train->rfleft()) this->train->move(a, b);
-		else train->move(-a, b);
+	if (train->rfleft()) this->train->move(a, b);
+	else train->move(-a, b);
 }
 
 void RailLane::checkCollision(sf::Font& font)
@@ -465,11 +465,11 @@ void LaneManager::initCharacter(Character* character)
 void LaneManager::addLane(int y)
 {
 	int random = rand() % 100;
-	if(index <= 4)
+	if (index <= 4)
 		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
 	else if (index == 10)
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
-	else if(index == 9)
+	else if (index == 9)
 		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 	else {
 		if (random < 12)
@@ -497,10 +497,10 @@ void LaneManager::processUp()
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		if (lanes[i]->getIndex() == character->index)
+		if (lanes[i]->getIndex() == character->index && !character->isAnimating())
 		{
 			if (lanes[i]->getCharacter())
-				lanes[i-1]->processUp(lanes[i]->getCharacter());
+				lanes[i - 1]->processUp(lanes[i]->getCharacter());
 			break;
 		}
 	}
@@ -510,10 +510,10 @@ void LaneManager::processDown()
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		if (lanes[i]->getIndex() == character->index)
+		if (lanes[i]->getIndex() == character->index && !character->isAnimating())
 		{
 			if (lanes[i]->getCharacter())
-				lanes[i+1]->processDown(lanes[i]->getCharacter());
+				lanes[i + 1]->processDown(lanes[i]->getCharacter());
 			break;
 		}
 	}
@@ -523,7 +523,7 @@ void LaneManager::processLeft()
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		if (lanes[i]->getIndex() == character->index)
+		if (lanes[i]->getIndex() == character->index && !character->isAnimating())
 		{
 			if (lanes[i]->getCharacter())
 				lanes[i]->processLeft(lanes[i]->getCharacter());
@@ -536,7 +536,7 @@ void LaneManager::processRight()
 {
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
-		if (lanes[i]->getIndex() == character->index)
+		if (lanes[i]->getIndex() == character->index && !character->isAnimating())
 		{
 			if (lanes[i]->getCharacter())
 				lanes[i]->processRight(lanes[i]->getCharacter());
@@ -555,18 +555,19 @@ void LaneManager::update(bool& shouldGoFaster)
 	{
 		lanes[i]->move(shouldGoFaster);
 	}
-	if (lanes[0]->isOutOfScreen(this->height))
-	{
-		delete lanes.back();
-		lanes.pop_back();
-
-		addLane(lanes[0]->getY() - 128);
-		for (int i = 0; i < this->lanes.size(); i++)
+	if (lanes.size() != 0)
+		if (lanes[0]->isOutOfScreen(this->height))
 		{
-			std::cout << lanes[i]->getIndex() << (lanes[i]->getCharacter() ? "x " : " ");
+			delete lanes.back();
+			lanes.pop_back();
+
+			addLane(lanes[0]->getY() - 128);
+			for (int i = 0; i < this->lanes.size(); i++)
+			{
+				std::cout << lanes[i]->getIndex() << (lanes[i]->getCharacter() ? "x " : " ");
+			}
+			std::cout << std::endl << character->index << std::endl;
 		}
-		std::cout << std::endl << character->index << std::endl;
-	}
 	for (int i = 0; i < this->lanes.size(); i++)
 	{
 		if (lanes[i]->getIndex() == character->index)
@@ -608,6 +609,19 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 	}
 }
 
+void LaneManager::reset()
+{
+	for (int i = 0; i < this->lanes.size(); i++)
+	{
+		delete lanes[i];
+	}
+	this->lanes.clear();
+	this->index = 1;
+	this->character = nullptr;
+	for (int i = 0; i < 9; i++)
+		this->addLane(900 - i * 128);
+}
+
 GrassLane::~GrassLane() {
 	delete[] ob;
 }
@@ -638,7 +652,7 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 
 void AnimalLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
-this->sprite.setPosition(0, y);
+	this->sprite.setPosition(0, y);
 
 	//window.draw(this->sprite);
 	for (int i = 0; i < nob; i++)
@@ -692,26 +706,26 @@ void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture&
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
 		if (rand() % 3 == 0) {
-			this->ob[i].setup(animal1, 4, 4, 0, 0, 16, 16);
+			this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16);
 		}
 		else if (rand() % 3 == 2) {
-			this->ob[i].setup(animal2, 4, 4, 0, 0, 16, 16);
+			this->ob[i].setup(animal2, 5, 5, 0, 0, 16, 16);
 			tmp = 1;
 		}
 		else {
-			this->ob[i].setup(animal3, 4, 4, 0, 0, 16, 16);
+			this->ob[i].setup(animal3, 5, 5, 0, 0, 16, 16);
 			tmp = 2;
 		}
 		b = ob[i].randomx(idx, 13);
 		while (a == b) b = ob[i].randomx(idx, 13);
-		a = b;
+		a = b;/*
 		if (tmp == 1) {
 			ob[i].setPos(ob[i].returnx(), y + 30);
 		}
 		else if (tmp == 2) {
 			ob[i].setPos(ob[i].returnx(), y + 50);
 		}
-		else ob[i].setPos(ob[i].returnx(), y);
+		else */ob[i].setPos(ob[i].returnx(), y + 50);
 	}
 	delete[] idx;
 }

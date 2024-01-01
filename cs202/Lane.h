@@ -173,4 +173,5 @@ public:
 	int getHeight() const { return height; }
 	int getDifficulty() const { return difficulty; }
 	void setDifficulty(int difficulty) { this->difficulty = difficulty; }
+	void reset();
 };

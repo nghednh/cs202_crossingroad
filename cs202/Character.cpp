@@ -7,8 +7,8 @@ Character::Character()
 	this->speed = 1;
 	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.35 * speed);
 	this->gif.setScale(3, 3);
-	this->x = 7*128;
-	this->y = 900 - 128*2;
+	this->x = 7 * 128;
+	this->y = 900 - 128 * 2;
 	this->gif.setPosition(this->x, this->y);
 	this->normal.setTexture(this->jumping);
 	this->normal.setScale(3, 3);
@@ -37,44 +37,52 @@ void Character::update()
 		clock.restart();
 		if (upPressed) {
 			//this->y -= 64;
-			this->x = position * 128;
-			this->gif.setPosition(x, y);
 			if (counter == 2)
+			{
 				index++;
+				this->x = position * 128;
+				this->gif.setPosition(x, y);
+			}
 			counter++;
 		}
 		if (downPressed) {
 			//this->y += 64;
-			this->x = position * 128;
-			this->gif.setPosition(x, y);
 			if (counter == 2)
+			{
 				index--;
+				this->x = position * 128;
+				this->gif.setPosition(x, y);
+			}
 			counter++;
 		}
 		if (leftPressed) {
 			//this->x -= 64;
-			this->x = position * 128;
-			this->gif.setPosition(x, y);
 			if (counter == 2)
+			{
 				position--;
+				this->x = position * 128;
+				this->gif.setPosition(x, y);
+			}
 			counter++;
 		}
 		if (rightPressed) {
 			//this->x += 64;
-			this->x = position * 128;
-			this->gif.setPosition(x, y);
 			if (counter == 2)
+			{
 				position++;
+				this->x = position * 128;
+				this->gif.setPosition(x, y);
+			}
 			counter++;
 		}
-		if (counter == 6) {
+		if (counter == 5) {
 			upPressed = false;
 			downPressed = false;
 			leftPressed = false;
 			rightPressed = false;
 			counter = 0;
 			//std::cout << this->x << " " << this->y << " index: " << this->index << " pos: " << this->position << std::endl;
-			
+
 		}
 	}
 	else
@@ -130,12 +138,14 @@ void Character::right()
 
 void Character::draw(sf::RenderWindow& window)
 {
-	if (upPressed || downPressed || leftPressed || rightPressed)
-		this->gif.drawTo(window);
-	else {
-		normal.setPosition(this->x, this->y);
-		window.draw(normal);
-	}
+	if (!dead && !crashed)
+		if (upPressed || downPressed || leftPressed || rightPressed)
+			this->gif.drawTo(window);
+		else {
+
+			normal.setPosition(this->x, this->y);
+			window.draw(normal);
+		}
 }
 
 bool Character::isDead()
@@ -154,4 +164,22 @@ void Character::die()
 {
 	this->dead = true;
 	this->crashed = true;
+}
+
+void Character::reset()
+{
+	this->dead = false;
+	this->crashed = false;
+	this->isOutOfScreen = false;
+	this->upPressed = false;
+	this->downPressed = false;
+	this->leftPressed = false;
+	this->rightPressed = false;
+	this->counter = 0;
+	this->blocked = false;
+	this->index = 3;
+	this->position = 7;
+	this->x = 7 * 128;
+	this->y = 900 - 128 * 2;
+	this->gif.setPosition(this->x, this->y);
 }

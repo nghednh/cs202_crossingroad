@@ -23,6 +23,7 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	laneManager.initCharacter(&character);
 	crashed = false;
 	crashAnimationCounter = 0;
+	crashSoundPlayed = false;
 }
 
 void Game::loadSound()
@@ -33,9 +34,13 @@ void Game::loadSound()
 		std::cout << "Error" << std::endl;
 	if (!musicInGame.openFromFile("resource/sound/musicInGame.wav"))
 		std::cout << "Error" << std::endl;
+	if (!crashBuffer.loadFromFile("resource/sound/GameOver2.wav"))
+		std::cout << "Error" << std::endl;
+	crashSound.setBuffer(crashBuffer);
 	musicMenu.play();
 	musicMenu.setLoop(true);
 	clickSound.setBuffer(clickBuffer);
+	musicInGame.setVolume(30);
 	musicInGame.setLoop(true);
 }
 
@@ -55,6 +60,10 @@ void Game::loadTexture()
 	_filter.loadFromFile("resource/filter.png");
 	filter.setTexture(_filter);
 
+	_gameOver.loadFromFile("resource/gameOver.png");
+	gameOver.setTexture(_gameOver);
+	gameOver.setPosition(0, 0);
+
 	crash.loadFromFile("resource/explode.png");
 	crashSprite.setTexture(crash);
 	crashSprite.setTextureRect(sf::IntRect(0, 0, 120, 109));
@@ -66,6 +75,11 @@ void Game::loadTexture()
 	_backButton1.loadFromFile("resource/backButton1.png");
 	backButton.setTexture(_backButton0);
 	backButton.setPosition(50, 20);
+
+	_replayButton0.loadFromFile("resource/replayButton0.png");
+	_replayButton1.loadFromFile("resource/replayButton1.png");
+	replayButton.setTexture(_replayButton0);
+	replayButton.setPosition(1400, 20);
 }
 
 void Game::run()
@@ -118,6 +132,17 @@ void Game::handleEvent()
 					musicInGame.stop();
 					musicMenu.play();
 				}
+				if (isMouseOver(replayButton, window)) {
+					this->state = PLAY;
+					musicInGame.play();
+					musicInGame.setLoop(true);
+					character.reset();
+					laneManager.reset();
+					crashed = false;
+					crashAnimationCounter = 0;
+					crashSoundPlayed = false;
+					laneManager.initCharacter(&character);
+				}
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				laneManager.processUp();
@@ -131,9 +156,13 @@ void Game::handleEvent()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 				laneManager.processRight();
 			}
-			if (crashed) {
-				musicInGame.stop();
-			}
+			/*if (crashed) {
+				musicInGame.pause();
+				if (!crashSoundPlayed) {
+					crashSound.play();
+					crashSoundPlayed = true;
+				}
+			}*/
 		}
 		else if (state == CREDIT) {
 			if (event.type == sf::Event::MouseButtonReleased) {
@@ -184,13 +213,26 @@ void Game::update()
 		else
 			backButton.setTexture(_backButton0);
 		//shouldGoFaster = character.shouldGoFaster();
+		if (isMouseOver(replayButton, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				replayButton.setTexture(_replayButton1);
+		}
+		else
+			replayButton.setTexture(_replayButton0);
 		if (character.isDead()) {
-
+			musicInGame.pause();
 		}
 		else {
 			laneManager.update(shouldGoFaster);
 			character.update();
 			crashed = character.isCrashed();
+			if (crashed) {
+				musicInGame.pause();
+				if (!crashSoundPlayed) {
+					crashSound.play();
+					crashSoundPlayed = true;
+				}
+			}
 		}
 	}
 	else if (state == CREDIT) {
@@ -229,24 +271,25 @@ void Game::draw()
 		if (character.isDead()) {
 			window.draw(backgroundPlay);
 			laneManager.drawTo(window);
-			window.draw(filter);
-			window.draw(backButton);
 			//character.draw(window);
 			crashSprite.setPosition(character.getX() - 120 / 2, character.getY() - 109 / 2);
-			if (crashAnimationCounter < 29) {
+			if (crashAnimationCounter < 29) {	
+				int time = clock.getElapsedTime().asMilliseconds();
+				if (time > 70) {
+					clock.restart();
+					crashAnimationCounter++;
+				}
 				crashSprite.setTextureRect(sf::IntRect(120 * crashAnimationCounter, 0, 120, 109));
 				window.draw(crashSprite);
-				crashAnimationCounter++;
+				window.draw(filter);
+				//crashAnimationCounter++;
 				//std::cout << crashAnimationCounter << std::endl;
 			}
 			else {
-				sf::Text dead;
-				dead.setFont(font);
-				dead.setCharacterSize(100);
-				dead.setString("YOU DIED!");
-				dead.setPosition(1600 / 2 - dead.getGlobalBounds().width/2, 900 / 2 - dead.getGlobalBounds().height);
-				window.draw(dead);
+				window.draw(gameOver);
+				window.draw(replayButton);
 			}
+			window.draw(backButton);
 		}
 		else {
 			window.draw(backgroundPlay);
