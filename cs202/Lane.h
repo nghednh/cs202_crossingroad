@@ -50,7 +50,7 @@ private:
 
 public:
 	~GrassLane();
-	GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2, sf::Texture& car, sf::Texture& train, int index);
+	GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -60,7 +60,7 @@ public:
 	void processRight(Character* character);
 	void checkCollision(sf::Font& font);
 	int getY() const { return y; }
-	void initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2);
+	void initOb(sf::Texture& plant, sf::Texture& rock);
 	void moveobx(int a, int b);
 	int returnnob() { return nob; }
 };
@@ -98,7 +98,7 @@ private:
 	ObjectStable light2;
 public:
 	~RailLane();
-	RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index);
+	RailLane(sf::Texture& texture, int y, sf::Texture& Light, sf::Texture& train, int index);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -143,13 +143,12 @@ class LaneManager
 private:
 	std::vector<Lane*> lanes;
 	sf::Texture texture[6];
-	sf::Texture rock[2];
+	sf::Texture rock;
 	sf::Texture plant;
 	sf::Texture car[5];
 	sf::Texture animal[5];
 	sf::Texture train;
-	sf::Texture redLight;
-	sf::Texture greenLight;
+	sf::Texture Light;
 	int width;
 	int height;
 	int difficulty;

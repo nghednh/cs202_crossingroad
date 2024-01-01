@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 
-GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2, sf::Texture& car, sf::Texture& train, int index)
+GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -15,13 +15,13 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	else {
 		nob = rand() % 9 + 1;
 		this->ob = new ObjectStable[nob];
-		initOb(plant, rock1, rock2);
+		initOb(plant, rock);
 	}
 	this->character = nullptr;
 	this->type = GRASS;
 }
 
-void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock2) {
+void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock) {
 	int a = -1;
 	//std::cout << nob;
 	int b = -2;
@@ -32,10 +32,10 @@ void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock1, sf::Texture& rock
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
 		if (rand() % 3 == 0) {
-			this->ob[i].setup(rock1, 2, 2, 195, -9, 64, 70);
+			this->ob[i].setup(rock, 2, 2, 195, -9, 64, 70);
 		}
 		else if (rand() % 3 == 2) {
-			this->ob[i].setup(rock2, 2, 2, 384, 194, 64, 64);
+			this->ob[i].setup(rock, 2, 2, 384, 194, 64, 64);
 			tmp = 1;
 		}
 		else {
@@ -295,7 +295,7 @@ void RoadLane::moveobx(int a, int b) {
 	}
 }
 
-RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index)
+RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& Light , sf::Texture& train, int index)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -304,8 +304,8 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& rock, sf::Texture& 
 	randomInitLight();
 	this->train = new TrainObject;
 	initOb(train);
-	light1.setup(rock, 2.6, 2.6, 57, 49, 18, 73);
-	light2.setup(car, 2.6, 2.6, 91, 49, 18, 73);
+	light1.setup(Light, 2.6, 2.6, 57, 49, 18, 73);
+	light2.setup(Light, 2.6, 2.6, 91, 49, 18, 73);
 	this->character = nullptr;
 	this->type = RAIL;
 }
@@ -429,8 +429,7 @@ LaneManager::LaneManager()
 	this->texture[3].loadFromFile("resource/tiles/grass1.png");
 	this->texture[4].loadFromFile("resource/tiles/grass2.png");
 	this->texture[5].loadFromFile("resource/tiles/grass3.png");
-	this->rock[0].loadFromFile("resource/object/object.png");
-	this->rock[1].loadFromFile("resource/object/object.png");
+	this->rock.loadFromFile("resource/object/object.png");
 	this->plant.loadFromFile("resource/object/plant.png");
 	this->car[0].loadFromFile("resource/object/vehicle/left0.png");
 	this->car[1].loadFromFile("resource/object/vehicle/left1.png");
@@ -443,8 +442,7 @@ LaneManager::LaneManager()
 	this->animal[3].loadFromFile("resource/object/animal/dog.png");
 	this->animal[4].loadFromFile("resource/object/animal/pig.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
-	this->greenLight.loadFromFile("resource/object/TrafficLight.png");
-	this->redLight.loadFromFile("resource/object/TrafficLight.png");
+	this->Light.loadFromFile("resource/object/TrafficLight.png");
 	this->character = nullptr;
 	font.loadFromFile("resource/fibberish.ttf");
 }
@@ -466,9 +464,9 @@ void LaneManager::addLane(int y)
 {
 	int random = rand() % 100;
 	if (index <= 4)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index));
 	else if (index == 10)
-		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
+		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, Light, train, index));
 	else if (index == 9)
 		this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 	else {
@@ -477,13 +475,13 @@ void LaneManager::addLane(int y)
 		else if (random < 24)
 			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 		else if (random < 36)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock[0], rock[1], car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock, car[0], train, index));
 		else if (random < 48)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock[0], rock[1], car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index));
 		else if (random < 60)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock[0], rock[1], car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock, car[0], train, index));
 		else if (random < 72)
-			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, greenLight, redLight, train, index));
+			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, Light, train, index));
 		else if (random < 84)
 			this->lanes.insert(lanes.begin(), new AnimalLane(this->texture[5], y, animal[0], animal[1], animal[2], animal[3], animal[4], index));
 		else
