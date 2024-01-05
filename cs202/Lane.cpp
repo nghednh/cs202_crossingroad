@@ -84,8 +84,7 @@ void GrassLane::processUp(Character* character) {
 	for (int i = 0; i < nob; i++) {
 		if (character->position == ob[i].returnx()) {
 			//std::cout << "BLOCKED UP GRASS" << std::endl;
-			//return;
-			// tempo for debug
+			return;
 		}
 	}
 	character->up();
@@ -160,7 +159,6 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 	}
 	for (int i = 0; i < nob; i++) {
 		int rdm = rand() % 5;
-		rdm = 0; // tempo for debug
 		switch (rdm) {
 		case 0:
 		{
