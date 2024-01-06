@@ -436,7 +436,8 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	string xPos, yPos, fleft;
 	
 	iss >> cut;
-	iss >> xPos;
+	if (cut != "train") xPos = cut;
+	else iss >> xPos;
 	iss >> yPos;
 	iss >> fleft;
 	this->train->setFleft(stoi(fleft));

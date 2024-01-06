@@ -17,14 +17,18 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 550);
 	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 650);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
-	ifstream in("Save.txt");
-	if (!in.is_open())
+	ifstream in("Save.txt"); string tmp;
+	if (in.is_open())
 	{
-		for (int i = 0; i < 9; i++)
-			laneManager.addLane(900 - i * 128);
-		laneManager.initCharacter(&character);
+		getline(in, tmp);
+		if (!tmp.empty()) loadFromFile();
+		else
+		{
+			for (int i = 0; i < 9; i++)
+				laneManager.addLane(900 - i * 128);
+			laneManager.initCharacter(&character);
+		}
 	}
-	else loadFromFile();
 	update();
 	shouldGoFaster = false;
 	crashed = false;
