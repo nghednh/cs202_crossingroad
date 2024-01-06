@@ -216,7 +216,8 @@ void Character::setInfoFromFile(string charInfo)
 	this->y = stoi(yChar);
 	this->speed = stod(speedChar);
 	this->dead = stoi(deadChar);
-	this->position = stoi(speedChar);
+	this->position = stoi(posChar);
 	this->index = stoi(indChar) - 1;
+//	this->normal.setPosition(this->x, this->y);
 }
 

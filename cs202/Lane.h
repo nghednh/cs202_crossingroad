@@ -57,7 +57,7 @@ private:
 public:
 	~GrassLane();
 	GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL);
-	GrassLane(sf::Texture& texture, std::string tmp, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL, std::string& charInfo, int& indexChar);
+	GrassLane(sf::Texture& texture, std::string tmp, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL, std::string& charInfo, int& indexChar, int& setIndex);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -83,7 +83,7 @@ private:
 public:
 	~RoadLane();
 	RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture &car4, sf::Texture& car5, int index);
-	RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5, int index, std::string& charInfo, int& indexChar);
+	RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5, int index, std::string& charInfo, int& indexChar, int& setIndex);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -111,7 +111,7 @@ private:
 public:
 	~RailLane();
 	RailLane(sf::Texture& texture, int y, sf::Texture& Light, sf::Texture& train, int index);
-	RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf::Texture& train, int index, std::string& charInfo, int& indexChar);
+	RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf::Texture& train, int index, std::string& charInfo, int& indexChar, int& setIndex);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -138,7 +138,7 @@ private:
 public:
 	~AnimalLane();
 	AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index);
-	AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index, std::string& charInfo, int& indexChar);
+	AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index, std::string& charInfo, int& indexChar, int& setIndex);
 	bool isOutOfScreen(int& height) const { return this->sprite.getPosition().y + 128 > height; }
 	void drawTo(sf::RenderWindow& window, sf::Font& font);
 	void move(bool& shouldGoFaster);
@@ -175,6 +175,7 @@ private:
 public:
 	LaneManager();
 	~LaneManager();
+	void setIndex();
 	void initCharacter(Character* character);
 	void addLane(int y);
 	void popLane() { lanes.pop_back(); }
@@ -191,9 +192,4 @@ public:
 	void reset();
 	void saveToFile();
 	void processEach(std::string tmp, std::string& charInfo, int& indexChar);
-	void setInfoChar(int i)
-	{
-		lanes[i]->setCharacter(character);
-		lanes[i]->setCharacterPosition(lanes[i]->getY());
-	}
 };

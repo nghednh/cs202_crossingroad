@@ -17,11 +17,12 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 550);
 	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 650);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
-	for (int i = 0; i < 9; i++)			
-		laneManager.addLane(900 - i * 128);
-//	loadFromFile();
+//	for (int i = 0; i < 9; i++)			
+//		laneManager.addLane(900 - i * 128);
+//	laneManager.initCharacter(&character);
+	loadFromFile();
+	update();
 	shouldGoFaster = false;
-	laneManager.initCharacter(&character);
 	crashed = false;
 	crashAnimationCounter = 0;
 	crashSoundPlayed = false;
@@ -315,10 +316,14 @@ void Game::draw()
 void Game::save()
 {
 	laneManager.saveToFile();
+	ofstream out("Save.txt", ios::app);
+	out << "character " << character.info();
+	out.close();
 }
 
 void Game::loadFromFile()
 {
+	laneManager.LaneManager::setIndex();
 	ifstream in("Save.txt");
 	string tmp;
 	string charInfo = "";
@@ -328,12 +333,31 @@ void Game::loadFromFile()
 		getline(in, tmp);
 		laneManager.processEach(tmp, charInfo, indexChar);
 	}
+	getline(in, tmp);
+	istringstream iss(tmp);
+	string type;
+	iss >> type;
+	string xChar, yChar, posChar, indChar, speedChar, deadChar;
+	iss >> xChar;
+	iss >> yChar;
+	iss >> speedChar;
+	iss >> deadChar;
+	iss >> posChar;
+	iss >> indChar;
 
+	charInfo = xChar;
+	charInfo += " ";
+	charInfo += yChar;
+	charInfo += " ";
+	charInfo += speedChar;
+	charInfo += " ";
+	charInfo += deadChar;
+	charInfo += " ";
+	charInfo += posChar;
+	charInfo += " ";
+	charInfo += indChar;
 	character.setInfoFromFile(charInfo);
 	laneManager.initCharacter(&character);
-	laneManager.setInfoChar(indexChar);
-
-	charInfo = "";
 
 	in.close();
 }

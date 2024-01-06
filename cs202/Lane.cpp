@@ -22,7 +22,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	this->type = GRASS;
 }
 
-GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL, string& charInfo, int& indexChar)
+GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL, string& charInfo, int& indexChar, int& setIndex)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -36,6 +36,7 @@ GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::T
 	iss >> y;
 	iss >> nob;
 	ob = new ObjectStable[nob];
+//	this->sprite.setPosition(0, this->y);
 	string rockType;
 	string xPos, yPos;
 	for (int i = 0; i < this->nob; i++)
@@ -48,38 +49,12 @@ GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::T
 		iss >> yPos;
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
 	}
-
+	string idx;
+	iss >> idx;
+	index = stoi(idx);
 	this->character = nullptr;
-	
-	string check = "";
-	iss >> check;
-	if (!check.empty())
-	{
-		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
-
-		iss >> xChar;
-		iss >> yChar;
-		iss >> speedChar;
-		iss >> deadChar;
-		iss >> posChar;
-		iss >> indChar;
-
-		charInfo = to_string(xChar);
-		charInfo += " ";
-		charInfo += to_string(yChar);
-		charInfo += " ";
-		charInfo += to_string(speedChar);
-		charInfo += " ";
-		if (deadChar) charInfo += "1";
-		else charInfo += "0";
-		charInfo += " ";
-		charInfo += to_string(posChar);
-		charInfo += " ";
-		charInfo += to_string(indChar);
-		indexChar = index;
-	}
-
 	this->type = GRASS;
+	if (setIndex < index) setIndex = index;
 }
 
 std::string GrassLane::info()
@@ -95,7 +70,8 @@ std::string GrassLane::info()
 		res += " ";
 		res += ob[i].info();
 	}
-	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	res += " ";
+	res += to_string(index);
 	return res;
 }
 
@@ -225,7 +201,7 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& 
 	this->type = ROAD;
 }
 
-RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5, int index, std::string& charInfo, int& indexChar)
+RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5, int index, std::string& charInfo, int& indexChar, int& setIndex)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -237,6 +213,7 @@ RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf:
 	iss >> y;
 	iss >> nob;
 	ob = new ObjectMoving[nob];
+//	this->sprite.setPosition(0, this->y);
 	string carType;
 	string xPos, yPos, fleft;
 	for (int i = 0; i < nob; i++)
@@ -252,39 +229,15 @@ RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf:
 		iss >> yPos;
 		iss >> fleft;
 		ob[i].setFleft(stoi(fleft));
+		if (this->ob[i].rfleft())  this->ob[i].setScale(-2.56, 2.56);
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
 	}
-
+	string idx;
+	iss >> idx;
+	index = stoi(idx);
 	this->character = nullptr;
-
-	string check;
-	iss >> check;
-	if (!check.empty())
-	{
-		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
-
-		iss >> xChar;
-		iss >> yChar;
-		iss >> speedChar;
-		iss >> deadChar;
-		iss >> posChar;
-		iss >> indChar;
-
-		charInfo = to_string(xChar);
-		charInfo += " ";
-		charInfo += to_string(yChar);
-		charInfo += " ";
-		charInfo += to_string(speedChar);
-		charInfo += " ";
-		if (deadChar) charInfo += "1";
-		else charInfo += "0";
-		charInfo += " ";
-		charInfo += to_string(posChar);
-		charInfo += " ";
-		charInfo += to_string(indChar);
-		indexChar = index;
-	}
 	this->type = ROAD;
+	if (setIndex < index) setIndex = index;
 }
 
 std::string RoadLane::info()
@@ -298,7 +251,8 @@ std::string RoadLane::info()
 		res += " ";
 		res += ob[i].info();
 	}
-	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	res += " ";
+	res += to_string(index);
 	return res;
 }
 
@@ -464,7 +418,7 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& Light , sf::Texture
 	this->type = RAIL;
 }
 
-RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf::Texture& train, int index, std::string& charInfo, int& indexChar)
+RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf::Texture& train, int index, std::string& charInfo, int& indexChar, int& setIndex)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -486,38 +440,15 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	iss >> yPos;
 	iss >> fleft;
 	this->train->setFleft(stoi(fleft));
+//	this->sprite.setPosition(0, this->y);
 	this->train->setPosSprite(stoi(xPos), stoi(yPos));
-
+	string idx;
+	iss >> idx;
+	index = stoi(idx);
 	this->character = nullptr;
-
-	string check;
-	iss >> check;
-	if (!check.empty())
-	{
-		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
-
-		iss >> xChar;
-		iss >> yChar;
-		iss >> speedChar;
-		iss >> deadChar;
-		iss >> posChar;
-		iss >> indChar;
-
-		charInfo = to_string(xChar);
-		charInfo += " ";
-		charInfo += to_string(yChar);
-		charInfo += " ";
-		charInfo += to_string(speedChar);
-		charInfo += " ";
-		if (deadChar) charInfo += "1";
-		else charInfo += "0";
-		charInfo += " ";
-		charInfo += to_string(posChar);
-		charInfo += " ";
-		charInfo += to_string(indChar);
-		indexChar = index;
-	}
 	this->type = RAIL;
+	if (this->train->rfleft())  this->train->setScale(-4, 4);
+	if (setIndex < index) setIndex = index;
 }
 
 std::string RailLane::info()
@@ -527,7 +458,8 @@ std::string RailLane::info()
 	res += to_string(y);
 	res += " ";
 	res += train->info();
-	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	res += " ";
+	res += to_string(index);
 	return res;
 }
 
@@ -870,7 +802,7 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 	this->type = ANIMAL;
 }
 
-AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index, std::string& charInfo, int& indexChar)
+AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index, std::string& charInfo, int& indexChar, int& setIndex)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
@@ -878,6 +810,7 @@ AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& anima
 
 	istringstream iss(tmp);
 	string cut;
+	iss >> cut;		// grasslane
 	iss >> y;
 	iss >> nob;
 	ob = new ObjectStable[nob];
@@ -893,36 +826,12 @@ AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& anima
 		iss >> yPos;
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
 	}
-
+	string idx;
+	iss >> idx;
+	index = stoi(idx);
 	this->character = nullptr;
-
-	string check;
-	iss >> check;
-	if (!check.empty())
-	{
-		string xChar, yChar, posChar, indChar, speedChar, deadChar;
-
-		iss >> xChar;
-		iss >> yChar;
-		iss >> speedChar;
-		iss >> deadChar;
-		iss >> posChar;
-		iss >> indChar;
-
-		charInfo = xChar;
-		charInfo += " ";
-		charInfo += yChar;
-		charInfo += " ";
-		charInfo += speedChar;
-		charInfo += " ";
-		charInfo += deadChar;
-		charInfo += " ";
-		charInfo += posChar;
-		charInfo += " ";
-		charInfo += indChar;
-		indexChar = stoi(indChar);
-	}
 	this->type = ANIMAL;
+	if (setIndex < index) setIndex = index;
 }
 
 void AnimalLane::drawTo(sf::RenderWindow& window, sf::Font& font)
@@ -1016,7 +925,8 @@ std::string AnimalLane::info()
 		res += " ";
 		res += ob[i].info();
 	}
-	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	res += " ";
+	res += to_string(index);
 	return res;
 }
 
@@ -1042,7 +952,7 @@ void AnimalLane::checkCollision(sf::Font& font)
 void LaneManager::saveToFile()
 {
 	ofstream out("Save.txt");
-	for (int i = 0; i < lanes.size(); i++) 
+	for (int i = lanes.size() - 1; i >= 0; i--)
 	{
 		std::string tmp = lanes[i]->info();
 		out << tmp << endl;
@@ -1059,17 +969,19 @@ void LaneManager::processEach(std::string tmp, std::string& charInfo, int& index
 	{
 		iss >> tGL;
 		
-		if (tGL == "2") lanes.insert(lanes.begin(), new GrassLane(texture[2], tmp, plant, rock, car[0], train, index, 2, charInfo, indexChar));
-		else if (tGL == "3") lanes.insert(lanes.begin(), new GrassLane(texture[3], tmp, plant, rock, car[0], train, index, 3, charInfo, indexChar));
-		else if (tGL == "4") lanes.insert(lanes.begin(), new GrassLane(texture[4], tmp, plant, rock, car[0], train, index, 4, charInfo, indexChar));
+		if (tGL == "2") lanes.insert(lanes.begin(), new GrassLane(texture[2], tmp, plant, rock, car[0], train, index, 2, charInfo, indexChar, this->index));
+		else if (tGL == "3") lanes.insert(lanes.begin(), new GrassLane(texture[3], tmp, plant, rock, car[0], train, index, 3, charInfo, indexChar, this->index));
+		else if (tGL == "4") lanes.insert(lanes.begin(), new GrassLane(texture[4], tmp, plant, rock, car[0], train, index, 4, charInfo, indexChar, this->index));
 	}
 	else if (type == "RailLane")
-		lanes.insert(lanes.begin(), new RailLane(texture[0], tmp, Light, train, index, charInfo, indexChar));
+		lanes.insert(lanes.begin(), new RailLane(texture[0], tmp, Light, train, index, charInfo, indexChar, this->index));
 	else if (type == "RoadLane")
-		lanes.insert(lanes.begin(), new RoadLane(texture[1], tmp, car[0], car[1], car[2], car[3], car[4], index, charInfo, indexChar));
+		lanes.insert(lanes.begin(), new RoadLane(texture[1], tmp, car[0], car[1], car[2], car[3], car[4], index, charInfo, indexChar, this->index));
 	else if (type == "AnimalLane")
-		lanes.insert(lanes.begin(), new AnimalLane(texture[5], tmp, animal[0], animal[1], animal[2], animal[3], animal[4], index, charInfo, indexChar));
-	
-	index++;
+		lanes.insert(lanes.begin(), new AnimalLane(texture[5], tmp, animal[0], animal[1], animal[2], animal[3], animal[4], index, charInfo, indexChar, this->index));
 }
 
+void LaneManager::setIndex()
+{
+	index = 9;
+}
