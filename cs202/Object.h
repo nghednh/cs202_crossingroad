@@ -225,6 +225,10 @@ public:
 };
 class TrainObject : public ObjectMoving {
 public:
+	TrainObject()
+	{
+		type = "train";
+	}
 	virtual string info()
 	{
 		return ObjectMoving::info();
