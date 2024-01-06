@@ -317,27 +317,27 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 		switch (rdm) {
 		case 0:
 		{
-			this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49, "car1");
+			this->ob[i].setup(car1, 2.56, 2.56, 5, 0, 82, 72, "car1");
 			break;
 		}
 		case 1:
 		{
-			this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49, "car2");
+			this->ob[i].setup(car2, 2.56, 2.56, 5, 0, 82, 72, "car2");
 			break;
 		}
 		case 2:
 		{
-			this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49, "car3");
+			this->ob[i].setup(car3, 2.56, 2.56, 12, 0, 74, 66, "car3");
 			break;
 		}
 		case 3:
 		{
-			this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49, "car4");
+			this->ob[i].setup(car4, 2.56, 2.56, 8, 0, 83, 72, "car4");
 			break;
 		}
 		case 4:
 		{
-			this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49, "car5");
+			this->ob[i].setup(car5, 2.56, 2.56, 12, 0, 74, 66, "car5");
 			break;
 		}
 		}
@@ -375,7 +375,7 @@ void RoadLane::checkCollision(sf::Font& font)
 		if (ob[i].rfleft()) {
 			if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
 
-				std::cout << "Left\n";
+				//std::cout << "Left\n";
 				continue;
 			}
 			else {
@@ -386,7 +386,7 @@ void RoadLane::checkCollision(sf::Font& font)
 		}
 		else {
 			if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
-				std::cout << "Right\n";
+				//std::cout << "Right\n";
 				continue;
 			}
 			else {
@@ -617,7 +617,7 @@ void RailLane::checkCollision(sf::Font& font)
 	if (train->rfleft()) {
 		if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
 
-			std::cout << "Left\n";
+			//std::cout << "Left\n";
 			return;
 		}
 		else {
@@ -628,7 +628,7 @@ void RailLane::checkCollision(sf::Font& font)
 	}
 	else {
 		if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
-			std::cout << "Right\n";
+			//std::cout << "Right\n";
 			return;
 		}
 		else {
@@ -646,7 +646,7 @@ LaneManager::LaneManager()
 	this->height = 128;
 	this->index = 1;
 	this->texture[0].loadFromFile("resource/tiles/train1.png");
-	this->texture[1].loadFromFile("resource/tiles/road.png");
+	this->texture[1].loadFromFile("resource/tiles/road1.png");
 	this->texture[2].loadFromFile("resource/tiles/grass0.png");
 	this->texture[3].loadFromFile("resource/tiles/grass1.png");
 	this->texture[4].loadFromFile("resource/tiles/grass2.png");
@@ -658,14 +658,15 @@ LaneManager::LaneManager()
 	this->car[2].loadFromFile("resource/object/vehicle/left21.png");
 	this->car[3].loadFromFile("resource/object/vehicle/left9.png");
 	this->car[4].loadFromFile("resource/object/vehicle/left31.png");
-	this->animal[0].loadFromFile("resource/object/animal/cow.png");
-	this->animal[1].loadFromFile("resource/object/animal/sheep.png");
-	this->animal[2].loadFromFile("resource/object/animal/goat.png");
+	this->animal[0].loadFromFile("resource/object/animal1/cow.png");
+	this->animal[1].loadFromFile("resource/object/animal1/sheep.png");
+	this->animal[2].loadFromFile("resource/object/animal1/goat1.png");
 	this->animal[3].loadFromFile("resource/object/animal/dog.png");
 	this->animal[4].loadFromFile("resource/object/animal/pig.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 	this->Light.loadFromFile("resource/object/TrafficLight.png");
 	this->character = nullptr;
+	this->isShielded = false;
 	font.loadFromFile("resource/fibberish.ttf");
 }
 
@@ -842,6 +843,21 @@ void LaneManager::reset()
 		this->addLane(900 - i * 128);
 }
 
+void LaneManager::createShield() {
+	int nearestGrass = index;
+	for (int i = 0; i < lanes.size(); i++) {
+		if ((lanes[i]->getType() == GRASS || lanes[i]->getType() == ANIMAL) && lanes[i]->getIndex() < nearestGrass && lanes[i]->getIndex() > character->index) {
+			nearestGrass = lanes[i]->getIndex();
+		}
+	}
+	if (nearestGrass != index) {
+		int nob = lanes[nearestGrass]->returnnob();
+		for (int i = 0; i < nob; i++) {
+			
+		}
+	}
+}
+
 GrassLane::~GrassLane() {
 	delete[] ob;
 }
@@ -981,14 +997,14 @@ void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture&
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
 		if (rand() % 3 == 0) {
-			this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16, "animal1");
+			this->ob[i].setup(animal1, 3, 3, 0, 0, 32, 32, "animal1");
 		}
 		else if (rand() % 3 == 2) {
-			this->ob[i].setup(animal2, 5, 5, 0, 0, 16, 16, "animal2");
+			this->ob[i].setup(animal2, 3, 3, 0, 0, 32, 32, "animal2");
 			tmp = 1;
 		}
 		else {
-			this->ob[i].setup(animal3, 5, 5, 0, 0, 16, 16, "animal3");
+			this->ob[i].setup(animal3, 3, 3, 0, 0, 32, 32, "animal3");
 			tmp = 2;
 		}
 		b = ob[i].randomx(idx, 13);

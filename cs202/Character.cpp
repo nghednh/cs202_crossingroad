@@ -37,7 +37,7 @@ void Character::update()
 		clock.restart();
 		if (upPressed) {
 			//this->y -= 64;
-			if (counter == 2)
+			if (counter == 3)
 			{
 				index++;
 				this->x = position * 128;
@@ -47,7 +47,7 @@ void Character::update()
 		}
 		if (downPressed) {
 			//this->y += 64;
-			if (counter == 2)
+			if (counter == 3)
 			{
 				index--;
 				this->x = position * 128;
@@ -57,7 +57,7 @@ void Character::update()
 		}
 		if (leftPressed) {
 			//this->x -= 64;
-			if (counter == 2)
+			if (counter == 3)
 			{
 				position--;
 				this->x = position * 128;
@@ -67,7 +67,7 @@ void Character::update()
 		}
 		if (rightPressed) {
 			//this->x += 64;
-			if (counter == 2)
+			if (counter == 3)
 			{
 				position++;
 				this->x = position * 128;
@@ -75,7 +75,7 @@ void Character::update()
 			}
 			counter++;
 		}
-		if (counter == 5) {
+		if (counter == 7) {
 			upPressed = false;
 			downPressed = false;
 			leftPressed = false;

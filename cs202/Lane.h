@@ -39,12 +39,14 @@ public:
 	virtual void processRight(Character* character) = 0;
 	virtual void checkCollision(sf::Font& font) = 0;
 	virtual std::string info() { return ""; }
+	virtual int returnnob() { return 0; }
 	int getIndex() const { return index; }
 	void setCharacter(Character* character) { this->character = character; }
 	Character* getCharacter() const { return character; }
 	void drawCharacterTo(sf::RenderWindow& window) {if (character) character->draw(window); }
 	void drawBackgroundTo(sf::RenderWindow& window) { this->sprite.setPosition(0, y); window.draw(sprite); }
 	void setCharacterPosition(int y) { if (character) character->setY(y); }
+	LaneType getType() const { return type; }
 };
 
 class GrassLane : public Lane
@@ -122,6 +124,7 @@ public:
 	int getY() const { return y; }
 	void initOb(sf::Texture& rock);
 	virtual std::string info();
+	int returnnob() { return 0; }
 	void moveobx(int a, int b);
 	void randomInitLight() { redLight = rand() % 2; }
 	bool greenLight() { return !redLight; };
@@ -165,6 +168,8 @@ private:
 	sf::Texture animal[5];
 	sf::Texture train;
 	sf::Texture Light;
+	sf::Texture shield_;
+	sf::Sprite shield;
 	int width;
 	int height;
 	int difficulty;
@@ -172,6 +177,7 @@ private:
 	Character* character;
 	sf::Font font;
 	sf::Text text;
+	bool isShielded;
 public:
 	LaneManager();
 	~LaneManager();
@@ -188,6 +194,7 @@ public:
 	int getHeight() const { return height; }
 	int getDifficulty() const { return difficulty; }
 	void setDifficulty(int difficulty) { this->difficulty = difficulty; }
+	void createShield();
 	void reset();
 	void saveToFile();
 	void processEach(std::string tmp, std::string& charInfo, int& indexChar);
