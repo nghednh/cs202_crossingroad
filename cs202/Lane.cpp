@@ -370,12 +370,12 @@ void RoadLane::checkCollision(sf::Font& font)
 	{
 		int objectX = ob[i].spriteX();
 		double objectScale = ob[i].spriteScaleX();
-		double objectWidth = ob[i].spriteWidth() * 1;
+		double objectWidth = ob[i].spriteWidth() * objectScale;
 		int characterX = character->position * 128;
 		if (ob[i].rfleft()) {
 			if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
 
-				//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
+				std::cout << "Left\n";
 				continue;
 			}
 			else {
@@ -386,6 +386,7 @@ void RoadLane::checkCollision(sf::Font& font)
 		}
 		else {
 			if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
+				std::cout << "Right\n";
 				continue;
 			}
 			else {
@@ -611,12 +612,12 @@ void RailLane::checkCollision(sf::Font& font)
 		return;
 	int objectX = train->spriteX();
 	double objectScale = train->spriteScaleX();
-	double objectWidth = train->spriteWidth() * 1;
+	double objectWidth = train->spriteWidth() * objectScale;
 	int characterX = character->position * 128;
 	if (train->rfleft()) {
 		if (characterX + 21 >= objectX || characterX + 72 - 12 <= objectX + objectWidth) {
 
-			//std::cout << characterX + 21 << " " << objectX << " --- " << characterX + 72 - 27 << " " << objectX - objectWidth << std::endl;
+			std::cout << "Left\n";
 			return;
 		}
 		else {
@@ -627,6 +628,7 @@ void RailLane::checkCollision(sf::Font& font)
 	}
 	else {
 		if (characterX + 72 - 12 <= objectX || characterX + 21 >= objectX + objectWidth) {
+			std::cout << "Right\n";
 			return;
 		}
 		else {
