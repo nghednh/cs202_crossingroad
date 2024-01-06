@@ -3,14 +3,18 @@
 #include <SFML/Window.hpp>
 #include <cstdlib>
 #include <iostream>
+#include <string>
+using namespace std;
 class Object {
 protected:
 	sf::Sprite sprite;
 	int x;
+	string type;
 public:
 	Object() = default;
-	Object(sf::Texture& ob) {
+	Object(sf::Texture& ob, string type) {
 		sprite.setTexture(ob);
+		setType(type);
 	}
 	void setTexture(sf::Texture& tex) {
 		sprite.setTexture(tex);
@@ -48,7 +52,8 @@ public:
 	virtual int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture& tex) {
+	virtual void setup(sf::Texture& tex, string type) {
+		setType(type);
 		setTexture(tex);
 		setTextureRect(0, 0, 64, 64);
 		setScale(2.56, 2.56);
@@ -77,6 +82,24 @@ public:
 	double spriteScaleY() {
 		return sprite.getScale().y;
 	}
+	void setType(string type)
+	{
+		this->type = type;
+	}
+	virtual string info()
+	{
+		string res = type;
+		res += " ";
+		res += to_string(spriteX());
+		res += " ";
+		res += to_string(spriteY());
+		return res;
+	}
+	void setPosSprite(int x, int y)
+	{
+		this->x = ((x + 20) / 64) / 2;
+		sprite.setPosition(x, y);
+	}
 };
 class ObjectStable : public Object {
 private:
@@ -84,7 +107,8 @@ public:
 	int returnx() {
 		return this->x;
 	}
-	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
+	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height, string type) {
+		Object::setType(type);
 		setTexture(tex);
 		setTextureRect(xTopLeft, yTopLeft, width, height);
 		setScale(scaleX, scaleY);
@@ -100,15 +124,29 @@ public:
 		}
 		return x;
 	}
+	virtual string info()
+	{
+		return Object::info();
+	}
 };
 class ObjectMoving : public Object {
 private:
 	bool fleft;
 public:
-	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height) {
+	void setFleft(bool fleft) { this->fleft = fleft; }
+	virtual void setup(sf::Texture& tex, float scaleX, float scaleY, int xTopLeft, int yTopLeft, int width, int height, string type) {
+		Object::setType(type);
 		setTexture(tex);
 		setTextureRect(xTopLeft, yTopLeft, width, height);
 		setScale(scaleX, scaleY);
+	}
+	virtual string info()
+	{
+		string res = Object::info();
+		res += " ";
+		if (fleft) res += "1";
+		else res += "0";
+		return res;
 	}
 	int returnx() {
 		return this->x;
@@ -187,8 +225,12 @@ public:
 };
 class TrainObject : public ObjectMoving {
 public:
-	
-	virtual void setup(sf::Texture& tex) {
+	virtual string info()
+	{
+		return ObjectMoving::info();
+	}
+	virtual void setup(sf::Texture& tex, string type) {
+		Object::setType(type);
 		setTexture(tex);
 		setTextureRect(0, 0, 512, 64);
 		setScale(4, 4);

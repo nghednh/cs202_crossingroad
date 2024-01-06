@@ -5,6 +5,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include "Gif.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+using namespace std;
 
 class Character
 {
@@ -47,6 +52,8 @@ public:
 	int getX() { return x; }
 	int getY() { return y; }
 	void reset();
+	string info();
 	bool isAnimating() { return (upPressed || downPressed || leftPressed || rightPressed); }
+	void setInfoFromFile(string charInfo);
 };
 

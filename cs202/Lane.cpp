@@ -2,12 +2,13 @@
 #include <cstdlib>
 #include <iostream>
 
-GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index)
+GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL)
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
+	this->nGL = nGL;
 	if (index <= 4) {
 		nob = 0;
 		this->ob = nullptr;
@@ -21,6 +22,83 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	this->type = GRASS;
 }
 
+GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::Texture& rock, sf::Texture& car, sf::Texture& train, int index, int nGL, string& charInfo, int& indexChar)
+{
+	this->sprite.setTexture(texture);
+	this->sprite.setScale(4, 4);
+	this->index = index;
+	this->nGL = nGL;
+	
+	istringstream iss(tmp);
+	string cut;
+	iss >> cut;		// grasslane
+	iss >> cut;		// numgrasslane
+	iss >> y;
+	iss >> nob;
+	ob = new ObjectStable[nob];
+	string rockType;
+	string xPos, yPos;
+	for (int i = 0; i < this->nob; i++)
+	{
+		iss >> rockType;
+		if (rockType == "rock1") ob[i].setup(rock, 2, 2, 195, -9, 64, 70, "rock1");
+		else if (rockType == "rock2") ob[i].setup(rock, 2, 2, 384, 194, 64, 64, "rock2");
+		else if (rockType == "rock3") ob[i].setup(plant, 2, 2, 216, 185, 47, 42, "rock3");
+		iss >> xPos;
+		iss >> yPos;
+		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
+	}
+
+	this->character = nullptr;
+	
+	string check = "";
+	iss >> check;
+	if (!check.empty())
+	{
+		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
+
+		iss >> xChar;
+		iss >> yChar;
+		iss >> speedChar;
+		iss >> deadChar;
+		iss >> posChar;
+		iss >> indChar;
+
+		charInfo = to_string(xChar);
+		charInfo += " ";
+		charInfo += to_string(yChar);
+		charInfo += " ";
+		charInfo += to_string(speedChar);
+		charInfo += " ";
+		if (deadChar) charInfo += "1";
+		else charInfo += "0";
+		charInfo += " ";
+		charInfo += to_string(posChar);
+		charInfo += " ";
+		charInfo += to_string(indChar);
+		indexChar = index;
+	}
+
+	this->type = GRASS;
+}
+
+std::string GrassLane::info()
+{
+	std::string res = "GrassLane";
+	res += " ";
+	res += to_string(nGL);
+	res += " ";
+	res += to_string(y);
+	res += " "; res += to_string(nob);
+	for (int i = 0; i < nob; i++)
+	{
+		res += " ";
+		res += ob[i].info();
+	}
+	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	return res;
+}
+
 void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock) {
 	int a = -1;
 	//std::cout << nob;
@@ -32,14 +110,14 @@ void GrassLane::initOb(sf::Texture& plant, sf::Texture& rock) {
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
 		if (rand() % 3 == 0) {
-			this->ob[i].setup(rock, 2, 2, 195, -9, 64, 70);
+			this->ob[i].setup(rock, 2, 2, 195, -9, 64, 70, "rock1");
 		}
 		else if (rand() % 3 == 2) {
-			this->ob[i].setup(rock, 2, 2, 384, 194, 64, 64);
+			this->ob[i].setup(rock, 2, 2, 384, 194, 64, 64, "rock2");
 			tmp = 1;
 		}
 		else {
-			this->ob[i].setup(plant, 2, 2, 216, 185, 47, 42);
+			this->ob[i].setup(plant, 2, 2, 216, 185, 47, 42, "rock3");
 			tmp = 2;
 		}
 		b = ob[i].randomx(idx, 13);
@@ -148,6 +226,83 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& 
 	this->type = ROAD;
 }
 
+RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5, int index, std::string& charInfo, int& indexChar)
+{
+	this->sprite.setTexture(texture);
+	this->sprite.setScale(4, 4);
+	this->index = index;
+
+	istringstream iss(tmp);
+	string cut;
+	iss >> cut;		// grasslane
+	iss >> y;
+	iss >> nob;
+	ob = new ObjectMoving[nob];
+	string carType;
+	string xPos, yPos, fleft;
+	for (int i = 0; i < nob; i++)
+	{
+		iss >> carType;
+		if (carType == "car1") this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49, "car1");
+		else if (carType == "car2") this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49, "car2");
+		else if (carType == "car3") this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49, "car3");
+		else if (carType == "car4")	this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49, "car4");
+		else if (carType == "car5") this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49, "car5");
+				
+		iss >> xPos;
+		iss >> yPos;
+		iss >> fleft;
+		ob[i].setFleft(stoi(fleft));
+		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
+	}
+
+	this->character = nullptr;
+
+	string check;
+	iss >> check;
+	if (!check.empty())
+	{
+		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
+
+		iss >> xChar;
+		iss >> yChar;
+		iss >> speedChar;
+		iss >> deadChar;
+		iss >> posChar;
+		iss >> indChar;
+
+		charInfo = to_string(xChar);
+		charInfo += " ";
+		charInfo += to_string(yChar);
+		charInfo += " ";
+		charInfo += to_string(speedChar);
+		charInfo += " ";
+		if (deadChar) charInfo += "1";
+		else charInfo += "0";
+		charInfo += " ";
+		charInfo += to_string(posChar);
+		charInfo += " ";
+		charInfo += to_string(indChar);
+		indexChar = index;
+	}
+	this->type = ROAD;
+}
+
+std::string RoadLane::info()
+{
+	std::string res = "RoadLane";
+	res += " ";
+	res += to_string(y);
+	res += " "; res += to_string(nob);
+	for (int i = 0; i < nob; i++)
+	{
+		res += " ";
+		res += ob[i].info();
+	}
+	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	return res;
+}
+
 void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, sf::Texture& car4, sf::Texture& car5) {
 
 	int a = -1;
@@ -164,27 +319,27 @@ void RoadLane::initOb(sf::Texture& car1, sf::Texture& car2, sf::Texture& car3, s
 		switch (rdm) {
 		case 0:
 		{
-			this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49);
+			this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49, "car1");
 			break;
 		}
 		case 1:
 		{
-			this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49);
+			this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49, "car2");
 			break;
 		}
 		case 2:
 		{
-			this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49);
+			this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49, "car3");
 			break;
 		}
 		case 3:
 		{
-			this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49);
+			this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49, "car4");
 			break;
 		}
 		case 4:
 		{
-			this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49);
+			this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49, "car5");
 			break;
 		}
 		}
@@ -304,15 +459,82 @@ RailLane::RailLane(sf::Texture& texture, int y, sf::Texture& Light , sf::Texture
 	randomInitLight();
 	this->train = new TrainObject;
 	initOb(train);
-	light1.setup(Light, 2.6, 2.6, 57, 49, 18, 73);
-	light2.setup(Light, 2.6, 2.6, 91, 49, 18, 73);
+	light1.setup(Light, 2.6, 2.6, 57, 49, 18, 73, "ligh1");
+	light2.setup(Light, 2.6, 2.6, 91, 49, 18, 73, "light2");
 	this->character = nullptr;
 	this->type = RAIL;
 }
 
+RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf::Texture& train, int index, std::string& charInfo, int& indexChar)
+{
+	this->sprite.setTexture(texture);
+	this->sprite.setScale(4, 4);
+	this->index = index;
+
+	istringstream iss(tmp);
+	string cut;
+	iss >> cut;		// grasslane
+	iss >> y;
+	this->train = new TrainObject;
+	randomInitLight();
+	light1.setup(Light, 2.6, 2.6, 57, 49, 18, 73, "ligh1");
+	light2.setup(Light, 2.6, 2.6, 91, 49, 18, 73, "light2");
+	string carType;
+	string xPos, yPos, fleft;
+	
+	iss >> cut;
+	iss >> xPos;
+	iss >> yPos;
+	iss >> fleft;
+	this->train->setFleft(stoi(fleft));
+	this->train->setPosSprite(stoi(xPos), stoi(yPos));
+
+	this->character = nullptr;
+
+	string check;
+	iss >> check;
+	if (!check.empty())
+	{
+		int xChar, yChar, posChar, indChar; double speedChar; bool deadChar;
+
+		iss >> xChar;
+		iss >> yChar;
+		iss >> speedChar;
+		iss >> deadChar;
+		iss >> posChar;
+		iss >> indChar;
+
+		charInfo = to_string(xChar);
+		charInfo += " ";
+		charInfo += to_string(yChar);
+		charInfo += " ";
+		charInfo += to_string(speedChar);
+		charInfo += " ";
+		if (deadChar) charInfo += "1";
+		else charInfo += "0";
+		charInfo += " ";
+		charInfo += to_string(posChar);
+		charInfo += " ";
+		charInfo += to_string(indChar);
+		indexChar = index;
+	}
+	this->type = RAIL;
+}
+
+std::string RailLane::info()
+{
+	std::string res = "RailLane";
+	res += " ";
+	res += to_string(y);
+	res += " ";
+	res += train->info();
+	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	return res;
+}
+
 void RailLane::initOb(sf::Texture& rock) {
 	bool* dummy = new bool[1];
-	this->train->setup(rock);
+	this->train->setup(rock, "train");
 	this->train->randomx(dummy);
 	this->train->setPos(train->returnx(), y);
 	if (this->train->rfleft())  this->train->setScale(-4, 4);
@@ -464,7 +686,7 @@ void LaneManager::addLane(int y)
 {
 	int random = rand() % 100;
 	if (index <= 4)
-		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index));
+		this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index, 3));
 	else if (index == 10)
 		this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, Light, train, index));
 	else if (index == 9)
@@ -475,11 +697,11 @@ void LaneManager::addLane(int y)
 		else if (random < 24)
 			this->lanes.insert(lanes.begin(), new RoadLane(this->texture[1], y, car[0], car[1], car[2], car[3], car[4], index));
 		else if (random < 36)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock, car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[2], y, plant, rock, car[0], train, index, 2));
 		else if (random < 48)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[3], y, plant, rock, car[0], train, index, 3));
 		else if (random < 60)
-			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock, car[0], train, index));
+			this->lanes.insert(lanes.begin(), new GrassLane(this->texture[4], y, plant, rock, car[0], train, index, 4));
 		else if (random < 72)
 			this->lanes.insert(lanes.begin(), new RailLane(this->texture[0], y, Light, train, index));
 		else if (random < 84)
@@ -648,6 +870,61 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 	this->type = ANIMAL;
 }
 
+AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& animal1, sf::Texture& animal2, sf::Texture& animal3, sf::Texture& animal4, sf::Texture& animal5, int index, std::string& charInfo, int& indexChar)
+{
+	this->sprite.setTexture(texture);
+	this->sprite.setScale(4, 4);
+	this->index = index;
+
+	istringstream iss(tmp);
+	string cut;
+	iss >> y;
+	iss >> nob;
+	ob = new ObjectStable[nob];
+	string animalType;
+	string xPos, yPos;
+	for (int i = 0; i < nob; i++)
+	{
+		iss >> animalType;
+		if (animalType == "animal1") this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16, "animal1");
+		else if (animalType == "animal2") ob[i].setup(animal2, 5, 5, 0, 0, 16, 16, "animal2");
+		else if (animalType == "animal3") ob[i].setup(animal3, 5, 5, 0, 0, 16, 16, "animal3");
+		iss >> xPos;
+		iss >> yPos;
+		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
+	}
+
+	this->character = nullptr;
+
+	string check;
+	iss >> check;
+	if (!check.empty())
+	{
+		string xChar, yChar, posChar, indChar, speedChar, deadChar;
+
+		iss >> xChar;
+		iss >> yChar;
+		iss >> speedChar;
+		iss >> deadChar;
+		iss >> posChar;
+		iss >> indChar;
+
+		charInfo = xChar;
+		charInfo += " ";
+		charInfo += yChar;
+		charInfo += " ";
+		charInfo += speedChar;
+		charInfo += " ";
+		charInfo += deadChar;
+		charInfo += " ";
+		charInfo += posChar;
+		charInfo += " ";
+		charInfo += indChar;
+		indexChar = stoi(indChar);
+	}
+	this->type = ANIMAL;
+}
+
 void AnimalLane::drawTo(sf::RenderWindow& window, sf::Font& font)
 {
 	this->sprite.setPosition(0, y);
@@ -704,14 +981,14 @@ void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture&
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
 		if (rand() % 3 == 0) {
-			this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16);
+			this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16, "animal1");
 		}
 		else if (rand() % 3 == 2) {
-			this->ob[i].setup(animal2, 5, 5, 0, 0, 16, 16);
+			this->ob[i].setup(animal2, 5, 5, 0, 0, 16, 16, "animal2");
 			tmp = 1;
 		}
 		else {
-			this->ob[i].setup(animal3, 5, 5, 0, 0, 16, 16);
+			this->ob[i].setup(animal3, 5, 5, 0, 0, 16, 16, "animal3");
 			tmp = 2;
 		}
 		b = ob[i].randomx(idx, 13);
@@ -726,6 +1003,21 @@ void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture&
 		else */ob[i].setPos(ob[i].returnx(), y + 50);
 	}
 	delete[] idx;
+}
+
+std::string AnimalLane::info()
+{
+	std::string res = "AnimalLane";
+	res += " ";
+	res += to_string(y);
+	res += " "; res += to_string(nob);
+	for (int i = 0; i < nob; i++)
+	{
+		res += " ";
+		res += ob[i].info();
+	}
+	if (getCharacter()) { res += " character "; res += getCharacter()->info(); }
+	return res;
 }
 
 void AnimalLane::moveobx(int a, int b)
@@ -746,3 +1038,38 @@ void AnimalLane::checkCollision(sf::Font& font)
 		}
 	}
 }
+
+void LaneManager::saveToFile()
+{
+	ofstream out("Save.txt");
+	for (int i = 0; i < lanes.size(); i++) 
+	{
+		std::string tmp = lanes[i]->info();
+		out << tmp << endl;
+	}
+	out.close();
+}
+
+void LaneManager::processEach(std::string tmp, std::string& charInfo, int& indexChar) {
+	std::string type;
+	std::string tGL;
+	istringstream iss(tmp);
+	iss >> type;
+	if (type == "GrassLane")
+	{
+		iss >> tGL;
+		
+		if (tGL == "2") lanes.insert(lanes.begin(), new GrassLane(texture[2], tmp, plant, rock, car[0], train, index, 2, charInfo, indexChar));
+		else if (tGL == "3") lanes.insert(lanes.begin(), new GrassLane(texture[3], tmp, plant, rock, car[0], train, index, 3, charInfo, indexChar));
+		else if (tGL == "4") lanes.insert(lanes.begin(), new GrassLane(texture[4], tmp, plant, rock, car[0], train, index, 4, charInfo, indexChar));
+	}
+	else if (type == "RailLane")
+		lanes.insert(lanes.begin(), new RailLane(texture[0], tmp, Light, train, index, charInfo, indexChar));
+	else if (type == "RoadLane")
+		lanes.insert(lanes.begin(), new RoadLane(texture[1], tmp, car[0], car[1], car[2], car[3], car[4], index, charInfo, indexChar));
+	else if (type == "AnimalLane")
+		lanes.insert(lanes.begin(), new AnimalLane(texture[5], tmp, animal[0], animal[1], animal[2], animal[3], animal[4], index, charInfo, indexChar));
+	
+	index++;
+}
+

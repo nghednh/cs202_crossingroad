@@ -183,3 +183,40 @@ void Character::reset()
 	this->y = 900 - 128 * 2;
 	this->gif.setPosition(this->x, this->y);
 }
+
+string Character::info()
+{
+	string res = "";
+	res += to_string(x);
+	res += " ";
+	res += to_string(y);
+	res += " ";
+	res += to_string(speed);
+	if (dead) res += " 1";
+	else res += " 0";
+	res += " ";
+	res += to_string(position);
+	res += " ";
+	res += to_string(index);
+	return res;
+}
+
+void Character::setInfoFromFile(string charInfo)
+{
+	istringstream iss(charInfo);
+	string xChar, yChar, posChar, indChar, speedChar, deadChar;
+	iss >> xChar;
+	iss >> yChar;
+	iss >> speedChar;
+	iss >> deadChar;
+	iss >> posChar;
+	iss >> indChar;
+
+	this->x = stoi(xChar);
+	this->y = stoi(yChar);
+	this->speed = stod(speedChar);
+	this->dead = stoi(deadChar);
+	this->position = stoi(speedChar);
+	this->index = stoi(indChar) - 1;
+}
+

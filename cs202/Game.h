@@ -8,6 +8,11 @@
 #include "Gif.h"
 #include "Lane.h"
 #include "Character.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+using namespace std;
 
 class Game {
 private:
@@ -86,4 +91,6 @@ public:
 	void handleEvent();
 	void update();
 	void draw();
+	void save();
+	void loadFromFile();
 };

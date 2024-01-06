@@ -19,6 +19,7 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
 	for (int i = 0; i < 9; i++)			
 		laneManager.addLane(900 - i * 128);
+//	loadFromFile();
 	shouldGoFaster = false;
 	laneManager.initCharacter(&character);
 	crashed = false;
@@ -112,6 +113,7 @@ void Game::handleEvent()
 					musicInGame.play();
 				}
 				if (exitButton.isMouseOver(window)) {
+					save();
 					window.close();
 				}
 				if (creditButton.isMouseOver(window)) {
@@ -178,6 +180,7 @@ void Game::handleEvent()
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
+
 			}
 		}
 	}
@@ -307,4 +310,30 @@ void Game::draw()
 		window.draw(backButton);
 	}
 	window.display();
+}
+
+void Game::save()
+{
+	laneManager.saveToFile();
+}
+
+void Game::loadFromFile()
+{
+	ifstream in("Save.txt");
+	string tmp;
+	string charInfo = "";
+	int indexChar = 0;
+	for (int i = 0; i < 9; i++)
+	{
+		getline(in, tmp);
+		laneManager.processEach(tmp, charInfo, indexChar);
+	}
+
+	character.setInfoFromFile(charInfo);
+	laneManager.initCharacter(&character);
+	laneManager.setInfoChar(indexChar);
+
+	charInfo = "";
+
+	in.close();
 }
