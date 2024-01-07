@@ -442,6 +442,9 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	this->train->setFleft(stoi(fleft));
 //	this->sprite.setPosition(0, this->y);
 	this->train->setup(train, "train");
+	string isRed;
+	iss >> isRed;
+	redLight = stoi(isRed);
 	string idx;
 	iss >> idx;
 	this->index = stoi(idx);
@@ -460,6 +463,8 @@ std::string RailLane::info()
 	res += " ";
 	res += train->info();
 	res += " ";
+	if (redLight) res += "1 ";
+	else res += "0 ";
 	res += to_string(index);
 	return res;
 }
@@ -1018,6 +1023,7 @@ void AnimalLane::checkCollision(sf::Font& font)
 void LaneManager::saveToFile()
 {
 	ofstream out("Save.txt");
+	out << isRaining << endl;
 	for (int i = lanes.size() - 1; i >= 0; i--)
 	{
 		std::string tmp = lanes[i]->info();

@@ -197,6 +197,7 @@ public:
 	void update(bool& shouldGoFaster);
 	void drawTo(sf::RenderWindow& window);
 	void drawRainTo(sf::RenderWindow& window);
+	void setRain(bool isRain) { isRaining = isRain; }
 	int getWidth() const { return width; }
 	int getHeight() const { return height; }
 	int getDifficulty() const { return difficulty; }

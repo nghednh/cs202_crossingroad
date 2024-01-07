@@ -365,9 +365,9 @@ void Game::draw()
 void Game::save()
 {
 	laneManager.saveToFile();
-	ofstream out("Save.txt", ios::app);
-	out << "character " << character.info();
-	out.close();
+	ofstream fout("Save.txt", ios::app);
+	fout << "character " << character.info();
+	fout.close();
 }
 
 void Game::loadFromFile()
@@ -376,6 +376,10 @@ void Game::loadFromFile()
 	ifstream in("Save.txt");
 	string tmp;
 	string charInfo = "";
+
+	getline(in, tmp);
+	laneManager.setRain(stoi(tmp));
+
 	int indexChar = 0;
 	for (int i = 0; i < 9; i++)
 	{
