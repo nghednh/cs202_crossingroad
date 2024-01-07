@@ -89,6 +89,7 @@ void Character::update()
 		gif.update();
 	if (this->y > 900) {
 		this->dead = true;
+		this->crashed = true;
 	}
 }
 

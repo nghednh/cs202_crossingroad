@@ -761,7 +761,7 @@ void LaneManager::drawRainTo(sf::RenderWindow& window)
 	if (isRaining) {
 		std::cout << "rained\n";
 		for (int i = 0; i < 25; i++) {
-			if (animationTime >= 0.2) {
+			if (animationTime >= 0.1) {
 				int x = rand() % 1600;
 				int y = rand() % 900;
 				int number = rand() % 3;

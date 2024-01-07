@@ -19,7 +19,7 @@ private:
 	enum State {
 		MENU,
 		PLAY,
-		PAUSE,
+		HIGHSCORE,
 		SETTING,
 		CREDIT
 	};
@@ -32,6 +32,9 @@ private:
 	sf::Texture _backgroundPlay;
 	sf::Sprite backgroundPlay;
 
+	sf::Texture _backgroundHighscore;
+	sf::Sprite backgroundHighscore;
+
 	sf::Texture _backgroundCredit;
 	sf::Sprite backgroundCredit;
 
@@ -42,6 +45,9 @@ private:
 
 	sf::Sprite filter;
 	sf::Texture _filter;
+
+	sf::Texture _filterCountdown;
+	sf::Sprite filterCountdown;
 
 	sf::Sprite gameOver;
 	sf::Texture _gameOver;
@@ -71,7 +77,9 @@ private:
 
 	sf::Font font;
 
+	Button newGameButton;
 	Button playButton;
+	Button highscoreButton;
 	Button settingButton;
 	Button creditButton;
 	Button exitButton;
@@ -83,6 +91,7 @@ private:
 
 	sf::Texture _replayButton0;
 	sf::Texture _replayButton1;
+	sf::Sprite replayButton;
 
 	sf::Texture _addVol0;
 	sf::Texture _addVol1;
@@ -91,7 +100,9 @@ private:
 	sf::Sprite addVol;
 	sf::Sprite minVol;
 
-	sf::Sprite replayButton;
+	int score[5]{};
+
+	int countdown;
 
 	sf::Clock clock;
 public:

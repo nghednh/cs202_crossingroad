@@ -1,21 +1,25 @@
 #include "Game.h"
 
 Game::Game() : window(sf::VideoMode(1600, 900), "Cross The Road", sf::Style::Close),
-playButton("play", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-settingButton(" setting ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-creditButton("  credit  ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-exitButton("   exit   ", { 230, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
-selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font)
+newGameButton(" new game ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+playButton("continue", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+highscoreButton("highscore", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+settingButton(" setting ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+creditButton("  credit  ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+exitButton("   exit   ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+selectArrow(">           <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font)
 {
 	window.setFramerateLimit(60);
 	this->state = MENU;
 	loadTexture();
 	loadSound();
 	font.loadFromFile("resource/fibberish.ttf");
-	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 350 + 10);
-	settingButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 450);
-	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 550);
-	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 650);
+	newGameButton.setPosition((int)((1600 - newGameButton.getSize().x) / 2), 245);
+	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 335-5);
+	highscoreButton.setPosition((int)((1600 - highscoreButton.getSize().x) / 2), 425 + 5);
+	settingButton.setPosition((int)((1600 - exitButton.getSize().x) / 2), 515 + 5);
+	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 605);
+	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 695);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
 	ifstream in("Save.txt"); string tmp;
 	if (in.is_open())
@@ -40,6 +44,7 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 	shouldGoFaster = false;
 	crashed = false;
 	crashAnimationCounter = 0;
+	countdown = -1;
 	crashSoundPlayed = false;
 }
 
@@ -69,6 +74,9 @@ void Game::loadTexture()
 	_backgroundPlay.loadFromFile("resource/background/play.jpg");
 	backgroundPlay.setTexture(_backgroundPlay);
 
+	_backgroundHighscore.loadFromFile("resource/background/highscore.jpg");
+	backgroundHighscore.setTexture(_backgroundHighscore);
+
 	_backgroundCredit.loadFromFile("resource/background/credit.jpg");
 	backgroundCredit.setTexture(_backgroundCredit);
 
@@ -79,6 +87,9 @@ void Game::loadTexture()
 
 	_filter.loadFromFile("resource/filter.png");
 	filter.setTexture(_filter);
+
+	_filterCountdown.loadFromFile("resource/countdown.png");
+	filterCountdown.setTexture(_filterCountdown);
 
 	_gameOver.loadFromFile("resource/gameOver.png");
 	gameOver.setTexture(_gameOver);
@@ -129,27 +140,53 @@ void Game::handleEvent()
 			window.close();
 		if (state == MENU)
 		{
-			
+
 			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
 				clickSound.play();
-				clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
-				if (playButton.isMouseOver(window)) {
+				if (newGameButton.isMouseOver(window)) {
 					this->state = PLAY;
-					clickGif.popGif();
+					musicInGame.play();
+					musicInGame.setLoop(true);
+					character.reset();
+					laneManager.reset();
+					crashed = false;
+					crashAnimationCounter = 0;
+					crashSoundPlayed = false;
+					laneManager.initCharacter(&character);
+				}
+				else if (playButton.isMouseOver(window)) {
+					countdown = 4;
+					this->state = PLAY;
 					musicMenu.stop();
 					musicInGame.play();
 				}
-				if (exitButton.isMouseOver(window)) {
+				else if (highscoreButton.isMouseOver(window)) {
+					this->state = HIGHSCORE;
+				}
+				else if (exitButton.isMouseOver(window)) {
 					save();
 					window.close();
 				}
-				if (creditButton.isMouseOver(window)) {
+				else if (creditButton.isMouseOver(window)) {
 					this->state = CREDIT;
-					clickGif.popGif();
 				}
-				if (settingButton.isMouseOver(window)) {
+				else if (settingButton.isMouseOver(window)) {
 					this->state = SETTING;
 				}
+				else
+					clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
+			}
+
+		}
+		else if (state == HIGHSCORE)
+		{
+			if (event.type == sf::Event::MouseButtonReleased) {
+				clickSound.play();
+				if (isMouseOver(backButton, window)) {
+					this->state = MENU;
+				}
+				else
+					this->clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
 			}
 		}
 		else if (state == PLAY)
@@ -158,6 +195,7 @@ void Game::handleEvent()
 				clickSound.play();
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
+					countdown = -1;
 					musicInGame.stop();
 					musicMenu.play();
 				}
@@ -199,6 +237,8 @@ void Game::handleEvent()
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
+				else
+					this->clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
 			}
 		}
 		else if (state == SETTING) {
@@ -207,6 +247,8 @@ void Game::handleEvent()
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
+				else
+					this->clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
 				if (isMouseOver(addVol, window)) {
 					addVolumn();
 				}
@@ -221,26 +263,56 @@ void Game::handleEvent()
 void Game::update()
 {
 	if (state == MENU) {
+		newGameButton.updateHalfTransparent(window);
 		playButton.updateHalfTransparent(window);
 		settingButton.updateHalfTransparent(window);
+		highscoreButton.updateHalfTransparent(window);
 		creditButton.updateHalfTransparent(window);
 		exitButton.updateHalfTransparent(window);
 		selectArrow.updateHalfTransparent(window);
+		if (newGameButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 245 - 10);
 		if (playButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 335 - 10);
+		if (highscoreButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 425 - 10);
 		if (settingButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 450 - 5);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 515 - 10);
 		if (creditButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 550 - 5);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 605 - 5);
 		if (exitButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 650 - 5);
-		if (playButton.isMouseOver(window) || settingButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 695 - 5);
+		if (newGameButton.isMouseOver(window) || playButton.isMouseOver(window) || highscoreButton.isMouseOver(window) || settingButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
 			selectArrow.setTextColor(darkBeige);
 		else
 			selectArrow.setTextColor(sf::Color::Transparent);
 		clickGif.update();
 	}
 	else if (state == PLAY) {
+		if (countdown <= 0) {
+			if (isMouseOver(replayButton, window)) {
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					replayButton.setTexture(_replayButton1);
+			}
+			else
+				replayButton.setTexture(_replayButton0);
+			if (character.isDead()) {
+				musicInGame.pause();
+			}
+			else {
+				laneManager.update(shouldGoFaster);
+				character.update();
+				crashed = character.isCrashed();
+				if (crashed) {
+					musicInGame.pause();
+					if (!crashSoundPlayed) {
+						crashSound.play();
+						crashSoundPlayed = true;
+					}
+				}
+			}
+
+		}
 		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				backButton.setTexture(_backButton1);
@@ -248,27 +320,15 @@ void Game::update()
 		else
 			backButton.setTexture(_backButton0);
 		//shouldGoFaster = character.shouldGoFaster();
-		if (isMouseOver(replayButton, window)) {
+	}
+	else if (state == HIGHSCORE) {
+		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-				replayButton.setTexture(_replayButton1);
+				backButton.setTexture(_backButton1);
 		}
 		else
-			replayButton.setTexture(_replayButton0);
-		if (character.isDead()) {
-			musicInGame.pause();
-		}
-		else {
-			laneManager.update(shouldGoFaster);
-			character.update();
-			crashed = character.isCrashed();
-			if (crashed) {
-				musicInGame.pause();
-				if (!crashSoundPlayed) {
-					crashSound.play();
-					crashSoundPlayed = true;
-				}
-			}
-		}
+			backButton.setTexture(_backButton0);
+		clickGif.update();
 	}
 	else if (state == CREDIT) {
 		if (isMouseOver(backButton, window)) {
@@ -277,6 +337,7 @@ void Game::update()
 		}
 		else
 			backButton.setTexture(_backButton0);
+		clickGif.update();
 	}
 	else if (state == SETTING) {
 		if (isMouseOver(backButton, window)) {
@@ -299,6 +360,7 @@ void Game::update()
 		}
 		else
 			minVol.setTexture(_minVol0);
+		clickGif.update();
 	}
 }
 
@@ -308,7 +370,9 @@ void Game::draw()
 	if (state == MENU)
 	{
 		window.draw(backgroundMenu);
+		newGameButton.drawTo(window);
 		playButton.drawTo(window);
+		highscoreButton.drawTo(window);
 		exitButton.drawTo(window);
 		settingButton.drawTo(window);
 		creditButton.drawTo(window);
@@ -322,7 +386,7 @@ void Game::draw()
 			laneManager.drawTo(window);
 			//character.draw(window);
 			crashSprite.setPosition(character.getX() - 120 / 2, character.getY() - 109 / 2);
-			if (crashAnimationCounter < 29) {	
+			if (crashAnimationCounter < 29) {
 				int time = clock.getElapsedTime().asMilliseconds();
 				if (time > 70) {
 					clock.restart();
@@ -341,16 +405,85 @@ void Game::draw()
 			window.draw(backButton);
 		}
 		else {
-			window.draw(backgroundPlay);
-			laneManager.drawTo(window);
-			window.draw(filter);
-			window.draw(backButton);
-			//character.draw(window);
+			if (countdown <= 0) {
+				window.draw(backgroundPlay);
+				laneManager.drawTo(window);
+				window.draw(filter);
+				window.draw(backButton);
+				//character.draw(window);
+			}
+			else {
+				window.draw(backgroundPlay);
+				laneManager.drawTo(window);
+				character.draw(window);
+				window.draw(filterCountdown);
+				sf::Text text;
+				text.setFont(font);
+				text.setCharacterSize(200);
+				text.setString(to_string(countdown));
+				text.setFillColor(sf::Color::Black);
+				text.setPosition(755, 105);
+				window.draw(text);
+				text.setFillColor(darkBeige);
+				text.setPosition(750, 100);
+				window.draw(text);
+				text.setFillColor(sf::Color(255, 230, 153));
+				text.setPosition(750, 95);
+				window.draw(text);
+				int time = clock.getElapsedTime().asMilliseconds();
+				if (time > 1000) {
+					clock.restart();
+					countdown--;
+				}
+				window.draw(backButton);
+			}
 		}
+	}
+	else if (state == HIGHSCORE) {
+		window.draw(backgroundHighscore);
+		window.draw(backButton);
+		sf::Text text;
+		text.setFont(font);
+		text.setCharacterSize(50);
+		text.setFillColor(darkBeige);
+		text.setPosition(400, 250);
+		text.setString("Name");
+		window.draw(text);
+		text.setString("Score");
+		text.setPosition(1070, 250);
+		window.draw(text);
+		ifstream fin("highscore.txt"); //there are 5 lines, each line is a name and white space then score, want to extract the name and score
+		if (!fin.is_open()) {
+			cout << "Error opening file" << endl;
+			return;
+		}
+		else {
+			string tmp;
+			istringstream iss;
+			int i = 0;
+			while (getline(fin, tmp)) {
+				iss.str(tmp);
+				string name;
+				int score;
+				iss >> name;
+				iss >> score;
+				text.setString(name);
+				text.setPosition(400, 330 + i * 60);
+				window.draw(text);
+				text.setString(to_string(score));
+				text.setPosition(1070, 330 + i * 60);
+				window.draw(text);
+				i++;
+				iss.clear();
+			}
+			fin.close();
+		}
+		clickGif.drawTo(window);
 	}
 	else if (state == CREDIT) {
 		window.draw(backgroundCredit);
 		window.draw(backButton);
+		clickGif.drawTo(window);
 	}
 	else if (state == SETTING) {
 		window.draw(backgroundSetting);
@@ -358,6 +491,7 @@ void Game::draw()
 		window.draw(minVol);
 		window.draw(addVol);
 		drawVolumn();
+		clickGif.drawTo(window);
 	}
 	window.display();
 }
@@ -449,7 +583,7 @@ void Game::drawVolumn()
 {
 	sf::Text textTmp;
 	int tmp = round(musicMenu.getVolume());
-	textTmp.setString("Volumn: " + to_string(tmp));
+	textTmp.setString("Volume: " + to_string(tmp));
 	textTmp.setCharacterSize(80);
 	textTmp.setFillColor(sf::Color::Black);
 	textTmp.setFont(font);
