@@ -72,6 +72,9 @@ void Game::loadTexture()
 	_backgroundCredit.loadFromFile("resource/background/credit.jpg");
 	backgroundCredit.setTexture(_backgroundCredit);
 
+	_backgroundSetting.loadFromFile("resource/background/setting.jpg");
+	backgroundSetting.setTexture(_backgroundSetting);
+
 	_object.loadFromFile("resource/object/object.png");
 
 	_filter.loadFromFile("resource/filter.png");
@@ -90,8 +93,16 @@ void Game::loadTexture()
 
 	_backButton0.loadFromFile("resource/backButton0.png");
 	_backButton1.loadFromFile("resource/backButton1.png");
+	_addVol0.loadFromFile("resource/increaseButton0.png");
+	_addVol1.loadFromFile("resource/increaseButton1.png");
+	_minVol0.loadFromFile("resource/decreaseButton0.png");
+	_minVol1.loadFromFile("resource/decreaseButton1.png");
 	backButton.setTexture(_backButton0);
 	backButton.setPosition(50, 20);
+	addVol.setTexture(_addVol0);
+	minVol.setTexture(_minVol0);
+	addVol.setPosition(1050, 220);
+	minVol.setPosition(920, 220);
 
 	_replayButton0.loadFromFile("resource/replayButton0.png");
 	_replayButton1.loadFromFile("resource/replayButton1.png");
@@ -269,6 +280,20 @@ void Game::update()
 		}
 		else
 			backButton.setTexture(_backButton0);
+
+		if (isMouseOver(addVol, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				addVol.setTexture(_addVol1);
+		}
+		else
+			addVol.setTexture(_addVol0);
+
+		if (isMouseOver(minVol, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				minVol.setTexture(_minVol1);
+		}
+		else
+			minVol.setTexture(_minVol0);
 	}
 }
 
@@ -323,7 +348,10 @@ void Game::draw()
 		window.draw(backButton);
 	}
 	else if (state == SETTING) {
+		window.draw(backgroundSetting);
 		window.draw(backButton);
+		window.draw(minVol);
+		window.draw(addVol);
 	}
 	window.display();
 }

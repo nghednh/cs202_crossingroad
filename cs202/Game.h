@@ -35,6 +35,9 @@ private:
 	sf::Texture _backgroundCredit;
 	sf::Sprite backgroundCredit;
 
+	sf::Texture _backgroundSetting;
+	sf::Sprite backgroundSetting;
+
 	sf::Texture _object;
 
 	sf::Sprite filter;
@@ -85,8 +88,8 @@ private:
 	sf::Texture _addVol1;
 	sf::Texture _minVol0;
 	sf::Texture _minVol1;
-//	Button addVol;
-//	Button minVol;
+	sf::Sprite addVol;
+	sf::Sprite minVol;
 
 	sf::Sprite replayButton;
 
