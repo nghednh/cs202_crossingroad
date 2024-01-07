@@ -276,18 +276,32 @@ void Game::handleEvent()
 				if (isMouseOver(minVol, window)) {
 					minVolumn();
 				}
+				/*
 				if (isMouseOver(up, window)) {
-
+					if (event.type == sf::Event::KeyPressed)
+						if (event.key.code == sf::Keyboard::Escape) {
+							window.close();
+						}
 				}
 				if (isMouseOver(down, window)) {
-
+					if (event.type == sf::Event::KeyPressed)
+						if (event.key.code == sf::Keyboard::Escape) {
+							window.close();
+						}
 				}
 				if (isMouseOver(left, window)) {
-
+					if (event.type == sf::Event::KeyPressed)
+						if (event.key.code == sf::Keyboard::Escape) {
+							window.close();
+						}
 				}
 				if (isMouseOver(right, window)) {
-
+					if (event.type == sf::Event::KeyPressed)
+						if (event.key.code == sf::Keyboard::Escape) {
+							window.close();
+						}
 				}
+				*/
 			}
 		}
 	}

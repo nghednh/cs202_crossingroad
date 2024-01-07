@@ -113,6 +113,8 @@ private:
 	sf::Sprite left;
 	sf::Sprite right;
 
+	sf::Keyboard::Key tmp;
+
 	sf::Sprite replayButton;
 	int score[5]{};
 
