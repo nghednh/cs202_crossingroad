@@ -14,7 +14,7 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 		this->ob = nullptr;
 	}
 	else {
-		nob = rand() % 9 + 1;
+		nob = rand() % 6 + 1;
 		this->ob = new ObjectStable[nob];
 		initOb(plant, rock);
 	}
@@ -218,11 +218,11 @@ RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf:
 	for (int i = 0; i < nob; i++)
 	{
 		iss >> carType;
-		if (carType == "car1") this->ob[i].setup(car1, 2.56, 2.56, 3, 27, 84, 49, "car1");
-		else if (carType == "car2") this->ob[i].setup(car2, 2.56, 2.56, 3, 27, 84, 49, "car2");
-		else if (carType == "car3") this->ob[i].setup(car3, 2.56, 2.56, 3, 27, 84, 49, "car3");
-		else if (carType == "car4")	this->ob[i].setup(car4, 2.56, 2.56, 3, 27, 84, 49, "car4");
-		else if (carType == "car5") this->ob[i].setup(car5, 2.56, 2.56, 3, 27, 84, 49, "car5");
+		if (carType == "car1") this->ob[i].setup(car1, 2.56, 2.56, 5, 0, 82, 72, "car1");
+		else if (carType == "car2") this->ob[i].setup(car2, 2.56, 2.56, 5, 0, 82, 72, "car2");
+		else if (carType == "car3") this->ob[i].setup(car3, 2.56, 2.56, 12, 0, 74, 66, "car3");
+		else if (carType == "car4")	this->ob[i].setup(car4, 2.56, 2.56, 8, 0, 83, 72, "car4");
+		else if (carType == "car5") this->ob[i].setup(car5, 2.56, 2.56, 12, 0, 74, 66, "car5");
 				
 		iss >> xPos;
 		iss >> yPos;
@@ -782,10 +782,10 @@ void LaneManager::createShield() {
 			nearestGrass = lanes[i]->getIndex();
 		}
 	}
+	std::cout << "Nearest grass: " << nearestGrass << std::endl;
 	if (nearestGrass != index) {
 		int nob = lanes[nearestGrass]->returnnob();
 		for (int i = 0; i < nob; i++) {
-			
 		}
 	}
 }
@@ -811,7 +811,7 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	nob = rand() % 10 + 1;
+	nob = rand() % 7 + 1;
 	this->ob = new ObjectStable[nob];
 	initOb(animal1, animal2, animal3, animal4, animal5);
 	this->character = nullptr;
