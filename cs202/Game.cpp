@@ -419,9 +419,6 @@ void Game::update()
 				down.setTexture(_down1);
 		}
 		else down.setTexture(_down);
-		clickGif.update();
-	}
-}
 
 		if (isMouseOver(right, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -434,8 +431,11 @@ void Game::update()
 				left.setTexture(_left1);
 		}
 		else left.setTexture(_left);
+		clickGif.update();
 	}
 }
+
+		
 
 void Game::draw()
 {

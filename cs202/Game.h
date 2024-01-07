@@ -114,8 +114,6 @@ private:
 	sf::Sprite right;
 
 	sf::Keyboard::Key tmp;
-
-	sf::Sprite replayButton;
 	int score[5]{};
 
 	int countdown;
