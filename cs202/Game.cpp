@@ -115,6 +115,27 @@ void Game::loadTexture()
 	addVol.setPosition(1050, 220);
 	minVol.setPosition(920, 220);
 
+	_up.loadFromFile("resource/keyButton0.png");
+	_down.loadFromFile("resource/keyButton0.png");
+	_left.loadFromFile("resource/keyButton0.png");
+	_right.loadFromFile("resource/keyButton0.png");
+	_up1.loadFromFile("resource/keyButton1.png");
+	_down1.loadFromFile("resource/keyButton1.png");
+	_left1.loadFromFile("resource/keyButton1.png");
+	_right1.loadFromFile("resource/keyButton1.png");
+	up.setTexture(_up);
+	down.setTexture(_down);
+	left.setTexture(_left);
+	right.setTexture(_right);
+	up.setPosition(1025, 430);
+	up.setScale(0.4, 0.4);
+	down.setPosition(825, 430);
+	down.setScale(0.4, 0.4);
+	left.setPosition(625, 430);
+	left.setScale(0.4, 0.4);
+	right.setPosition(425, 430);
+	right.setScale(0.4, 0.4);
+
 	_replayButton0.loadFromFile("resource/replayButton0.png");
 	_replayButton1.loadFromFile("resource/replayButton1.png");
 	replayButton.setTexture(_replayButton0);
@@ -255,6 +276,18 @@ void Game::handleEvent()
 				if (isMouseOver(minVol, window)) {
 					minVolumn();
 				}
+				if (isMouseOver(up, window)) {
+
+				}
+				if (isMouseOver(down, window)) {
+
+				}
+				if (isMouseOver(left, window)) {
+
+				}
+				if (isMouseOver(right, window)) {
+
+				}
 			}
 		}
 	}
@@ -360,7 +393,33 @@ void Game::update()
 		}
 		else
 			minVol.setTexture(_minVol0);
+
+		if (isMouseOver(up, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				up.setTexture(_up1);
+		}
+		else up.setTexture(_up);
+
+		if (isMouseOver(down, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				down.setTexture(_down1);
+		}
+		else down.setTexture(_down);
 		clickGif.update();
+	}
+}
+
+		if (isMouseOver(right, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				right.setTexture(_right1);
+		}
+		else right.setTexture(_right);
+
+		if (isMouseOver(left, window)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				left.setTexture(_left1);
+		}
+		else left.setTexture(_left);
 	}
 }
 
@@ -490,7 +549,12 @@ void Game::draw()
 		window.draw(backButton);
 		window.draw(minVol);
 		window.draw(addVol);
+		window.draw(up);
+		window.draw(down);
+		window.draw(right);
+		window.draw(left);
 		drawVolumn();
+		drawDirect();
 		clickGif.drawTo(window);
 	}
 	window.display();
@@ -499,9 +563,9 @@ void Game::draw()
 void Game::save()
 {
 	laneManager.saveToFile();
-	ofstream out("Save.txt", ios::app);
-	out << "character " << character.info();
-	out.close();
+	ofstream fout("Save.txt", ios::app);
+	fout << "character " << character.info();
+	fout.close();
 }
 
 void Game::loadFromFile()
@@ -510,6 +574,10 @@ void Game::loadFromFile()
 	ifstream in("Save.txt");
 	string tmp;
 	string charInfo = "";
+
+	getline(in, tmp);
+	laneManager.setRain(stoi(tmp));
+
 	int indexChar = 0;
 	for (int i = 0; i < 9; i++)
 	{
@@ -589,4 +657,64 @@ void Game::drawVolumn()
 	textTmp.setFont(font);
 	textTmp.setPosition(450, 230);
 	window.draw(textTmp);
+}
+
+void Game::drawDirect() {
+	sf::Text text;
+
+	text.setString("Up");
+	text.setCharacterSize(40);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(1085, 590);
+	window.draw(text);
+
+	text.setString("Down");
+	text.setCharacterSize(40);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(863, 590);
+	window.draw(text);
+
+	text.setString("Left");
+	text.setCharacterSize(40);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(670, 590);
+	window.draw(text);
+
+	text.setString("Right");
+	text.setCharacterSize(40);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(460, 590);
+	window.draw(text);
+
+	text.setString("W");
+	text.setCharacterSize(80);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(1070, 450);
+	window.draw(text);
+
+	text.setString("S");
+	text.setCharacterSize(80);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(880,450);
+	window.draw(text);
+
+	text.setString("A");
+	text.setCharacterSize(80);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(680, 450);
+	window.draw(text);
+
+	text.setString("D");
+	text.setCharacterSize(80);
+	text.setFillColor(sf::Color::Black);
+	text.setFont(font);
+	text.setPosition(480, 450);
+	window.draw(text);
 }
