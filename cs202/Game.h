@@ -80,6 +80,14 @@ private:
 
 	sf::Texture _replayButton0;
 	sf::Texture _replayButton1;
+
+	sf::Texture _addVol0;
+	sf::Texture _addVol1;
+	sf::Texture _minVol0;
+	sf::Texture _minVol1;
+//	Button addVol;
+//	Button minVol;
+
 	sf::Sprite replayButton;
 
 	sf::Clock clock;
@@ -93,4 +101,6 @@ public:
 	void draw();
 	void save();
 	void loadFromFile();
+	void addVolumn();
+	void minVolumn();
 };

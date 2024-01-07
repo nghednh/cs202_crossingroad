@@ -835,9 +835,9 @@ AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& anima
 	for (int i = 0; i < nob; i++)
 	{
 		iss >> animalType;
-		if (animalType == "animal1") this->ob[i].setup(animal1, 5, 5, 0, 0, 16, 16, "animal1");
-		else if (animalType == "animal2") ob[i].setup(animal2, 5, 5, 0, 0, 16, 16, "animal2");
-		else if (animalType == "animal3") ob[i].setup(animal3, 5, 5, 0, 0, 16, 16, "animal3");
+		if (animalType == "animal1") this->ob[i].setup(animal1, 3, 3, 0, 0, 32, 32, "animal1");
+		else if (animalType == "animal2") ob[i].setup(animal2, 3, 3, 0, 0, 32, 32, "animal2");
+		else if (animalType == "animal3") ob[i].setup(animal3, 3, 3, 0, 0, 32, 32, "animal3");
 		iss >> xPos;
 		iss >> yPos;
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));

@@ -376,3 +376,21 @@ void Game::loadFromFile()
 
 	in.close();
 }
+
+void Game::addVolumn()
+{
+	int vol = musicInGame.getVolume();
+	if (vol == 50)
+		return;
+	musicMenu.setVolume(vol + 5);
+	musicInGame.setVolume(vol + 5);
+}
+
+void Game::minVolumn()
+{
+	int vol = musicInGame.getVolume();
+	if (vol == 0)
+		return;
+	musicMenu.setVolume(vol - 5);
+	musicInGame.setVolume(vol - 5);
+}
