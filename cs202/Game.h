@@ -104,6 +104,8 @@ private:
 	sf::Sprite left;
 	sf::Sprite right;
 
+	sf::Keyboard::Key tmp;
+
 	sf::Sprite replayButton;
 
 	sf::Clock clock;
