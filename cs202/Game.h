@@ -91,9 +91,23 @@ private:
 	sf::Sprite addVol;
 	sf::Sprite minVol;
 
+	sf::Texture _up;
+	sf::Texture _down;
+	sf::Texture _right;
+	sf::Texture _left;
+	sf::Texture _up1;
+	sf::Texture _down1;
+	sf::Texture _right1;
+	sf::Texture _left1;
+	sf::Sprite up;
+	sf::Sprite down;
+	sf::Sprite left;
+	sf::Sprite right;
+
 	sf::Sprite replayButton;
 
 	sf::Clock clock;
+
 public:
 	Game();
 	void loadSound();
@@ -107,4 +121,5 @@ public:
 	void addVolumn();
 	void minVolumn();
 	void drawVolumn();
+	void drawDirect();
 };
