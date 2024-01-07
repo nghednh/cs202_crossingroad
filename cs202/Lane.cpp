@@ -26,7 +26,6 @@ GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::T
 {
 	this->sprite.setTexture(texture);
 	this->sprite.setScale(4, 4);
-	this->index = index;
 	this->nGL = nGL;
 	
 	istringstream iss(tmp);
@@ -45,16 +44,16 @@ GrassLane::GrassLane(sf::Texture& texture, string tmp, sf::Texture& plant, sf::T
 		if (rockType == "rock1") ob[i].setup(rock, 2, 2, 195, -9, 64, 70, "rock1");
 		else if (rockType == "rock2") ob[i].setup(rock, 2, 2, 384, 194, 64, 64, "rock2");
 		else if (rockType == "rock3") ob[i].setup(plant, 2, 2, 216, 185, 47, 42, "rock3");
-		iss >> xPos;
+		iss >> xPos; 
 		iss >> yPos;
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
 	}
 	string idx;
 	iss >> idx;
-	index = stoi(idx);
+	this->index = stoi(idx);
 	this->character = nullptr;
 	this->type = GRASS;
-	if (setIndex < index) setIndex = index;
+	if (setIndex < this->index + 1) setIndex = this->index + 1;
 }
 
 std::string GrassLane::info()
@@ -234,10 +233,10 @@ RoadLane::RoadLane(sf::Texture& texture, std::string tmp, sf::Texture& car1, sf:
 	}
 	string idx;
 	iss >> idx;
-	index = stoi(idx);
+	this->index = stoi(idx);
 	this->character = nullptr;
 	this->type = ROAD;
-	if (setIndex < index) setIndex = index;
+	if (setIndex < this->index + 1) setIndex = this->index + 1;
 }
 
 std::string RoadLane::info()
@@ -445,11 +444,11 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	this->train->setPosSprite(stoi(xPos), stoi(yPos));
 	string idx;
 	iss >> idx;
-	index = stoi(idx);
+	this->index = stoi(idx);
 	this->character = nullptr;
 	this->type = RAIL;
 	if (this->train->rfleft())  this->train->setScale(-4, 4);
-	if (setIndex < index) setIndex = index;
+	if (setIndex < this->index + 1) setIndex = this->index + 1;
 }
 
 std::string RailLane::info()
@@ -845,10 +844,10 @@ AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& anima
 	}
 	string idx;
 	iss >> idx;
-	index = stoi(idx);
+	this->index = stoi(idx);
 	this->character = nullptr;
 	this->type = ANIMAL;
-	if (setIndex < index) setIndex = index;
+	if (setIndex < this->index + 1) setIndex = this->index + 1;
 }
 
 void AnimalLane::drawTo(sf::RenderWindow& window, sf::Font& font)

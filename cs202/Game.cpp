@@ -29,6 +29,13 @@ selectArrow(">        <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Tr
 			laneManager.initCharacter(&character);
 		}
 	}
+	else
+	{
+		for (int i = 0; i < 9; i++)
+			laneManager.addLane(900 - i * 128);
+		laneManager.initCharacter(&character);
+	}
+
 	update();
 	shouldGoFaster = false;
 	crashed = false;
