@@ -4,7 +4,7 @@ Character::Character()
 {
 	this->jumping.loadFromFile("resource/character/jumping.png");
 	this->flash.loadFromFile("resource/character/die2.png");
-	this->speed = 1;
+	this->speed = 0.8;
 	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.35 * speed);
 	this->gif.setScale(3, 3);
 	this->x = 7 * 128;

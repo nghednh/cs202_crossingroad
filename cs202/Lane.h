@@ -168,8 +168,8 @@ private:
 	sf::Texture animal[5];
 	sf::Texture train;
 	sf::Texture Light;
-	sf::Texture shield_;
-	sf::Sprite shield;
+	sf::Texture rain[3];
+	sf::Sprite rainSprite[25];
 	int width;
 	int height;
 	int difficulty;
@@ -177,7 +177,12 @@ private:
 	Character* character;
 	sf::Font font;
 	sf::Text text;
-	bool isShielded;
+	bool isRaining;
+	sf::Clock clock;
+	sf::Clock rainClock;
+	sf::Clock rainAnimationClock;
+	sf::Texture rainFilter_;
+	sf::Sprite rainFilter;
 public:
 	LaneManager();
 	~LaneManager();
@@ -191,6 +196,7 @@ public:
 	void processRight();
 	void update(bool& shouldGoFaster);
 	void drawTo(sf::RenderWindow& window);
+	void drawRainTo(sf::RenderWindow& window);
 	int getWidth() const { return width; }
 	int getHeight() const { return height; }
 	int getDifficulty() const { return difficulty; }

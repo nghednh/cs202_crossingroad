@@ -55,5 +55,6 @@ public:
 	string info();
 	bool isAnimating() { return (upPressed || downPressed || leftPressed || rightPressed); }
 	void setInfoFromFile(string charInfo);
+	void setSpeed(double speed) { this->speed = speed; }
 };
 

@@ -21,13 +21,13 @@ public:
 	}
 	virtual void drawTo(sf::RenderWindow& win, sf::Font& font) {
 		win.draw(sprite);
-		sf::Text text;
+		/*sf::Text text;
 		text.setString(std::to_string(x));
 		text.setCharacterSize(24);
 		text.setFillColor(sf::Color::White);
 		text.setFont(font);
 		text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
-		win.draw(text);
+		win.draw(text);*/
 	}
 	virtual void setPos(int x, int y) {
 		sprite.setPosition(x * 64 * 2 - 20, y - 26);
@@ -40,6 +40,9 @@ public:
 		sprite.setTextureRect(sf::IntRect(a, b, c, d));
 	}
 	void move(int x, int y) {
+		if (sprite.getPosition().x + x < -2000) sprite.move(x + 2000 + 1600, y);
+		else if (sprite.getPosition().x + x > 1600 + 2000) sprite.move(x - 2000 - 1600, y);
+		else
 		sprite.move(x, y);
 	}
 	void setX(int x) {
@@ -210,17 +213,17 @@ public:
 	}
 	void drawTo(sf::RenderWindow& win, sf::Font& font) {
 		win.draw(sprite);
-		sf::Text text;
-		text.setString(std::to_string(sprite.getPosition().x));
-		text.setCharacterSize(24);
-		text.setFillColor(sf::Color::White);
-		text.setFont(font);
-		text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
-		win.draw(text);
-		text.setString(std::to_string((int)(sprite.getPosition().x + spriteWidth() * spriteScaleX())));
-		text.setPosition(sprite.getPosition().x + this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
-		//if (rfleft()) text.setPosition(sprite.getPosition().x - this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
-		win.draw(text);
+		//sf::Text text;
+		//text.setString(std::to_string(sprite.getPosition().x));
+		//text.setCharacterSize(24);
+		//text.setFillColor(sf::Color::White);
+		//text.setFont(font);
+		//text.setPosition(sprite.getPosition().x, sprite.getPosition().y);
+		//win.draw(text);
+		//text.setString(std::to_string((int)(sprite.getPosition().x + spriteWidth() * spriteScaleX())));
+		//text.setPosition(sprite.getPosition().x + this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
+		////if (rfleft()) text.setPosition(sprite.getPosition().x - this->spriteWidth() * spriteScaleX(), sprite.getPosition().y);
+		//win.draw(text);
 	}
 };
 class TrainObject : public ObjectMoving {

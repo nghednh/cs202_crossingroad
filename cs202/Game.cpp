@@ -345,7 +345,7 @@ void Game::draw()
 			laneManager.drawTo(window);
 			window.draw(filter);
 			window.draw(backButton);
-			character.draw(window);
+			//character.draw(window);
 		}
 	}
 	else if (state == CREDIT) {

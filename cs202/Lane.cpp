@@ -598,8 +598,13 @@ LaneManager::LaneManager()
 	this->animal[4].loadFromFile("resource/object/animal/pig.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 	this->Light.loadFromFile("resource/object/TrafficLight.png");
+	this->rain[0].loadFromFile("resource/rain0.png");
+	this->rain[1].loadFromFile("resource/rain1.png");
+	this->rain[2].loadFromFile("resource/rain2.png");
+	this->rainFilter_.loadFromFile("resource/filterRaining.png");
+	this->rainFilter.setTexture(rainFilter_);
 	this->character = nullptr;
-	this->isShielded = false;
+	this->isRaining = false;
 	font.loadFromFile("resource/fibberish.ttf");
 }
 
@@ -734,7 +739,47 @@ void LaneManager::update(bool& shouldGoFaster)
 			lanes[i]->setCharacter(nullptr);
 		}
 	}
+	double time = clock.getElapsedTime().asSeconds();
+	if (time >= 5) {
+		clock.restart();
+		int rain = rand() % 2;
+		//std::cout << rain << std::endl;
+		if (rain == 1)
+		{
+			character->setSpeed(1.2);
+			isRaining = true;
+			rainClock.restart();
+			rainAnimationClock.restart();
+		}
+	}
 }
+
+void LaneManager::drawRainTo(sf::RenderWindow& window)
+{
+	double time = rainClock.getElapsedTime().asSeconds();
+	double animationTime = rainAnimationClock.getElapsedTime().asSeconds();
+	if (isRaining) {
+		std::cout << "rained\n";
+		for (int i = 0; i < 25; i++) {
+			if (animationTime >= 0.2) {
+				int x = rand() % 1600;
+				int y = rand() % 900;
+				int number = rand() % 3;
+				rainSprite[i].setScale(4, 4);
+				rainSprite[i].setTexture(this->rain[number]);
+				rainSprite[i].setPosition(x, y);
+				rainAnimationClock.restart();
+			}
+			window.draw(rainSprite[i]);
+		}
+		if (time >= 3) {
+			character->setSpeed(0.8);
+			isRaining = false;
+			rainClock.restart();
+		}
+	}
+}
+
 
 void LaneManager::drawTo(sf::RenderWindow& window)
 {
@@ -751,7 +796,7 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 		text.setFillColor(sf::Color::White);
 		text.setPosition(0, lanes[i]->getY());
 		window.draw(text);
-		if (lanes[i]->getCharacter()) {
+		/*if (lanes[i]->getCharacter()) {
 			text.setCharacterSize(12);
 			text.setString(std::to_string(character->getX() + 21));
 			text.setPosition(character->getX() + 21, character->getY());
@@ -759,7 +804,11 @@ void LaneManager::drawTo(sf::RenderWindow& window)
 			text.setString(std::to_string(character->getX() + 72 - 12));
 			text.setPosition(character->getX() + 72 - 12, character->getY());
 			window.draw(text);
-		}
+		}*/
+	}
+	drawRainTo(window);
+	if (isRaining) {
+		window.draw(rainFilter);
 	}
 }
 
