@@ -441,7 +441,7 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	iss >> fleft;
 	this->train->setFleft(stoi(fleft));
 //	this->sprite.setPosition(0, this->y);
-	this->train->setPosSprite(stoi(xPos), stoi(yPos));
+	this->train->setup(train, "train");
 	string idx;
 	iss >> idx;
 	this->index = stoi(idx);
@@ -449,6 +449,7 @@ RailLane::RailLane(sf::Texture& texture, std::string tmp, sf::Texture& Light, sf
 	this->type = RAIL;
 	if (this->train->rfleft())  this->train->setScale(-4, 4);
 	if (setIndex < this->index + 1) setIndex = this->index + 1;
+	this->train->setPosSprite(stoi(xPos), stoi(yPos));
 }
 
 std::string RailLane::info()
