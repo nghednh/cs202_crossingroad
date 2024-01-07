@@ -415,8 +415,8 @@ void Game::addVolumn()
 {
 	musicMenu.stop();
 
-	int vol = musicMenu.getVolume();
-	vol += 10;
+	float vol = round(musicMenu.getVolume());
+	vol += 10.000000000;
 	if (vol >= 100)
 	{
 		musicMenu.setVolume(100);
@@ -432,8 +432,8 @@ void Game::addVolumn()
 void Game::minVolumn()
 {
 	musicMenu.stop();
-	int vol = musicMenu.getVolume();
-	vol -= 10;
+	float vol = round(musicMenu.getVolume());
+	vol -= 10.000000;
 	if (vol <= 0)
 	{
 		musicMenu.setVolume(0);
@@ -448,7 +448,7 @@ void Game::minVolumn()
 void Game::drawVolumn()
 {
 	sf::Text textTmp;
-	int tmp = musicMenu.getVolume();
+	int tmp = round(musicMenu.getVolume());
 	textTmp.setString("Volumn: " + to_string(tmp));
 	textTmp.setCharacterSize(80);
 	textTmp.setFillColor(sf::Color::Black);
