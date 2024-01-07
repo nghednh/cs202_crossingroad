@@ -106,4 +106,5 @@ public:
 	void loadFromFile();
 	void addVolumn();
 	void minVolumn();
+	void drawVolumn();
 };

@@ -207,7 +207,12 @@ void Game::handleEvent()
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
-
+				if (isMouseOver(addVol, window)) {
+					addVolumn();
+				}
+				if (isMouseOver(minVol, window)) {
+					minVolumn();
+				}
 			}
 		}
 	}
@@ -352,6 +357,7 @@ void Game::draw()
 		window.draw(backButton);
 		window.draw(minVol);
 		window.draw(addVol);
+		drawVolumn();
 	}
 	window.display();
 }
@@ -407,18 +413,46 @@ void Game::loadFromFile()
 
 void Game::addVolumn()
 {
-	int vol = musicInGame.getVolume();
-	if (vol == 50)
+	musicMenu.stop();
+
+	int vol = musicMenu.getVolume();
+	vol += 10;
+	if (vol >= 100)
+	{
+		musicMenu.setVolume(100);
+		musicInGame.setVolume(100);
 		return;
-	musicMenu.setVolume(vol + 5);
-	musicInGame.setVolume(vol + 5);
+	}
+	musicMenu.setVolume(vol);
+	musicInGame.setVolume(vol);
+
+	musicMenu.play();
 }
 
 void Game::minVolumn()
 {
-	int vol = musicInGame.getVolume();
-	if (vol == 0)
+	musicMenu.stop();
+	int vol = musicMenu.getVolume();
+	vol -= 10;
+	if (vol <= 0)
+	{
+		musicMenu.setVolume(0);
+		musicInGame.setVolume(0);
 		return;
-	musicMenu.setVolume(vol - 5);
-	musicInGame.setVolume(vol - 5);
+	}
+	musicMenu.setVolume(vol);
+	musicInGame.setVolume(vol);
+	musicMenu.play();
+}
+
+void Game::drawVolumn()
+{
+	sf::Text textTmp;
+	int tmp = musicMenu.getVolume();
+	textTmp.setString("Volumn: " + to_string(tmp));
+	textTmp.setCharacterSize(80);
+	textTmp.setFillColor(sf::Color::Black);
+	textTmp.setFont(font);
+	textTmp.setPosition(450, 230);
+	window.draw(textTmp);
 }
