@@ -782,7 +782,7 @@ void Game::loadFromFile()
 
 void Game::addVolumn()
 {
-	musicMenu.stop();
+//	musicMenu.stop();
 
 	float vol = round(musicMenu.getVolume());
 	vol += 10.000000000;
@@ -795,12 +795,12 @@ void Game::addVolumn()
 	musicMenu.setVolume(vol);
 	musicInGame.setVolume(vol);
 
-	musicMenu.play();
+//	musicMenu.play();
 }
 
 void Game::minVolumn()
 {
-	musicMenu.stop();
+//	musicMenu.stop();
 	float vol = round(musicMenu.getVolume());
 	vol -= 10.000000;
 	if (vol <= 0)
@@ -811,7 +811,7 @@ void Game::minVolumn()
 	}
 	musicMenu.setVolume(vol);
 	musicInGame.setVolume(vol);
-	musicMenu.play();
+//	musicMenu.play();
 }
 
 void Game::drawVolumn()
