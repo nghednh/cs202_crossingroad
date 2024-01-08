@@ -18,8 +18,9 @@ void Gif::load(const sf::Texture& texture, int x, int y, int width, int height, 
 void Gif::update()
 {
 	//while (currentFrame < totalFrame) {
+		frameTime = speed / totalFrame;
 		double time = clock.getElapsedTime().asSeconds();
-		if (time > frameTime) {
+		if (time >= frameTime) {
 			this->currentFrame++;
 			clock.restart();
 		}
@@ -56,6 +57,7 @@ void Gif::setScale(float x, float y)
 void Gif::setSpeed(double speed)
 {
 	this->speed = speed;
+	this->frameTime = speed / totalFrame;
 }
 
 bool Gif::needUpdate()

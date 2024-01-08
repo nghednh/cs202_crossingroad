@@ -141,6 +141,7 @@
     <ClCompile Include="Lane.cpp" />
     <ClCompile Include="LoadRandom.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Textbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Lane.h" />
     <ClInclude Include="LoadRandom.h" />
+    <ClInclude Include="Textbox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

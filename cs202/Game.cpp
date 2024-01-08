@@ -6,13 +6,15 @@ playButton("continue", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Trans
 highscoreButton("highscore", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
 settingButton(" setting ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
 creditButton("  credit  ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
-exitButton("   exit   ", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
-selectArrow(">           <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font)
+exitButton("save & exit", { 230, 90 }, 50, sf::Color::Transparent, sf::Color::Transparent, font),
+selectArrow(">           <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color::Transparent, font),
+textbox(50, sf::Color(255, 230, 153), sf::Color::Transparent, false)
 {
 	window.setFramerateLimit(60);
 	this->state = MENU;
 	loadTexture();
 	loadSound();
+	loadScore();
 	font.loadFromFile("resource/fibberish.ttf");
 	newGameButton.setPosition((int)((1600 - newGameButton.getSize().x) / 2), 245);
 	playButton.setPosition((int)((1600 - playButton.getSize().x) / 2), 335-5);
@@ -21,6 +23,12 @@ selectArrow(">           <", { 500, 90 }, 60, sf::Color::Transparent, sf::Color:
 	creditButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 605);
 	exitButton.setPosition((int)((1600 - settingButton.getSize().x) / 2), 695);
 	selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 350 - 5);
+	textbox.setPosition(600, 750);
+	textbox.setBoxPosition(600, 750);
+	textbox.setBoxSize(sf::Vector2f(900, 50));
+	textbox.setFont(font);
+	textbox.setLimit(true, 20);
+	currentScore = -1;
 	ifstream in("Save.txt"); string tmp;
 	if (in.is_open())
 	{
@@ -88,6 +96,9 @@ void Game::loadTexture()
 	_filter.loadFromFile("resource/filter.png");
 	filter.setTexture(_filter);
 
+	_filter1.loadFromFile("resource/filter1.png");
+	filter1.setTexture(_filter1);
+
 	_filterCountdown.loadFromFile("resource/countdown.png");
 	filterCountdown.setTexture(_filterCountdown);
 
@@ -142,6 +153,49 @@ void Game::loadTexture()
 	replayButton.setPosition(1400, 20);
 }
 
+void Game::loadScore()
+{
+	ifstream fin("highscore.txt"); //there are 5 lines, each line is a name and white space then score, want to extract the name and score
+	for (int i = 0; i < 5; i++) {
+		score[i] = -1;
+		name[i] = "Untitled";
+	}
+	if (!fin.is_open()) {
+		cout << "Error opening file highscore.txt" << endl;
+	}
+	else {
+		string tmp;
+		istringstream iss;
+		int i = 0;
+		while (getline(fin, tmp)) {
+			iss.str(tmp);
+			iss >> name[i];
+			iss >> score[i];
+			i++;
+			iss.clear();
+		}
+		fin.close();
+	}
+	for (int i = 0; i < 5; i++) {
+		cout << name[i] << " " << score[i] << endl;
+	}
+}
+
+void Game::saveScore()
+{
+	ofstream fout("highscore.txt");
+	if (!fout.is_open()) {
+		cout << "Error opening file highscore.txt" << endl;
+		return;
+	}
+	for (int i = 0; i < 5; i++) {
+		if (score[i] == -1)
+			continue;
+		fout << name[i] << " " << score[i] << endl;
+	}
+	fout.close();
+}
+
 void Game::run()
 {
 	while (window.isOpen())
@@ -150,6 +204,7 @@ void Game::run()
 		update();
 		draw();
 	}
+	saveScore();
 }
 
 void Game::handleEvent()
@@ -174,12 +229,15 @@ void Game::handleEvent()
 					crashAnimationCounter = 0;
 					crashSoundPlayed = false;
 					laneManager.initCharacter(&character);
+					countdown = 4;
+					currentScore = -1;
 				}
 				else if (playButton.isMouseOver(window)) {
 					countdown = 4;
 					this->state = PLAY;
 					musicMenu.stop();
-					musicInGame.play();
+					if (!crashed)
+						musicInGame.play();
 				}
 				else if (highscoreButton.isMouseOver(window)) {
 					this->state = HIGHSCORE;
@@ -213,25 +271,79 @@ void Game::handleEvent()
 		else if (state == PLAY)
 		{
 			if (event.type == sf::Event::MouseButtonReleased) {
-				clickSound.play();
+				//clickSound.play();
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 					countdown = -1;
 					musicInGame.stop();
 					musicMenu.play();
 				}
-				if (isMouseOver(replayButton, window)) {
-					this->state = PLAY;
-					musicInGame.play();
-					musicInGame.setLoop(true);
-					character.reset();
-					laneManager.reset();
-					crashed = false;
-					crashAnimationCounter = 0;
-					crashSoundPlayed = false;
-					laneManager.initCharacter(&character);
+				if (character.isDead())
+					if (isMouseOver(replayButton, window)) {
+						saveScore();
+						this->state = PLAY;
+						musicInGame.play();
+						musicInGame.setLoop(true);
+						character.reset();
+						laneManager.reset();
+						crashed = false;
+						crashAnimationCounter = 0;
+						crashSoundPlayed = false;
+						laneManager.initCharacter(&character);
+						countdown = 4;
+						currentScore = -1;
+					}
+			}
+			if (event.type == sf::Event::TextEntered && character.isDead())
+			{
+				textbox.setSelected(true);
+				textbox.typedOn(event);
+			}
+			else
+				textbox.setSelected(false);
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+			{
+				if (character.isDead())
+				{
+					if (textbox.getText() != "")
+					{
+						string tmp = textbox.getText();
+						int i = 0;
+						while (i < tmp.length() && tmp[i] == ' ')
+							i++;
+						if (i < tmp.length())
+						{
+							name[5] = tmp.substr(i);
+							score[5] = currentScore;
+							for (int i = 0; i < 6; i++)
+								for (int j = 0; j < 6 - i - 1; j++) {
+									cout << score[j] << " " << score[j + 1] << endl;
+									if (score[j] < score[j+1])
+									{
+										swap(score[j], score[j+1]);
+										swap(name[j], name[j+1]);
+										cout << "Swap" << endl;
+									}
+								}
+							textbox.clear();
+							saveScore();
+							character.reset();
+							laneManager.reset();
+							crashed = false;
+							crashAnimationCounter = 0;
+							crashSoundPlayed = false;
+							laneManager.initCharacter(&character);
+							countdown = 4;
+							currentScore = -1;
+							//debug purpose
+							for (int i = 0; i < 6; i++)
+								cout << name[i] << " " << score[i] << endl;
+						}
+					}
 				}
 			}
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				laneManager.processUp();
 			}
@@ -254,22 +366,26 @@ void Game::handleEvent()
 		}
 		else if (state == CREDIT) {
 			if (event.type == sf::Event::MouseButtonReleased) {
-				clickSound.play();
+				//clickSound.play();
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
-				else
+				else {
+					clickSound.play();
 					this->clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
+				}
 			}
 		}
 		else if (state == SETTING) {
 			if (event.type == sf::Event::MouseButtonReleased) {
-				clickSound.play();
+				//clickSound.play();
 				if (isMouseOver(backButton, window)) {
 					this->state = MENU;
 				}
-				else
+				else {
+					clickSound.play();
 					this->clickGif.addGif(sf::Mouse::getPosition(window).x - clickGif.getScaleX() * clickGif.getWidth() / 2, sf::Mouse::getPosition(window).y - clickGif.getScaleY() * clickGif.getHeight() / 2);
+				}
 				if (isMouseOver(addVol, window)) {
 					addVolumn();
 				}
@@ -318,17 +434,17 @@ void Game::update()
 		exitButton.updateHalfTransparent(window);
 		selectArrow.updateHalfTransparent(window);
 		if (newGameButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 245 - 10);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 245 - 12);
 		if (playButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 335 - 10);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 335 - 12);
 		if (highscoreButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 425 - 10);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 425 - 12);
 		if (settingButton.isMouseOver(window))
 			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 515 - 10);
 		if (creditButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 605 - 5);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 605 - 10);
 		if (exitButton.isMouseOver(window))
-			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 695 - 5);
+			selectArrow.setPosition((int)((1600 - selectArrow.getSize().x) / 2), 695 - 10);
 		if (newGameButton.isMouseOver(window) || playButton.isMouseOver(window) || highscoreButton.isMouseOver(window) || settingButton.isMouseOver(window) || creditButton.isMouseOver(window) || exitButton.isMouseOver(window))
 			selectArrow.setTextColor(darkBeige);
 		else
@@ -359,6 +475,9 @@ void Game::update()
 				}
 			}
 
+		}
+		if (currentScore <= character.index) {
+			currentScore = character.index;
 		}
 		if (isMouseOver(backButton, window)) {
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -466,22 +585,53 @@ void Game::draw()
 					crashAnimationCounter++;
 				}
 				crashSprite.setTextureRect(sf::IntRect(120 * crashAnimationCounter, 0, 120, 109));
+				musicInGame.pause();
 				window.draw(crashSprite);
-				window.draw(filter);
+				//window.draw(filter);
 				//crashAnimationCounter++;
 				//std::cout << crashAnimationCounter << std::endl;
 			}
 			else {
 				window.draw(gameOver);
 				window.draw(replayButton);
+				sf::Text score;
+				score.setFont(font);
+				score.setCharacterSize(60);
+				score.setString("Your score: " + to_string(currentScore));
+				score.setFillColor(sf::Color::Black);
+				score.setPosition(633, 503);
+				window.draw(score);
+				score.setFillColor(darkBeige);
+				score.setPosition(630, 500);
+				window.draw(score);
+				score.setFillColor(sf::Color(255, 230, 153));
+				score.setPosition(630, 497);
+				window.draw(score);
+				textbox.drawTo(window);
+				window.draw(backButton);
 			}
-			window.draw(backButton);
+			//window.draw(backButton);
 		}
 		else {
 			if (countdown <= 0) {
 				window.draw(backgroundPlay);
 				laneManager.drawTo(window);
 				window.draw(filter);
+				window.draw(filter1);
+				sf::Text score;
+				score.setFont(font);
+				score.setCharacterSize(60);
+				score.setString("Score: " + to_string(currentScore));
+				score.setFillColor(sf::Color::Black);
+				score.setPosition(1203, 18);
+				window.draw(score);
+				score.setFillColor(darkBeige);
+				score.setPosition(1200, 15);
+				window.draw(score);
+				score.setFillColor(sf::Color(255, 230, 153));
+				score.setPosition(1200, 12);
+				window.draw(score);
+
 				window.draw(backButton);
 				//character.draw(window);
 			}
@@ -490,23 +640,27 @@ void Game::draw()
 				laneManager.drawTo(window);
 				character.draw(window);
 				window.draw(filterCountdown);
-				sf::Text text;
-				text.setFont(font);
-				text.setCharacterSize(200);
-				text.setString(to_string(countdown));
-				text.setFillColor(sf::Color::Black);
-				text.setPosition(755, 105);
-				window.draw(text);
-				text.setFillColor(darkBeige);
-				text.setPosition(750, 100);
-				window.draw(text);
-				text.setFillColor(sf::Color(255, 230, 153));
-				text.setPosition(750, 95);
-				window.draw(text);
+				if (countdown != 4) {
+					sf::Text text;
+					text.setFont(font);
+					text.setCharacterSize(200);
+					text.setString(to_string(countdown));
+					text.setFillColor(sf::Color::Black);
+					text.setPosition(755, 105);
+					window.draw(text);
+					text.setFillColor(darkBeige);
+					text.setPosition(750, 100);
+					window.draw(text);
+					text.setFillColor(sf::Color(255, 230, 153));
+					text.setPosition(750, 95);
+					window.draw(text);
+				}
 				int time = clock.getElapsedTime().asMilliseconds();
 				if (time > 1000) {
 					clock.restart();
 					countdown--;
+					if (countdown == 1 || countdown == 2 || countdown == 3)
+						clickSound.play();
 				}
 				window.draw(backButton);
 			}
@@ -520,10 +674,10 @@ void Game::draw()
 		text.setCharacterSize(50);
 		text.setFillColor(darkBeige);
 		text.setPosition(400, 250);
-		text.setString("Name");
+		text.setString("NAME");
 		window.draw(text);
-		text.setString("Score");
-		text.setPosition(1070, 250);
+		text.setString("SCORE");
+		text.setPosition(1060, 250);
 		window.draw(text);
 		ifstream fin("highscore.txt"); //there are 5 lines, each line is a name and white space then score, want to extract the name and score
 		if (!fin.is_open()) {
@@ -544,7 +698,7 @@ void Game::draw()
 				text.setPosition(400, 330 + i * 60);
 				window.draw(text);
 				text.setString(to_string(score));
-				text.setPosition(1070, 330 + i * 60);
+				text.setPosition(1060, 330 + i * 60);
 				window.draw(text);
 				i++;
 				iss.clear();
@@ -579,6 +733,7 @@ void Game::save()
 	laneManager.saveToFile();
 	ofstream fout("Save.txt", ios::app);
 	fout << "character " << character.info();
+	fout << " " << currentScore;
 	fout.close();
 }
 
@@ -609,6 +764,7 @@ void Game::loadFromFile()
 	iss >> deadChar;
 	iss >> posChar;
 	iss >> indChar;
+	iss >> currentScore;
 
 	charInfo = xChar;
 	charInfo += " ";

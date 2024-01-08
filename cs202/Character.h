@@ -23,7 +23,7 @@ private:
 	int y;
 	int width;
 	int height;
-	double speed;
+	double ratio;
 	bool dead;
 	bool crashed;
 	bool isOutOfScreen;
@@ -55,6 +55,6 @@ public:
 	string info();
 	bool isAnimating() { return (upPressed || downPressed || leftPressed || rightPressed); }
 	void setInfoFromFile(string charInfo);
-	void setSpeed(double speed) { this->speed = speed; }
+	void setSpeed(double speed) { this->ratio = speed; this->gif.setSpeed(0.35*speed); }
 };
 

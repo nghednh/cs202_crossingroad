@@ -8,6 +8,7 @@
 #include "Gif.h"
 #include "Lane.h"
 #include "Character.h"
+#include "Textbox.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -45,6 +46,8 @@ private:
 
 	sf::Sprite filter;
 	sf::Texture _filter;
+	sf::Texture _filter1;
+	sf::Sprite filter1;
 
 	sf::Texture _filterCountdown;
 	sf::Sprite filterCountdown;
@@ -114,16 +117,22 @@ private:
 	sf::Sprite right;
 
 	sf::Keyboard::Key tmp;
-	int score[5]{};
+	int score[6]{};
+	string name[6]{};
+	int currentScore;
 
 	int countdown;
 
 	sf::Clock clock;
 
+	Textbox textbox;
+
 public:
 	Game();
 	void loadSound();
 	void loadTexture();
+	void loadScore();
+	void saveScore();
 	void run();
 	void handleEvent();
 	void update();

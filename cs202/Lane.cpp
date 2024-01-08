@@ -14,7 +14,12 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 		this->ob = nullptr;
 	}
 	else {
-		nob = rand() % 6 + 1;
+		int difficulty = 2;
+		if (index >= 10) difficulty = 3;
+		if (index >= 30) difficulty = 4;
+		if (index >= 50) difficulty = 5;
+		if (index >= 70) difficulty = 6;
+		nob = rand() % difficulty + 1;
 		this->ob = new ObjectStable[nob];
 		initOb(plant, rock);
 	}
@@ -370,6 +375,10 @@ void RoadLane::move(bool& shouldGoFaster)
 	if (time >= 0.01) {
 		y += 1;
 		this->sprite.setPosition(0, y);
+		if (index >= 30)
+			moveobx(1, 0);
+		if (index >= 50)
+			moveobx(1, 0);
 		moveobx(3, 1);
 		clock.restart();
 	}
@@ -764,7 +773,7 @@ void LaneManager::drawRainTo(sf::RenderWindow& window)
 	double time = rainClock.getElapsedTime().asSeconds();
 	double animationTime = rainAnimationClock.getElapsedTime().asSeconds();
 	if (isRaining) {
-		std::cout << "rained\n";
+		//std::cout << "rained\n";
 		for (int i = 0; i < 25; i++) {
 			if (animationTime >= 0.1) {
 				int x = rand() % 1600;
@@ -866,7 +875,12 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	nob = rand() % 7 + 1;
+	int difficulty = 2;
+	if (index >= 10) difficulty = 3;
+	if (index >= 30) difficulty = 4;
+	if (index >= 50) difficulty = 5;
+	if (index >= 70) difficulty = 6;
+	nob = rand() % difficulty + 1;
 	this->ob = new ObjectStable[nob];
 	initOb(animal1, animal2, animal3, animal4, animal5);
 	this->character = nullptr;

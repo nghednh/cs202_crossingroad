@@ -4,8 +4,8 @@ Character::Character()
 {
 	this->jumping.loadFromFile("resource/character/jumping.png");
 	this->flash.loadFromFile("resource/character/die2.png");
-	this->speed = 0.8;
-	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.35 * speed);
+	this->ratio = 0.8;
+	this->gif.load(this->flash, 0, 0, 32, 32, 7, 0.35 * ratio);
 	this->gif.setScale(3, 3);
 	this->x = 7 * 128;
 	this->y = 900 - 128 * 2;
@@ -33,7 +33,7 @@ void Character::update()
 	if (this->y > 900)
 		this->dead = true;
 	double time = clock.getElapsedTime().asMilliseconds();
-	if (time >= 50 * speed) {
+	if (time >= 50 * ratio) {
 		clock.restart();
 		if (upPressed) {
 			//this->y -= 64;
@@ -192,7 +192,7 @@ string Character::info()
 	res += " ";
 	res += to_string(y);
 	res += " ";
-	res += to_string(speed);
+	res += to_string(ratio);
 	if (dead) res += " 1";
 	else res += " 0";
 	res += " ";
@@ -215,7 +215,7 @@ void Character::setInfoFromFile(string charInfo)
 
 	this->x = stoi(xChar);
 	this->y = stoi(yChar);
-	this->speed = stod(speedChar);
+	this->ratio = stod(speedChar);
 	this->dead = stoi(deadChar);
 	this->position = stoi(posChar);
 	this->index = stoi(indChar);
