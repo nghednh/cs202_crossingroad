@@ -278,7 +278,6 @@ void Game::handleEvent()
 					musicInGame.stop();
 					musicMenu.play();
 				}
-			if (sf::Keyboard::isKeyPressed(u)) {
 				if (character.isDead())
 					if (isMouseOver(replayButton, window)) {
 						saveScore();
