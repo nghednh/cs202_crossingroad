@@ -143,5 +143,5 @@ public:
 	void minVolumn();
 	void drawVolumn();
 	void drawDirect();
-	string fromKtoS(const sf::Keyboard::Key& k)
+	string fromKtoS(const sf::Keyboard::Key& k);
 };
