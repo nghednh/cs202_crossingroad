@@ -116,7 +116,7 @@ private:
 	sf::Sprite left;
 	sf::Sprite right;
 
-	sf::Keyboard::Key u = sf::Keyboard::Q;
+	sf::Keyboard::Key u = sf::Keyboard::W;
 	sf::Keyboard::Key d = sf::Keyboard::S;
 	sf::Keyboard::Key l = sf::Keyboard::A;
 	sf::Keyboard::Key r = sf::Keyboard::D;

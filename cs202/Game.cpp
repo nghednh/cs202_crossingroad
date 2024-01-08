@@ -244,18 +244,6 @@ void Game::handleEvent()
 			if (sf::Keyboard::isKeyPressed(r)) {
 				laneManager.processRight();
 			}
-			/*
-			keyBindings[sf::Keyboard::Up] = [this]() { laneManager.processUp(); };
-			keyBindings[sf::Keyboard::Down] = [this]() { laneManager.processDown(); };
-			keyBindings[sf::Keyboard::Left] = [this]() { laneManager.processLeft(); };
-			keyBindings[sf::Keyboard::Right] = [this]() { laneManager.processRight(); };
-			for (const auto& [key, action] : keyBindings) {
-				if (sf::Keyboard::isKeyPressed(key)) {
-					action();
-				}
-
-			}
-			*/
 			/*if (crashed) {
 				musicInGame.pause();
 				if (!crashSoundPlayed) {
@@ -288,32 +276,29 @@ void Game::handleEvent()
 				if (isMouseOver(minVol, window)) {
 					minVolumn();
 				}
-				/*
 				if (isMouseOver(up, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (u == sf::Keyboard::W)
+							u = sf::Keyboard::Up;
+						else u = sf::Keyboard::W;
 				}
 				if (isMouseOver(down, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
-				}
-				if (isMouseOver(left, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (d == sf::Keyboard::S)
+							d = sf::Keyboard::Down;
+						else d = sf::Keyboard::S;
+				}if (isMouseOver(left, window)) {
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (l == sf::Keyboard::A)
+							l = sf::Keyboard::Left;
+						else l = sf::Keyboard::A;
 				}
 				if (isMouseOver(right, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (r == sf::Keyboard::D)
+							r = sf::Keyboard::Right;
+						else r = sf::Keyboard::D;
 				}
-				*/
 			}
 		}
 	}
@@ -687,6 +672,14 @@ void Game::drawVolumn()
 
 void Game::drawDirect() {
 	sf::Text text;
+	sf::Text tmp;
+	float i, j;
+	j = tmp.getGlobalBounds().width;
+	tmp.setString("Arrow");
+	tmp.setCharacterSize(50);
+	tmp.setFillColor(sf::Color::Black);
+	tmp.setFont(font);
+	tmp.setCharacterSize(50);
 
 	text.setString("Up");
 	text.setCharacterSize(40);
@@ -717,32 +710,69 @@ void Game::drawDirect() {
 	window.draw(text);
 
 	text.setString(fromKtoS(u));
-	text.setCharacterSize(80);
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(1070, 450);
-	window.draw(text);
+	text.setCharacterSize(50);
+	if (u == sf::Keyboard::W) {
+		text.setPosition(1105 - i, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(1105 - i + 8, 450);
+		window.draw(text);
+		tmp.setPosition(1105 - j - 65, 490);
+		window.draw(tmp);
+	}
 
 	text.setString(fromKtoS(d));
-	text.setCharacterSize(80);
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(880,450);
-	window.draw(text);
+	if (d == sf::Keyboard::S) {
+		text.setPosition(895 - i/2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(895 - i/2 + 3, 450);
+		window.draw(text);
+		tmp.setPosition(895 - j/2 - 58, 490);
+		window.draw(tmp);
+	}
 
 	text.setString(fromKtoS(l));
-	text.setCharacterSize(80);
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(680, 450);
-	window.draw(text);
+	if (l == sf::Keyboard::A) {
+		text.setPosition(695 - i / 2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(695 - i / 2 + 2, 450);
+		window.draw(text);
+		tmp.setPosition(695 - j / 2 - 58, 490);
+		window.draw(tmp);
+	}
 
 	text.setString(fromKtoS(r));
-	text.setCharacterSize(80);
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(480, 450);
-	window.draw(text);
+	if (r == sf::Keyboard::D) {
+		text.setPosition(495 - i / 2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(495 - i / 2, 450);
+		window.draw(text);
+		tmp.setPosition(495 - j / 2 - 58, 490);
+		window.draw(tmp);
+	}
 }
 string Game::fromKtoS(const sf::Keyboard::Key& k) {
 	string ret;
