@@ -13,6 +13,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <map>
+#include <functional>
+
 using namespace std;
 
 class Game {
@@ -116,6 +119,13 @@ private:
 	sf::Sprite left;
 	sf::Sprite right;
 
+	sf::Keyboard::Key u = sf::Keyboard::W;
+	sf::Keyboard::Key d = sf::Keyboard::S;
+	sf::Keyboard::Key l = sf::Keyboard::A;
+	sf::Keyboard::Key r = sf::Keyboard::D;
+
+	//std::map<sf::Keyboard::Key, std::function<void()>> keyBindings;
+
 	sf::Keyboard::Key tmp;
 	int score[6]{};
 	string name[6]{};
@@ -143,4 +153,5 @@ public:
 	void minVolumn();
 	void drawVolumn();
 	void drawDirect();
+	string fromKtoS(const sf::Keyboard::Key& k);
 };

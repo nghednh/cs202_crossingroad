@@ -278,6 +278,7 @@ void Game::handleEvent()
 					musicInGame.stop();
 					musicMenu.play();
 				}
+			if (sf::Keyboard::isKeyPressed(u)) {
 				if (character.isDead())
 					if (isMouseOver(replayButton, window)) {
 						saveScore();
@@ -344,16 +345,16 @@ void Game::handleEvent()
 				}
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+			if (sf::Keyboard::isKeyPressed(u)) {
 				laneManager.processUp();
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			if (sf::Keyboard::isKeyPressed(d)) {
 				laneManager.processDown();
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			if (sf::Keyboard::isKeyPressed(l)) {
 				laneManager.processLeft();
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			if (sf::Keyboard::isKeyPressed(r)) {
 				laneManager.processRight();
 			}
 			/*if (crashed) {
@@ -392,32 +393,29 @@ void Game::handleEvent()
 				if (isMouseOver(minVol, window)) {
 					minVolumn();
 				}
-				/*
 				if (isMouseOver(up, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (u == sf::Keyboard::W)
+							u = sf::Keyboard::Up;
+						else u = sf::Keyboard::W;
 				}
 				if (isMouseOver(down, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
-				}
-				if (isMouseOver(left, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (d == sf::Keyboard::S)
+							d = sf::Keyboard::Down;
+						else d = sf::Keyboard::S;
+				}if (isMouseOver(left, window)) {
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (l == sf::Keyboard::A)
+							l = sf::Keyboard::Left;
+						else l = sf::Keyboard::A;
 				}
 				if (isMouseOver(right, window)) {
-					if (event.type == sf::Event::KeyPressed)
-						if (event.key.code == sf::Keyboard::Escape) {
-							window.close();
-						}
+					if (event.type == sf::Event::MouseButtonReleased)
+						if (r == sf::Keyboard::D)
+							r = sf::Keyboard::Right;
+						else r = sf::Keyboard::D;
 				}
-				*/
 			}
 		}
 	}
@@ -831,6 +829,14 @@ void Game::drawVolumn()
 
 void Game::drawDirect() {
 	sf::Text text;
+	sf::Text tmp;
+	float i, j;
+	j = tmp.getGlobalBounds().width;
+	tmp.setString("Arrow");
+	tmp.setCharacterSize(50);
+	tmp.setFillColor(sf::Color::Black);
+	tmp.setFont(font);
+	tmp.setCharacterSize(50);
 
 	text.setString("Up");
 	text.setCharacterSize(40);
@@ -860,31 +866,382 @@ void Game::drawDirect() {
 	text.setPosition(460, 590);
 	window.draw(text);
 
-	text.setString("W");
-	text.setCharacterSize(80);
+	text.setString(fromKtoS(u));
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(1070, 450);
-	window.draw(text);
+	text.setCharacterSize(50);
+	if (u == sf::Keyboard::W) {
+		text.setPosition(1105 - i, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(1105 - i + 8, 450);
+		window.draw(text);
+		tmp.setPosition(1105 - j - 65, 490);
+		window.draw(tmp);
+	}
 
-	text.setString("S");
-	text.setCharacterSize(80);
+	text.setString(fromKtoS(d));
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(880,450);
-	window.draw(text);
+	if (d == sf::Keyboard::S) {
+		text.setPosition(895 - i/2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(895 - i/2 + 3, 450);
+		window.draw(text);
+		tmp.setPosition(895 - j/2 - 58, 490);
+		window.draw(tmp);
+	}
 
-	text.setString("A");
-	text.setCharacterSize(80);
+	text.setString(fromKtoS(l));
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(680, 450);
-	window.draw(text);
+	if (l == sf::Keyboard::A) {
+		text.setPosition(695 - i / 2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(695 - i / 2 + 2, 450);
+		window.draw(text);
+		tmp.setPosition(695 - j / 2 - 58, 490);
+		window.draw(tmp);
+	}
 
-	text.setString("D");
-	text.setCharacterSize(80);
+	text.setString(fromKtoS(r));
+	i = text.getGlobalBounds().width;
+	text.setCharacterSize(50);
 	text.setFillColor(sf::Color::Black);
 	text.setFont(font);
-	text.setPosition(480, 450);
-	window.draw(text);
+	if (r == sf::Keyboard::D) {
+		text.setPosition(495 - i / 2, 470);
+		window.draw(text);
+	}
+	else {
+		text.setPosition(495 - i / 2, 450);
+		window.draw(text);
+		tmp.setPosition(495 - j / 2 - 58, 490);
+		window.draw(tmp);
+	}
+}
+string Game::fromKtoS(const sf::Keyboard::Key& k) {
+	string ret;
+	switch (k) {
+
+	case sf::Keyboard::A:
+
+		ret = "A";
+		break;
+	case sf::Keyboard::B:
+
+		ret = "B";
+		break;
+	case sf::Keyboard::C:
+
+		ret = "C";
+		break;
+	case sf::Keyboard::D:
+
+		ret = "D";
+		break;
+	case sf::Keyboard::E:
+
+		ret = "E";
+		break;
+	case sf::Keyboard::F:
+
+		ret = "F";
+		break;
+	case sf::Keyboard::G:
+
+		ret = "G";
+		break;
+	case sf::Keyboard::H:
+
+		ret = "H";
+		break;
+	case sf::Keyboard::I:
+
+		ret = "I";
+		break;
+	case sf::Keyboard::J:
+
+		ret = "J";
+		break;
+	case sf::Keyboard::K:
+
+		ret = "K";
+		break;
+	case sf::Keyboard::L:
+
+		ret = "L";
+		break;
+	case sf::Keyboard::M:
+
+		ret = "M";
+		break;
+	case sf::Keyboard::N:
+
+		ret = "N";
+		break;
+	case sf::Keyboard::O:
+
+		ret = "O";
+		break;
+	case sf::Keyboard::P:
+
+		ret = "P";
+		break;
+	case sf::Keyboard::Q:
+
+		ret = "Q";
+		break;
+	case sf::Keyboard::R:
+
+		ret = "R";
+		break;
+	case sf::Keyboard::S:
+
+		ret = "S";
+		break;
+	case sf::Keyboard::T:
+
+		ret = "T";
+		break;
+	case sf::Keyboard::U:
+
+		ret = "U";
+		break;
+	case sf::Keyboard::V:
+
+		ret = "V";
+		break;
+	case sf::Keyboard::W:
+
+		ret = "W";
+		break;
+	case sf::Keyboard::X:
+
+		ret = "X";
+		break;
+	case sf::Keyboard::Y:
+
+		ret = "Y";
+		break;
+	case sf::Keyboard::Z:
+
+		ret = "Z";
+		break;
+	case sf::Keyboard::Num0:
+
+		ret = "Num0";
+		break;
+	case sf::Keyboard::Num1:
+
+		ret = "Num1";
+		break;
+	case sf::Keyboard::Num2:
+
+		ret = "Num2";
+		break;
+	case sf::Keyboard::Num3:
+
+		ret = "Num3";
+		break;
+	case sf::Keyboard::Num4:
+
+		ret = "Num4";
+		break;
+	case sf::Keyboard::Num5:
+
+		ret = "Num5";
+		break;
+	case sf::Keyboard::Num6:
+
+		ret = "Num6";
+		break;
+	case sf::Keyboard::Num7:
+
+		ret = "Num7";
+		break;
+	case sf::Keyboard::Num8:
+
+		ret = "Num8";
+		break;
+	case sf::Keyboard::Num9:
+
+		ret = "Num9";
+		break;
+	case sf::Keyboard::Escape:
+
+		ret = "Escape";
+		break;
+	case sf::Keyboard::LControl:
+
+		ret = "LControl";
+		break;
+	case sf::Keyboard::LShift:
+
+		ret = "LShift";
+		break;
+	case sf::Keyboard::LAlt:
+
+		ret = "LAlt";
+		break;
+	case sf::Keyboard::LSystem:
+
+		ret = "LSystem";
+		break;
+	case sf::Keyboard::RControl:
+
+		ret = "RControl";
+		break;
+	case sf::Keyboard::RShift:
+
+		ret = "RShift";
+		break;
+	case sf::Keyboard::RAlt:
+
+		ret = "RAlt";
+		break;
+	case sf::Keyboard::RSystem:
+
+		ret = "RSystem";
+		break;
+	case sf::Keyboard::Menu:
+
+		ret = "Menu";
+		break;
+	case sf::Keyboard::LBracket:
+
+		ret = "LBracket";
+		break;
+	case sf::Keyboard::RBracket:
+
+		ret = "RBracket";
+		break;
+	case sf::Keyboard::SemiColon:
+
+		ret = "SemiColon";
+		break;
+	case sf::Keyboard::Comma:
+
+		ret = "Comma";
+		break;
+	case sf::Keyboard::Period:
+
+		ret = "Period";
+		break;
+	case sf::Keyboard::Quote:
+
+		ret = "Quote";
+		break;
+	case sf::Keyboard::Slash:
+
+		ret = "Slash";
+		break;
+	case sf::Keyboard::BackSlash:
+
+		ret = "BackSlash";
+		break;
+	case sf::Keyboard::Tilde:
+
+		ret = "Tilde";
+		break;
+	case sf::Keyboard::Equal:
+
+		ret = "Equal";
+		break;
+	case sf::Keyboard::Dash:
+
+		ret = "Dash";
+		break;
+	case sf::Keyboard::Space:
+
+		ret = "Space";
+		break;
+	case sf::Keyboard::Return:
+
+		ret = "Return";
+		break;
+	case sf::Keyboard::BackSpace:
+
+		ret = "BackSpace";
+		break;
+	case sf::Keyboard::Tab:
+
+		ret = "Tab";
+		break;
+	case sf::Keyboard::PageUp:
+
+		ret = "PageUp";
+		break;
+	case sf::Keyboard::PageDown:
+
+		ret = "PageDown";
+		break;
+	case sf::Keyboard::End:
+
+		ret = "End";
+		break;
+	case sf::Keyboard::Home:
+
+		ret = "Home";
+		break;
+	case sf::Keyboard::Insert:
+
+		ret = "Insert";
+		break;
+	case sf::Keyboard::Delete:
+
+		ret = "Delete";
+		break;
+	case sf::Keyboard::Add:
+
+		ret = "Add";
+		break;
+	case sf::Keyboard::Subtract:
+
+		ret = "Subtract";
+		break;
+	case sf::Keyboard::Multiply:
+
+		ret = "Multiply";
+		break;
+	case sf::Keyboard::Divide:
+
+		ret = "Divide";
+		break;
+	case sf::Keyboard::Left:
+
+		ret = "Left";
+		break;
+	case sf::Keyboard::Right:
+
+		ret = "Right";
+		break;
+	case sf::Keyboard::Up:
+
+		ret = "Up";
+		break;
+	case sf::Keyboard::Down:
+
+		ret = "Down";
+		break;
+	case sf::Keyboard::Pause:
+
+		ret = "Pause";
+		break;
+	default:
+		ret = "Unknown";
+		break;
+	}
+	return ret;
 }
