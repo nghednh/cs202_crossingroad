@@ -209,7 +209,6 @@ void Game::run()
 
 void Game::handleEvent()
 {
-	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
@@ -221,6 +220,7 @@ void Game::handleEvent()
 				clickSound.play();
 				if (newGameButton.isMouseOver(window)) {
 					this->state = PLAY;
+					musicMenu.stop();
 					musicInGame.play();
 					musicInGame.setLoop(true);
 					character.reset();
@@ -318,12 +318,12 @@ void Game::handleEvent()
 							score[5] = currentScore;
 							for (int i = 0; i < 6; i++)
 								for (int j = 0; j < 6 - i - 1; j++) {
-									cout << score[j] << " " << score[j + 1] << endl;
+									//cout << score[j] << " " << score[j + 1] << endl;
 									if (score[j] < score[j+1])
 									{
 										swap(score[j], score[j+1]);
 										swap(name[j], name[j+1]);
-										cout << "Swap" << endl;
+										//cout << "Swap" << endl;
 									}
 								}
 							textbox.clear();
@@ -337,8 +337,8 @@ void Game::handleEvent()
 							countdown = 4;
 							currentScore = -1;
 							//debug purpose
-							for (int i = 0; i < 6; i++)
-								cout << name[i] << " " << score[i] << endl;
+							//for (int i = 0; i < 6; i++)
+								//cout << name[i] << " " << score[i] << endl;
 						}
 					}
 				}
@@ -547,6 +547,16 @@ void Game::update()
 				left.setTexture(_left1);
 		}
 		else left.setTexture(_left);
+
+		if (event.type == sf::Event::MouseButtonReleased) {
+			backButton.setTexture(_backButton0);
+			addVol.setTexture(_addVol0);
+			minVol.setTexture(_minVol0);
+			up.setTexture(_up);
+			down.setTexture(_down);
+			right.setTexture(_right);
+			left.setTexture(_left);
+		}
 		clickGif.update();
 	}
 }

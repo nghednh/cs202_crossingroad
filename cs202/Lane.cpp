@@ -16,9 +16,9 @@ GrassLane::GrassLane(sf::Texture& texture, int y, sf::Texture& plant, sf::Textur
 	else {
 		int difficulty = 2;
 		if (index >= 10) difficulty = 3;
-		if (index >= 30) difficulty = 4;
-		if (index >= 50) difficulty = 5;
-		if (index >= 70) difficulty = 6;
+		if (index >= 20) difficulty = 4;
+		if (index >= 30) difficulty = 5;
+		if (index >= 40) difficulty = 6;
 		nob = rand() % difficulty + 1;
 		this->ob = new ObjectStable[nob];
 		initOb(plant, rock);
@@ -198,7 +198,12 @@ RoadLane::RoadLane(sf::Texture& texture, int y, sf::Texture& car1, sf::Texture& 
 	this->sprite.setScale(4, 4);
 	this->y = y;
 	this->index = index;
-	nob = rand() % 10 + 1;
+	int difficulty = 3;
+	if (index >= 10) difficulty = 5;
+	if (index >= 20) difficulty = 7;
+	if (index >= 30) difficulty = 8;
+	if (index >= 40) difficulty = 10;
+	nob = rand() % difficulty + 1;
 	this->ob = new ObjectMoving[nob];
 	initOb(car1, car2, car3, car4, car5);
 	this->character = nullptr;
@@ -375,9 +380,9 @@ void RoadLane::move(bool& shouldGoFaster)
 	if (time >= 0.01) {
 		y += 1;
 		this->sprite.setPosition(0, y);
-		if (index >= 30)
+		if (index >= 10)
 			moveobx(1, 0);
-		if (index >= 50)
+		if (index >= 30)
 			moveobx(1, 0);
 		moveobx(3, 1);
 		clock.restart();
@@ -608,8 +613,8 @@ LaneManager::LaneManager()
 	this->animal[0].loadFromFile("resource/object/animal1/cow.png");
 	this->animal[1].loadFromFile("resource/object/animal1/sheep.png");
 	this->animal[2].loadFromFile("resource/object/animal1/goat1.png");
-	this->animal[3].loadFromFile("resource/object/animal/dog.png");
-	this->animal[4].loadFromFile("resource/object/animal/pig.png");
+	this->animal[3].loadFromFile("resource/object/animal1/cow1.png");
+	this->animal[4].loadFromFile("resource/object/animal1/horse.png");
 	this->train.loadFromFile("resource/object/trainLeft.png");
 	this->Light.loadFromFile("resource/object/TrafficLight.png");
 	this->rain[0].loadFromFile("resource/rain0.png");
@@ -877,9 +882,9 @@ AnimalLane::AnimalLane(sf::Texture& texture, int y, sf::Texture& animal1, sf::Te
 	this->index = index;
 	int difficulty = 2;
 	if (index >= 10) difficulty = 3;
-	if (index >= 30) difficulty = 4;
-	if (index >= 50) difficulty = 5;
-	if (index >= 70) difficulty = 6;
+	if (index >= 20) difficulty = 4;
+	if (index >= 30) difficulty = 5;
+	if (index >= 40) difficulty = 6;
 	nob = rand() % difficulty + 1;
 	this->ob = new ObjectStable[nob];
 	initOb(animal1, animal2, animal3, animal4, animal5);
@@ -907,6 +912,8 @@ AnimalLane::AnimalLane(sf::Texture& texture, std::string tmp, sf::Texture& anima
 		if (animalType == "animal1") this->ob[i].setup(animal1, 3, 3, 0, 0, 32, 32, "animal1");
 		else if (animalType == "animal2") ob[i].setup(animal2, 3, 3, 0, 0, 32, 32, "animal2");
 		else if (animalType == "animal3") ob[i].setup(animal3, 3, 3, 0, 0, 32, 32, "animal3");
+		else if (animalType == "animal4")	ob[i].setup(animal4, 3, 3, 0, 0, 32, 32, "animal4");
+		else if (animalType == "animal5") ob[i].setup(animal5, 3, 3, 0, 0, 32, 32, "animal5");
 		iss >> xPos;
 		iss >> yPos;
 		ob[i].setPosSprite(stoi(xPos), stoi(yPos));
@@ -974,16 +981,24 @@ void AnimalLane::initOb(sf::Texture& animal1, sf::Texture& animal2, sf::Texture&
 	}
 	for (int i = 0; i < nob; i++) {
 		int tmp = 0;
-		if (rand() % 3 == 0) {
+		if (rand() % 5 == 0) {
 			this->ob[i].setup(animal1, 3, 3, 0, 0, 32, 32, "animal1");
 		}
-		else if (rand() % 3 == 2) {
+		else if (rand() % 5 == 2) {
 			this->ob[i].setup(animal2, 3, 3, 0, 0, 32, 32, "animal2");
 			tmp = 1;
 		}
-		else {
+		else if (rand() % 5 == 3) {
 			this->ob[i].setup(animal3, 3, 3, 0, 0, 32, 32, "animal3");
 			tmp = 2;
+		}
+		else if (rand() % 5 == 4) {
+			this->ob[i].setup(animal4, 3, 3, 0, 0, 32, 32, "animal4");
+			tmp = 3;
+		}
+		else {
+			this->ob[i].setup(animal5, 3, 3, 0, 0, 32, 32, "animal5");
+			tmp = 4;
 		}
 		b = ob[i].randomx(idx, 13);
 		while (a == b) b = ob[i].randomx(idx, 13);

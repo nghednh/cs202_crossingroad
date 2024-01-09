@@ -29,6 +29,7 @@ private:
 	};
 	State state;
 	sf::RenderWindow window;
+	sf::Event event;
 private:
 	sf::Texture _backgroundMenu;
 	sf::Sprite backgroundMenu;
